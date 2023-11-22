@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       backgroundColor: {
         'pico_default' : '#444452',
+        'pico_lighter' : '#565667',
         'pico_darker' : '#282830',
         'pico_blue' : '#8cb4f3',
 

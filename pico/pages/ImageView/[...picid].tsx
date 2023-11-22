@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ex1 from "@/public/assets/images/ex1.jpeg";
 import ex2 from "@/public/assets/images/ex2.jpeg";
 import ex3 from "@/public/assets/images/ex3.jpeg";

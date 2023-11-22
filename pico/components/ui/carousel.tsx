@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import arrow_forward from "@/public/assets/images/arrow_forward.svg";
 import arrow_back from "@/public/assets/images/arrow_back.svg";
+import logo from "@/public/assets/images/logo.png";
+import Link from "next/link";
 
 export interface PIC {
   // src: string;
@@ -54,6 +56,16 @@ const BackDrop = () =>{
   return <div className="w-screen h-screen fixed top-0 left-0 bg-white opacity-[0.15]"></div>
 }
 
+const Slides = ({pics}:{pics:React.JSX.Element[]}) => {
+  return <div className="w-min h-screen flex relative">{pics}</div>
+}
+
+const LogoLink = () =>{
+  return <Link href={'/'} className="fixed right-0 top-0 m-10">
+    <Image src={logo} alt='pico' width={70} height={70} className="cursor-pointer"/>
+  </Link>
+}
+
 const Indicators = ({
   totalNum,
   curIdx,
@@ -96,7 +108,6 @@ function PicoCarousel({ pics }: carouselProps) {
   },[activeIndex]);
 
   useEffect(() => {
-
     const handleScroll = () => {
       if (timerRef.current !== null){
         clearTimeout(timerRef.current);
@@ -108,22 +119,17 @@ function PicoCarousel({ pics }: carouselProps) {
           setActiveIndex(newIndex);
         }
       }, 100);        
-      
     }
   
-    
     if (screenRef.current) {
       screenRef.current.addEventListener('scroll', handleScroll);
     }
-
     return () => {
       if (screenRef.current) {
         screenRef.current.removeEventListener('scroll', handleScroll);
       }
     };
   }, []);
-
-  
 
   const next = () => {
     const nextIndex = activeIndex === length - 1 ? 0 : activeIndex + 1;
@@ -154,9 +160,10 @@ function PicoCarousel({ pics }: carouselProps) {
     <div className="(background) w-screen h-screen absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide"
     ref={screenRef}>
       <BackDrop/>
-      <div className="w-min h-screen flex relative">{imageList}</div>
+      <Slides pics={imageList}/>
       <Arrows prev={prev} next={next}/>
       <Indicators totalNum={length} curIdx={activeIndex} onClickHandler={goToIndex}/>
+      <LogoLink/>
     </div>
   );
 }

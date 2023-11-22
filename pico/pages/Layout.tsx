@@ -4,8 +4,9 @@ import { useRouter } from "next/router";
 
 function Layout({children}:{children: any}) {
   const router = useRouter();
-  console.log(router.pathname);
-  const showHeader = router.pathname.startsWith("/User");
+  const pathname = router.pathname;
+  // console.log(router.pathname);
+  const showHeader = pathname.startsWith("/User") || pathname.startsWith("/Gallery");
   return (
     <Fragment>
         {showHeader && <Header/>}
