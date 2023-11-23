@@ -4,7 +4,7 @@ type btnprops = {
   onClick: () => void;
   children: any;
   className?: string;
-  textsize: "s" | "m" | "l";
+  textsize?: "s" | "m" | "l";
 };
 const TSarr = {
   s: "text-xl ",
@@ -13,9 +13,9 @@ const TSarr = {
 };
 
 const Button = (props: btnprops) => {
-  const TS = TSarr[props.textsize];
+  const TS = props.textsize ? TSarr[props.textsize] : '';
   const newClass =
-    "cursor-pointer text-center text-3xl leading-[4rem] hover:underline underline-offset-8 items-center " +
+    "text-center text-3xl leading-[4rem] hover:underline underline-offset-8 items-center " +
     TS +
     props.className;
 

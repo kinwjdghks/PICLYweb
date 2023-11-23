@@ -1,0 +1,23 @@
+.search{
+    background-image: url('../public/assets/images/search.svg');
+    background-size:2rem;
+    background-repeat:no-repeat;
+    background-position:left center;
+    background-position-x: 0.2rem;
+    padding-left:2.5rem;
+    
+}
+
+.proceed{
+    background-image: url('../public/assets/images/arrow_forward.svg');
+    background-size:2rem;
+    background-repeat:no-repeat;
+    background-position:right center;
+}
+
+.addbtn{
+    background-image: url('../public/assets/images/addbtn.svg');
+    background-size:4.5rem;
+    background-repeat:no-repeat;
+    background-position:center center;
+}

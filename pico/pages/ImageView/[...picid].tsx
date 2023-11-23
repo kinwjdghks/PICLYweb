@@ -13,6 +13,7 @@ import { poppins } from "@/public/assets/fonts/poppins";
 import styles from '@/styles/animation.module.css';
 import { useEffect, useState, useRef } from "react";
 import { overrideTailwindClasses as ovr } from "tailwind-override";
+// import {Transition} from 'react-transition-group';
 
 const ImageView = () => {
   const dummypics = [
@@ -64,23 +65,23 @@ const ImageView = () => {
     return (
       <div className={`w-max h-max fixed flex gap-x-8 right-0 top-0 m-10 ${poppins.className}`}>
           <Image src={menu} alt='menu' width={40} height={40} 
-          onClick={(e)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}
-          className="cursor-pointer hover:scale-[115%]"/>
+            onClick={(e)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}
+            className="cursor-pointer hover:scale-[115%]"/>
           <MenuBar open = {menuOpen} first={first} menuClose={()=>{setMenuOpen(false)}}/>
           <Image src={link} alt='link' width={40} height={40}
-          className="cursor-pointer hover:scale-[115%]"
-          onClick={()=>{}}
-          ref={btnRef}/>
+            className="cursor-pointer hover:scale-[115%]"
+            onClick={()=>{}}
+            ref={btnRef}/>
           <CopiedMSG show={showcopymsg}/>
-        <Link href={"/"} className="w-max h-max">
-          <Image
-            src={logo}
-            alt="pico"
-            width={70}
-            height={70}
-            className="cursor-pointer hover:scale-[110%]"
-          />
-        </Link>
+          <Link href={"/"} className="w-max h-max">
+            <Image
+              src={logo}
+              alt="pico"
+              width={70}
+              height={70}
+              className="cursor-pointer hover:scale-[110%]"
+            />
+          </Link>
       </div>
     );
   };
@@ -102,7 +103,7 @@ const ImageView = () => {
 
   const CopiedMSG = ({show}:{show:Boolean}) =>{
     const initial = '-translate-y-[20%] opacity-0 scale[0.95] ';
-    return <p className={ovr(`absolute top-[120%] text-2xl font-bold left-[24%] ${initial} ${show && styles.showmsg} `)}>Copied!</p>
+    return <p className={ovr(`absolute top-[120%] text-2xl left-[24%] ${initial} ${show && styles.showmsg} `)}>Copied!</p>
   }
 
   return (
