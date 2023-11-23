@@ -1,6 +1,5 @@
-import { Poppins } from "next/font/google";
-export const poppins = Poppins({ weight: "300", subsets: ["latin-ext"] });
-
+import { poppins } from "@/public/assets/fonts/poppins";
+import { overrideTailwindClasses as ovr } from "tailwind-override";
 type btnprops = {
   onClick: () => void;
   children: any;
@@ -16,14 +15,13 @@ const TSarr = {
 const Button = (props: btnprops) => {
   const TS = TSarr[props.textsize];
   const newClass =
-    "cursor-pointer text-3xl text-center leading-[4rem] hover:underline underline-offset-8 " +
+    "cursor-pointer text-center text-3xl leading-[4rem] hover:underline underline-offset-8 items-center " +
     TS +
     props.className;
 
   return (
-    <div className={`${poppins.className} ${newClass}`} onClick={props.onClick}>
-      <p>{props.children}</p>
-    </div>
+    <button className={ovr(`${poppins.className} ${newClass}`)} onClick={(e)=>{e.preventDefault(); props.onClick()}}>
+      {props.children}</button>
   );
 };
 

@@ -28,7 +28,7 @@ const Logos = () => {
 const ActionBar = () => {
   const router = useRouter();
   return (
-    <div className="(action) flex gap-20 mb-32">
+    <div className="(action) w-full h-max flex place-content-between mb-32 px-16">
       <Button
         onClick={() => {
           router.push({
@@ -40,12 +40,7 @@ const ActionBar = () => {
       >
         Log in
       </Button>
-      <Button
-        onClick={() => {
-          
-        }}
-        textsize="l"
-      >
+      <Button onClick={() => {}} textsize="l">
         About
       </Button>
     </div>
@@ -53,14 +48,16 @@ const ActionBar = () => {
 };
 
 export default function Home() {
+  const gradient = '';
   return (
-    <div className="(mainpage) w-screen h-screen relative bg-pico_default flex overflow-hidden">
-      <Logos />
-      <div className="(leftside) w-full">
-        {/* <Image src={logo} alt="logo" className="w-16 h-16 m-10" /> */}
+    <div className="(mainpage) w-screen h-[200vh] relative bg-black flex flex-col align-middle overflow-hidden">
+      {/* <Logos /> */}
+      <div className="(content) w-full flex-grow ">
+        
       </div>
-      <div className="(rightside) w-full flex flex-col-reverse items-center">
-        <ActionBar />
+      <ActionBar />
+      <div className="(details) w-full h-[100vh] bg-gradient-to-b from-black via-[pico_default] to-[pico_default] from-0% via-20% to-100%">
+      
       </div>
     </div>
   );

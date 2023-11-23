@@ -8,18 +8,26 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      color: {
+        'pico_default' : '#444452',
+        'pico_lighter' : '#565667',
+        'pico_darker' : '#282830',
+        'pico_blue' : '#8cb4f3',
+      },
       backgroundColor: {
         'pico_default' : '#444452',
         'pico_lighter' : '#565667',
         'pico_darker' : '#282830',
         'pico_blue' : '#8cb4f3',
 
-      }  
+      },
+      
     
     },
   },
   safelist:[
-    {pattern: /bg-pico_(default|darker|blue)/}
+    {pattern: /(bg|from|via|to)-pico_(default|lighter|darker|blue)/},
+
   ],
   plugins: [require('tailwind-scrollbar-hide')],
 }

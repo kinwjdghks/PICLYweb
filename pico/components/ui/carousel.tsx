@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import arrow_forward from "@/public/assets/images/arrow_forward.svg";
 import arrow_back from "@/public/assets/images/arrow_back.svg";
-import logo from "@/public/assets/images/logo.png";
 import Link from "next/link";
 
 export interface PIC {
@@ -26,21 +25,16 @@ const Arrow = ({
 
   return (
     <div
-      className={`(${dir} action) w-24 h-full fixed top-0 ${pos} flex justify-center align-middle`}
+      className={`(${dir} action) lg:w-24 w-20 h-full fixed top-0 ${pos} flex justify-center items-center lg:opacity-1 opacity-50`}
     >
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          onClick();
-        }}
-      >
+      
         <Image
           src={dir == "back" ? arrow_back : arrow_forward}
           alt="arrow"
-          className="w-16 h-16"
-          
+          className="lg:w-16 lg:h-16 w-8 h-8 cursor-pointer"
+          onClick= {onClick}
         />
-      </button>
+      
     </div>
   );
 };
@@ -60,11 +54,6 @@ const Slides = ({pics}:{pics:React.JSX.Element[]}) => {
   return <div className="w-min h-screen flex relative">{pics}</div>
 }
 
-const LogoLink = () =>{
-  return <Link href={'/'} className="fixed right-0 top-0 m-10">
-    <Image src={logo} alt='pico' width={70} height={70} className="cursor-pointer"/>
-  </Link>
-}
 
 const Indicators = ({
   totalNum,
@@ -163,7 +152,6 @@ function PicoCarousel({ pics }: carouselProps) {
       <Slides pics={imageList}/>
       <Arrows prev={prev} next={next}/>
       <Indicators totalNum={length} curIdx={activeIndex} onClickHandler={goToIndex}/>
-      <LogoLink/>
     </div>
   );
 }

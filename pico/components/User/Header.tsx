@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Button from "../ui/Button";
-import { poppins } from "../ui/Button";
+import { poppins } from "@/public/assets/fonts/poppins";
 
 const Header = () => {
   const userName = "kinwjdghks";
@@ -15,7 +15,7 @@ const Header = () => {
           </p>
         </div>
         <div className="(actions) ml-40 flex gap-12">
-          <Button onClick={() => {}} textsize="m">
+          <Button onClick={() => {}} textsize="l">
             Profile
           </Button>
           <Button onClick={() => {
@@ -23,10 +23,10 @@ const Header = () => {
               pathname: "/Gallery/[userid]",
               query: { userid: 'arbitrary' },
             });
-          }} textsize="m">
+          }} textsize="l">
             Gallery
           </Button>
-          <Button onClick={() => {}} textsize="m">
+          <Button onClick={() => {}} textsize="l">
             Tutorial
           </Button>
         </div>
