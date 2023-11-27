@@ -4,6 +4,7 @@ import ex3 from "@/public/assets/images/ex3.jpeg";
 import logo from "@/public/assets/images/logo.png";
 import link from "@/public/assets/images/link.svg";
 import menu from "@/public/assets/images/menu.svg";
+import close from "@/public/assets/images/close.svg";
 //images
 import Image from "next/image";
 import Link from "next/link";
@@ -60,15 +61,21 @@ const ImageView = () => {
           btnRef.current.removeEventListener('click', handleClick);
         }
       };
-    }, []);
-    console.log(showcopymsg);
+    }, []); //throttling for clicking copy btn
+    
+    const goback = ()=> window.history.back();
+
     return (
       <div className={`w-max h-max fixed flex gap-x-8 right-0 top-0 m-10 ${poppins.className}`}>
+          <Image src={close} alt="close" width={50} height={50}
+            onClick={goback} className="fixed top-0 left-0 m-10 cursor-pointer"></Image>
+
+
           <Image src={menu} alt='menu' width={40} height={40} 
             onClick={(e)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}
             className="cursor-pointer hover:scale-[115%]"/>
           <MenuBar open = {menuOpen} first={first} menuClose={()=>{setMenuOpen(false)}}/>
-          <Image src={link} alt='link' width={40} height={40}
+          <Image src={link} alt='linkcopy' width={40} height={40}
             className="cursor-pointer hover:scale-[115%]"
             onClick={()=>{}}
             ref={btnRef}/>

@@ -26,17 +26,13 @@ const Logos = () => {
 const ActionBar = () => {
   const router = useRouter();
   return (
-    <div className="(action) w-full h-max flex flex-col mb-16 gap-6 lg:w-1/2 lg:justify-center lg:mb-0 lg:items-center">
-      <Button onClick={() => {}} textsize="m" >
+    <div className="(action) w-full h-max flex flex-col mb-16 p-3 gap-6 lg:w-1/2 lg:justify-center lg:mb-0 lg:items-center">
+      <Button onClick={() => {}} textsize="l" >
         <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>See More</div>
       </Button>
-      <Button onClick={() => { router.push({
-            pathname: "/Login",
-            query: { userid: 123 },
-          });
-        }}
-        textsize="m"
-        className="lg:w-max">Log in</Button>
+      <Button onClick={() =>router.push({pathname: "/Login",query: { userid: 123 }})} textsize="l">
+        <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>Log in</div>
+        </Button>
     </div>
   );
 };

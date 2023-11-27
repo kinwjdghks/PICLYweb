@@ -6,13 +6,12 @@ import arrow from '@/public/assets/images/arrow_back.svg';
 import Google from '@/public/assets/images/Google_logo.svg';
 import { StaticImageData } from "next/image";
 import { useRouter } from "next/router";
-import { useRef } from "react";
 
 const Icon = ({src,alt}:{src:StaticImageData, alt:string}) =>{
     const iconsize = 'w-16 h-16 rounded-full ';
     const logosize = 'w-8 h-8 ';
 
-    return <span className={`${iconsize} border-solid border-4 border-white flex justify-center items-center cursor-pointer`}>
+    return <span className={`${iconsize} border-solid border-4 border-white flex justify-center items-center cursor-pointer hover:scale-[105%]`}>
         <Image src={src} alt={alt} className={`${logosize}`} draggable="false"/>
     </span>
 }

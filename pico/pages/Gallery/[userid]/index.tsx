@@ -1,11 +1,13 @@
+import NewAlbumModal from "@/components/Gallery/newalbummodal";
 import AlbumContainer from "@/components/albumContainer";
 import { poppins } from "@/public/assets/fonts/poppins";
-import Image from "next/image";
-import search from "@/public/assets/images/search.svg";
 import styles from "@/styles/icons.module.css";
+import { useState } from "react";
 
 
 const Header = () => {
+  
+
     const transition = 'transition-[width] ease-in-out duration-[1000]';
   return (
     <div className="w-screen h-20 p-2 lg:px-64 fixed top-0 bg-pico_default flex items-center place-content-between z-[100]">
@@ -25,25 +27,27 @@ const Header = () => {
 };
 
 
-const AddPic = () =>{
+const AddPic = ({open}:{open:()=>void}) =>{
 
   return <button className={`
   ${styles.addbtn}
-   w-24 h-24 m-12 rounded-full bg-pico_darker fixed right-0 bottom-0 border-solid border-4 border-[#8cb4f3]`} onClick={(e)=>{e.preventDefault()}}></button>
+   w-24 h-24 m-12 rounded-full bg-pico_darker fixed right-0 bottom-0 border-solid border-4 border-[#8cb4f3]`} onClick={(e)=>{e.preventDefault();open()}}></button>
 }
 
 const GalleryPage = () => {
+  const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
   const media = "";
   return (
     <div
       className={
         media +
-        "w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll"
+        "w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"
       }
     >
       <Header />
       <AlbumContainer />
-      <AddPic/>
+      <AddPic open={()=>setNewAlbumModalopen(true)}/>
+      {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)}/>}
     </div>
   );
 };
