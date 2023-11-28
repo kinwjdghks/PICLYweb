@@ -1,12 +1,16 @@
-import NewAlbumModal from "@/components/Gallery/newalbummodal";
-import AlbumContainer from "@/components/albumContainer";
+// import NewAlbumModal from "@/components/Gallery/newalbummodal";
+import AlbumContainer from "@/components/AlbumContainer";
 import { poppins } from "@/public/assets/fonts/poppins";
 import styles from "@/styles/icons.module.css";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 
+//dynamic import component
+const NewAlbumModal = dynamic(()=> import('@/components/Gallery/newalbummodal'),{
+  ssr:false
+})
 
 const Header = () => {
-  
 
     const transition = 'transition-[width] ease-in-out duration-[1000]';
   return (
@@ -31,7 +35,8 @@ const AddPic = ({open}:{open:()=>void}) =>{
 
   return <button className={`
   ${styles.addbtn}
-   w-24 h-24 m-12 rounded-full bg-pico_darker fixed right-0 bottom-0 border-solid border-4 border-[#8cb4f3]`} onClick={(e)=>{e.preventDefault();open()}}></button>
+   w-24 h-24 m-12 rounded-full bg-pico_darker fixed right-0 bottom-0 border-solid border-4 border-[#8cb4f3] hover:scale-[110%]`} 
+   onClick={(e)=>{e.preventDefault();open()}}></button>
 }
 
 const GalleryPage = () => {

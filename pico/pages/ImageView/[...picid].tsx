@@ -16,6 +16,8 @@ import { useEffect, useState, useRef } from "react";
 import { overrideTailwindClasses as ovr } from "tailwind-override";
 // import {Transition} from 'react-transition-group';
 
+
+
 const ImageView = () => {
   const dummypics = [
     {

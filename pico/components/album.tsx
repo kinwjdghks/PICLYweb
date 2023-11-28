@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { StaticImageData } from "next/image";
-import { albumProps } from "./albumContainer";
+import { albumProps } from "./AlbumContainer";
 import stacked from '@/public/assets/images/stacked.svg';
 import { useRouter } from "next/router";
 
