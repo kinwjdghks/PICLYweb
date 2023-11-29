@@ -134,8 +134,8 @@ function PicoCarousel({ pics }: carouselProps) {
     setActiveIndex(newIndex);
   };
 
-  const imageList = pics.map((url) => (
-    <div className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative">
+  const imageList = pics.map((url,idx) => (
+    <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative">
       <Image
         src={url.src}
         alt={`${url}`}

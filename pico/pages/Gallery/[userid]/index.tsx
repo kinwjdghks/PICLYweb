@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 
 //dynamic import component
-const NewAlbumModal = dynamic(()=> import('@/components/Gallery/newalbummodal'),{
+const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'),{
   ssr:false
 })
 

@@ -1,71 +1,113 @@
 import { useState, useRef, useEffect } from "react";
+import { EmptyBlock, ImageBlock, TagBlock } from "./Blocks";
 import { IoIosClose } from "react-icons/io";
 import { FaHashtag } from "react-icons/fa";
-import Image from "next/image";
+import { BsSendFill } from "react-icons/bs";
+import styles from "@/styles/animation.module.css";
 
-const ImageBlock = ({img,ondelete}:{img:string,ondelete:(img:string)=>void}) =>{
 
-    return <div className="h-full aspect-square p-4 bg-orange-100">
-        <Image src={img} alt="userImage" className="w-full h-full"/>
+const ErrorModal = ({errorNo,maxTag,maxImg,reset}:{errorNo: number, maxTag:number, maxImg:number,reset:()=>void}) =>{
+    
+    const errorMessage = ["",
+                        `최대 ${maxTag}개의 태그를 남길 수 있습니다`,
+                        "중복된 태그가 있습니다",
+                        `최대 ${maxImg}개의 이미지를 저장할 수 있습니다`,
+                        "중복된 이미지가 있습니다"];
+    useEffect(()=>{
+        return ()=>{
+            const timer: NodeJS.Timeout = setTimeout(()=>{ //연속으로 오는 에러 핸들링 필요
+                reset();
+            },1200);
+        }
+    },[errorNo]);
+    return <div className="absolute left-1/2 -translate-x-1/2 bottom-[105%]"><div className={`${errorNo && styles.showmsg} p-2 px-4 bg-pico_lighter rounded-xl`}>
+        <p className={`text-xl`}>{errorMessage[errorNo]}</p>
     </div>
-}
-
-const EmptyBlock = ({updatefiles}:{updatefiles:(img : FileList|null)=>void}) =>{
-    const inputImgRef = useRef<HTMLInputElement>(null);
-
-    return <div className="h-full aspect-[3/4] border-solid border-2 border-pico-default rounded-lg bg-orange-100">
-        <input className="w-full h-full cursor-pointer opacity-0" type='file' accept="img/*" multiple
-        ref={inputImgRef}
-        onChange={(e)=>{() => updatefiles(e.currentTarget.files || null)}}/>
     </div>
-}
-
-const TagBlock = ({tag,ondelete}:{tag:string,ondelete:(tag:string)=>void}) =>{
-    return <div className="w-max h-max p-2 mr-2 my-2 flex rounded-md text-black bg-pico_blue">
-        <h2 className="mx-1">{tag}</h2>
-        <IoIosClose className="w-6 h-6 cursor-pointer" onClick={()=>ondelete(tag)}/>
-        </div>
 }
 
 const NewAlbumModal = ({close}:{close:()=>void}) =>{
     
+    const scrollImgRef = useRef<HTMLDivElement>(null);
     const inputTagRef = useRef<HTMLInputElement>(null);
     const scrollTagRef = useRef<HTMLDivElement>(null);
-    const [imgfiles,setImgfiles] = useState<File[]|null>([]);
+    const [imgfiles,setImgfiles] = useState<File[]>([]);
     const [tagList, setTagList] = useState<string[]>([]);
-    const [error,setError] = useState<number>(0); //0: no error 1: tags overflow 2:duplicate tags 3: image overflow
+    const [error,setError] = useState<number>(0); //0: no error 1: tags overflow 2:duplicate tags 3: image overflow 4: duplicate imgs
     const maxImgNum = 5;
     const maxTagNum = 5;
 
-    const updatefiles = ({fileList}:{fileList:FileList|null}) =>{
+    const deleteImageHandler = (filename: string) =>{
+        if(!imgfiles) return;
+        const updatedFileList = imgfiles.filter((img)=>img.name != filename);
+        setImgfiles(updatedFileList);
+    }
+
+    const updatefiles = (fileList:FileList|null) =>{
+        // console.log(fileList);
+        console.log("update files");
         if(imgfiles && fileList){
+
+            //img overflow check
             if(maxImgNum < imgfiles.length + fileList.length){
                 setError(3);
-                const newFileList = Array.from(fileList) || null;
-                const updatedFileList = [...imgfiles, ...newFileList];
-                setImgfiles(updatedFileList);
-                console.log(updatedFileList);
+                return;
             }
+
+            //dupliction check
+            const newFileList = Array.from(fileList) || null;
+            for(const file of newFileList){
+                for(let i=0;i<imgfiles.length;i++){
+                    console.log(file.name+'   '+imgfiles[i].name);
+                    if(file.name == imgfiles[i].name){
+                        console.log("error 4");
+                        setError(4); //duplicate imgs
+                        return;
+                    }   
+                }
+            }
+
+            const updatedFileList = [...imgfiles, ...newFileList];
+            setImgfiles(updatedFileList);
+            console.log("file updated");
         }
     }
 
-    const autoscroll = () => {
+    //autoscroll to very left when list updated.
+    const tagAutoscroll = () => {
         const scrollContainer = scrollTagRef.current;
         if (scrollContainer) {
           const maxScrollLeft = scrollContainer.scrollWidth + scrollContainer.clientWidth;
-          console.log(maxScrollLeft)
+        //   console.log(maxScrollLeft)
           scrollContainer.scrollTo(maxScrollLeft, 0);
         }
     }
-    useEffect(()=>autoscroll,[tagList.length]);
+    useEffect(()=>tagAutoscroll,[tagList.length]);
+
+    const imgAutoscroll = () => {
+        const scrollContainer = scrollImgRef.current;
+        if (scrollContainer) {
+          const maxScrollLeft = scrollContainer.scrollWidth + scrollContainer.clientWidth;
+        //   console.log(maxScrollLeft)
+          scrollContainer.scrollTo(maxScrollLeft, 0);
+        }
+    }
+    useEffect(()=>imgAutoscroll,[imgfiles.length]);
+
+
+
 
     const addTagHandler = () =>{
         if(inputTagRef.current){
-            if(tagList.length == maxTagNum) return;
-
+            
             const newtag = inputTagRef.current.value.trim();
             // console.log(newtag);
             if(newtag == '') return;
+
+            if(tagList.length == maxTagNum){
+                setError(1);
+                return;
+            }
             const res = tagList.find((tag)=> tag==newtag);
             if(res){
                 setError(2);
@@ -85,24 +127,30 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
         setTagList(newTagList);
     }
 
-   return  <div className="w-screen h-screen fixed top-0 left-0">
-        <div className="(backdrop) w-full h-full fixed bg-black opacity-50 z-100" onClick={(e)=>{close(); e.stopPropagation()}}></div>
-        <div className="(modal) w-1/2 h-1/2  p-5 fixed z-101 bg-white rounded-2xl top-1/4 left-1/4 flex flex-col items-center">
+    
+
+   return  <div className={`w-screen h-screen fixed top-0 left-0 z-[102]`}>
+        <div className="(backdrop) w-full h-full fixed bg-black opacity-50 z-100" ></div>
+        <IoIosClose className="w-16 h-16 absolute top-0 right-0 m-8 cursor-pointer" onClick={()=>{close()}}/>
+        <div className="(modal) lg:w-[800px] lg:h-[500px] w-[300px] h-[600px] p-5 relative z-101 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-white rounded-2xl flex flex-col items-center">
+            <BsSendFill className = "w-8 h-8 absolute right-0 top-0 m-6 fill-black cursor-pointer"/>
+            {error!=0 && <ErrorModal errorNo={error} maxTag={maxTagNum} maxImg={maxImgNum} reset={()=>setError(0)}/>}
             <h1 className="text-black text-3xl mb-6">새 앨범</h1>
-            <div className="(image list) w-full  bg-pico_darker rounded-2xl overflow-x-scroll scrollbar-hide">
-                <div className="min-w-max w-max h-full flex items-center p-4">
-                    {/* {imgList.map((img)=>{})} */}
-                    <EmptyBlock updatefiles={()=>updatefiles} />
+            <div className="(image list) w-full flex-auto bg-pico_darker rounded-2xl relative overflow-x-scroll scrollbar-hide basis-0" ref={scrollImgRef}>
+                <div className="min-w-full w-max h-full flex items-center gap-4 p-4">
+                    {imgfiles!.map((img:File)=> <ImageBlock key={img.name} file={img} ondelete={deleteImageHandler}/>)}
+                    <EmptyBlock updatefiles={updatefiles} />
                 </div>
             </div>
-            <div className="(tag list) w-full h-20 relative overflow-x-scroll scrollbar-hide align-center" ref={scrollTagRef}>
+            <div className="(tag list) w-full h-14 flex overflow-x-scroll scrollbar-hide" ref={scrollTagRef}>
                 <div className="min-w-max w-min h-max flex items-center" >
                 {tagList.map((tag)=> <TagBlock key={tag} tag={tag} ondelete={deleteTagHandler}/>)}
                 </div>
+                <div className=" w-full h-8"></div>
             </div>
-            <div className="w-full h-min flex items-center ">
+            <div className="(tag input) w-full h-min flex items-center box-border place-self-end">
                 <span className="w-max mr-3 text-black text-3xl "><FaHashtag/></span>
-                
+            
                 <input type="text" disabled={error==1 || error==2} className={`disabled:opacity-70 w-full p-2 border-solid border-2 border-black text-black text-xl`}
                      ref={inputTagRef}
                      onKeyDown={(e)=>{
@@ -111,6 +159,7 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
                             addTagHandler();
                             }
                      }}
+                     autoFocus
                      placeholder="해쉬태그를 입력하세요"
                      />
             </div>

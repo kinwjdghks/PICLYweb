@@ -52,7 +52,7 @@ const ImageView = () => {
           if (btnRef.current) {
             setShowcopymsg(false);
           }
-        }, 1000);        
+        }, 1200);        
       }
     
       if (btnRef.current) {

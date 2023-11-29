@@ -42,7 +42,7 @@
     }
   }
 .showmsg{
-  animation: msgappear 1s ease-in-out;
+  animation: msgappear 1.2s ease-in-out;
 }
   @keyframes msgappear {
     0%{

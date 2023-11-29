@@ -1,4 +1,4 @@
-import Album from "./album";
+import Album from "./Album";
 import { useState } from "react";
 import { StaticImageData } from "next/image";
 import ex1 from "@/public/assets/images/ex1.jpeg";
@@ -37,7 +37,7 @@ const dummyItem:albumProps[] = [{
 
 const AlbumContainer = () =>{
     const [albumList, setAlbumList] = useState<albumProps[]>(dummyItem);
-    const albumcomponents = albumList.map((item)=><Album item={item}/>);
+    const albumcomponents = albumList.map((item,idx)=><Album key={idx} item={item}/>);
     // const media = 'lg:px-40 lg:gap-[5%] lg:py-48 '
     const media = 'lg:px-64 lg:pt-32 pb-8 lg:gap-[4rem] ';
 
