@@ -73,6 +73,12 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
         }
     }
 
+    const onAlbumCreate = () =>{
+
+        
+    }
+
+
     //autoscroll to very left when list updated.
     const tagAutoscroll = () => {
         const scrollContainer = scrollTagRef.current;
@@ -93,9 +99,6 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
         }
     }
     useEffect(()=>imgAutoscroll,[imgfiles.length]);
-
-
-
 
     const addTagHandler = () =>{
         if(inputTagRef.current){
@@ -133,7 +136,8 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
         <div className="(backdrop) w-full h-full fixed bg-black opacity-50 z-100" ></div>
         <IoIosClose className="w-16 h-16 absolute top-0 right-0 m-8 cursor-pointer" onClick={()=>{close()}}/>
         <div className="(modal) lg:w-[800px] lg:h-[500px] w-[300px] h-[600px] p-5 relative z-101 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-white rounded-2xl flex flex-col items-center">
-            <BsSendFill className = "w-8 h-8 absolute right-0 top-0 m-6 fill-black cursor-pointer"/>
+            <BsSendFill className = "w-8 h-8 absolute right-0 top-0 m-6 fill-black cursor-pointer"
+                        onClick={onAlbumCreate}/>
             {error!=0 && <ErrorModal errorNo={error} maxTag={maxTagNum} maxImg={maxImgNum} reset={()=>setError(0)}/>}
             <h1 className="text-black text-3xl mb-6">새 앨범</h1>
             <div className="(image list) w-full flex-auto bg-pico_darker rounded-2xl relative overflow-x-scroll scrollbar-hide basis-0" ref={scrollImgRef}>
@@ -142,14 +146,15 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
                     <EmptyBlock updatefiles={updatefiles} />
                 </div>
             </div>
-            <div className="(tag list) w-full h-14 flex overflow-x-scroll scrollbar-hide" ref={scrollTagRef}>
-                <div className="min-w-max w-min h-max flex items-center" >
-                {tagList.map((tag)=> <TagBlock key={tag} tag={tag} ondelete={deleteTagHandler}/>)}
+
+                <div className="(tag list) w-full h-14 flex overflow-x-scroll scrollbar-hide" ref={scrollTagRef}>
+                    <div className="min-w-max w-min h-max flex items-center" >
+                    {tagList.map((tag)=> <TagBlock key={tag} tag={tag} ondelete={deleteTagHandler}/>)}
+                    </div>
                 </div>
-                <div className=" w-full h-8"></div>
-            </div>
+                
             <div className="(tag input) w-full h-min flex items-center box-border place-self-end">
-                <span className="w-max mr-3 text-black text-3xl "><FaHashtag/></span>
+                <span className="w-max mr-3 text-black text-3xl text-center"><FaHashtag/></span>
             
                 <input type="text" disabled={error==1 || error==2} className={`disabled:opacity-70 w-full p-2 border-solid border-2 border-black text-black text-xl`}
                      ref={inputTagRef}

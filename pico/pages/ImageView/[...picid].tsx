@@ -3,8 +3,8 @@ import ex2 from "@/public/assets/images/ex2.jpeg";
 import ex3 from "@/public/assets/images/ex3.jpeg";
 import logo from "@/public/assets/images/logo.png";
 import link from "@/public/assets/images/link.svg";
-import menu from "@/public/assets/images/menu.svg";
-import close from "@/public/assets/images/close.svg";
+import { IoMenu } from "react-icons/io5";
+import { IoIosClose } from "react-icons/io";
 //images
 import Image from "next/image";
 import Link from "next/link";
@@ -14,7 +14,6 @@ import { poppins } from "@/public/assets/fonts/poppins";
 import styles from '@/styles/animation.module.css';
 import { useEffect, useState, useRef } from "react";
 import { overrideTailwindClasses as ovr } from "tailwind-override";
-// import {Transition} from 'react-transition-group';
 
 
 
@@ -68,14 +67,12 @@ const ImageView = () => {
     const goback = ()=> window.history.back();
 
     return (
-      <div className={`w-max h-max fixed flex gap-x-8 right-0 top-0 m-10 ${poppins.className}`}>
-          <Image src={close} alt="close" width={50} height={50}
-            onClick={goback} className="fixed top-0 left-0 m-10 cursor-pointer"></Image>
+      <div className={`w-max h-max fixed flex items-center gap-x-8 right-0 top-0 m-10 ${poppins.className}`}>
+          <IoIosClose className="w-14 h-14 fixed top-0 left-0 m-8 cursor-pointer fill-[#aaaaaa]"
+             onClick={goback}/>
 
-
-          <Image src={menu} alt='menu' width={40} height={40} 
-            onClick={(e)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}
-            className="cursor-pointer hover:scale-[115%]"/>
+          <IoMenu className="w-10 h-10 cursor-pointer hover:scale-[115%]" 
+            onClick={(e:Event)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}/>  
           <MenuBar open = {menuOpen} first={first} menuClose={()=>{setMenuOpen(false)}}/>
           <Image src={link} alt='linkcopy' width={40} height={40}
             className="cursor-pointer hover:scale-[115%]"

@@ -13,7 +13,7 @@ const ThumbNail = ({ src, len }: { src: StaticImageData, len:number }) => {
   );
 };
 
-const Album = ({ item }: { item: albumProps }) => {
+const AlbumComponent= ({ item }: { item: albumProps }) => {
   const router = useRouter();
   return (
     <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer"
@@ -31,4 +31,4 @@ const Album = ({ item }: { item: albumProps }) => {
   );
 };
 
-export default Album;
+export default AlbumComponent;
