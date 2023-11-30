@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { StaticImageData } from "next/image";
-import { albumProps } from "./AlbumContainer";
 import stacked from '@/public/assets/images/stacked.svg';
 import { useRouter } from "next/router";
+import Album from "@/templates/Album";
 
 const ThumbNail = ({ src, len }: { src: StaticImageData, len:number }) => {
   return (
@@ -13,19 +13,19 @@ const ThumbNail = ({ src, len }: { src: StaticImageData, len:number }) => {
   );
 };
 
-const AlbumComponent= ({ item }: { item: albumProps }) => {
+const AlbumComponent= ({ item }: { item: Album }) => {
   const router = useRouter();
   return (
     <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer"
         onClick = {()=>{
             router.push({
-              pathname: "/ImageView/[...userid]",
-              query: { userid: 'arbitrary' },
-            })
+            pathname: "/ImageView/[...userid]",
+            query: { userid: 'arbitrary' },
+          })
         }}
         >
         <div className="w-full h-full relative rounded-md bg-pico_lighter">
-      <ThumbNail src={item.thumbnail[0]} len={item.thumbnail.length}/>
+      <ThumbNail src={item.getImageURLs[0]} len={item.getImageURLs.length}/>
       </div>
     </div>
   );

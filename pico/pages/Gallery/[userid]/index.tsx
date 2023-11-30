@@ -3,14 +3,14 @@ import AlbumContainer from "@/components/AlbumContainer";
 import { poppins } from "@/public/assets/fonts/poppins";
 import styles from "@/styles/icons.module.css";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'),{
   ssr:false
 })
 
-const Header = () => {
+const Header = ({onChange}:{onChange:(input:string)=>void}) => {
 
     const transition = 'transition-[width] ease-in-out duration-[1000]';
   return (
@@ -24,6 +24,7 @@ const Header = () => {
           className={`${styles.search} w-1/2 hover:w-full lg:hover:w-1/2 focus:w-full lg:focus:w-1/2 h-12 float-right border-solid border-[2px] p-2 px-4 m-1 bg-pico_darker border-pico_darker box-border rounded-md text-xl ${transition}`}
           type="text"
           placeholder="#태그 검색"
+          onChange={(e)=>onChange(e.target.value)}
         />
       </div>
     </div>
@@ -41,6 +42,10 @@ const AddPic = ({open}:{open:()=>void}) =>{
 
 const GalleryPage = () => {
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
+  const [tagSearchInput,setTagSearchInput] = useState<string>('');
+  
+
+  
   const media = "";
   return (
     <div
@@ -49,8 +54,8 @@ const GalleryPage = () => {
         "w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"
       }
     >
-      <Header />
-      <AlbumContainer />
+      <Header onChange={(input:string)=>setTagSearchInput(input)}/>
+      <AlbumContainer tagInput={tagSearchInput}/>
       <AddPic open={()=>setNewAlbumModalopen(true)}/>
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)}/>}
     </div>
