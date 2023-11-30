@@ -4,7 +4,7 @@ import { TbBoxMultiple } from "react-icons/tb";
 import Album from "@/templates/Album";
 import { useSetRecoilState } from "recoil";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
-import { formatDateString } from "@/lib/functions/functions";
+import { formatDateString,formatTimeString, dateDiffAsString } from "@/lib/functions/functions";
 
 const ThumbNail = ({ src, len }: { src: StaticImageData, len:number }) => {
   return (
@@ -20,11 +20,18 @@ const AlbumComponent= ({ item }: { item: Album }) => {
   
   const Info = () =>{
     if(!item) return null
-    else return <div className="(info) w-full aspect-[3/1] p-2 flex flex-col">
-      <div className="(d-day) p-2 pb-0 ">{}</div>
-      <ul className="p-2">{item.getTags.map((tag)=>
-        <li className="(tags) inline-block list-none mr-3 text-[#aaaaaa] text-[2rem]">#{tag}</li>)}
-      </ul> 
+    const created = item.getCreationTime;
+    const expire = item.getExpireTime;
+
+    return <div className="(info) w-full aspect-[3/1] pb-2 p-4 flex flex-col justify-between">
+      <div className="flex justify-between">
+        <div className="(creation) p-2 pb-0 text-[3rem]">{formatDateString(created)}</div>
+        <div className="(d-day) p-2 text-[3rem]">D-{dateDiffAsString(expire,new Date())}</div>
+      </div>
+      <ul className="px-2 overflow-hidden whitespace-nowrap">{item.getTags.map((tag)=>
+        <li className="(tags) inline-block list-none mr-3 text-[#aaaaaa] text-[2rem] ">#{tag}</li>)}
+      </ul>
+      <div className="absolute"></div>
     </div>
   }
   

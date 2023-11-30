@@ -40,8 +40,14 @@ export const EmptyBlock = ({updatefiles}:{updatefiles:(fileList:FileList|null)=>
 }
 
 export const TagBlock = ({tag,ondelete}:{tag:string,ondelete:(tag:string)=>void}) =>{
-    return <div className="w-max h-10 p-2 mr-2 my-2 flex rounded-md text-black bg-pico_blue">
+    return <div className="w-max h-12 p-2 mr-2 my-2 text-2xl flex rounded-md text-black bg-pico_blue">
         <h2 className="mx-1">{tag}</h2>
-        <IoIosClose className="w-6 h-6 cursor-pointer" onClick={()=>ondelete(tag)}/>
+        <IoIosClose className="w-8 h-8 cursor-pointer" onClick={()=>ondelete(tag)}/>
         </div>
+}
+
+
+export const Calender = () =>{
+
+    return <div className=""></div>
 }

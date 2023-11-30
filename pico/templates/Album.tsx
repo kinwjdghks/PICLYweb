@@ -22,6 +22,10 @@ export default class Album{
         return this.albumID;
     }
 
+    get getCreationTime():Date{
+        return this.creationTime;
+    }
+
     get getTags(){
         return this.tags;
     }
@@ -40,7 +44,7 @@ export default class Album{
 
     public searchForTag = (input:string):boolean =>{
         for(const tag of this.tags){
-            if(tag == input) return true;
+            if(tag.includes(input)) return true;
         }
         return false;
     }

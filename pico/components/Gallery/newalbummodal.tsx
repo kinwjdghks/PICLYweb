@@ -135,9 +135,9 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
    return  <div className={`w-screen h-screen fixed top-0 left-0 z-[102]`}>
         <div className="(backdrop) w-full h-full fixed bg-black opacity-50 z-100" ></div>
         <IoIosClose className="w-16 h-16 absolute top-0 right-0 m-8 cursor-pointer" onClick={()=>{close()}}/>
-        <div className="(modal) lg:w-[800px] lg:h-[500px] w-[300px] h-[600px] p-5 relative z-101 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-white rounded-2xl flex flex-col items-center">
-            <BsSendFill className = "w-8 h-8 absolute right-0 top-0 m-6 fill-black cursor-pointer"
-                        onClick={onAlbumCreate}/>
+        <div className="(modal) lg:w-[900px] lg:h-[700px] w-[300px] h-[600px] p-5 relative z-101 left-1/3 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-white rounded-2xl flex flex-col items-center">
+            <BsSendFill className = "w-8 h-8 absolute right-0 top-0 m-6 fill-black cursor-pointer hover:scale-[115%] "
+                        onClick={()=>{onAlbumCreate();close()}}/>
             {error!=0 && <ErrorModal errorNo={error} maxTag={maxTagNum} maxImg={maxImgNum} reset={()=>setError(0)}/>}
             <h1 className="text-black text-3xl mb-6">새 앨범</h1>
             <div className="(image list) w-full flex-auto bg-pico_darker rounded-2xl relative overflow-x-scroll scrollbar-hide basis-0" ref={scrollImgRef}>
@@ -147,8 +147,8 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
                 </div>
             </div>
 
-                <div className="(tag list) w-full h-14 flex overflow-x-scroll scrollbar-hide" ref={scrollTagRef}>
-                    <div className="min-w-max w-min h-max flex items-center" >
+                <div className="(tag list) w-full h-[5.5rem] flex overflow-x-scroll scrollbar-hide" ref={scrollTagRef}>
+                    <div className="min-w-max w-min h-full flex items-center" >
                     {tagList.map((tag)=> <TagBlock key={tag} tag={tag} ondelete={deleteTagHandler}/>)}
                     </div>
                 </div>
