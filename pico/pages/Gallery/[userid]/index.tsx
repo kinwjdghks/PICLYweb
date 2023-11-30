@@ -3,7 +3,11 @@ import AlbumContainer from "@/components/AlbumContainer";
 import { poppins } from "@/public/assets/fonts/poppins";
 import styles from "@/styles/icons.module.css";
 import dynamic from "next/dynamic";
-import { useEffect, useState, useRef } from "react";
+import {useEffect, useState} from "react";
+import { curAlbumState } from "@/lib/recoil/curAlbumState";
+import { useRecoilValue } from "recoil";
+import PicoCarousel from "@/components/ui/carousel";
+import Actionbar from "@/components/AlbumView/ActionBar";
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'),{
@@ -14,7 +18,7 @@ const Header = ({onChange}:{onChange:(input:string)=>void}) => {
 
     const transition = 'transition-[width] ease-in-out duration-[1000]';
   return (
-    <div className="w-screen h-20 p-2 lg:px-64 fixed top-0 bg-pico_default flex items-center place-content-between z-[100]">
+    <div className="w-screen h-20 p-2 lg:px-64 fixed top-0 bg-pico_default flex items-center place-content-between">
       <div className={`w-max h-max pl-4  ${poppins.className} text-[2.5rem] font-[600] `}>
         PiCo
       </div>
@@ -42,22 +46,23 @@ const AddPic = ({open}:{open:()=>void}) =>{
 
 const GalleryPage = () => {
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
+  const [albumViewOpen,setAlbumViewOpen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
-  
+  const curAlbum = useRecoilValue(curAlbumState);
+
+  console.log(curAlbum);
 
   
-  const media = "";
   return (
-    <div
-      className={
-        media +
-        "w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"
-      }
-    >
+    <div className={"w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
+      <AlbumContainer tagInput={tagSearchInput} />
       <Header onChange={(input:string)=>setTagSearchInput(input)}/>
-      <AlbumContainer tagInput={tagSearchInput}/>
       <AddPic open={()=>setNewAlbumModalopen(true)}/>
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)}/>}
+      {curAlbum && <>
+        <PicoCarousel/>
+        <Actionbar/>
+        </>}
     </div>
   );
 };

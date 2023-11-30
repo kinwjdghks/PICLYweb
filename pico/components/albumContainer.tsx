@@ -8,7 +8,7 @@ import Album from "@/templates/Album";
 
 const a1 = new Album('1',new Date,[ex1,ex2,ex3],['tag1','tag2']);
 const a2 = new Album('2',new Date,[ex2,ex3,ex1],['tag3','tag4','tag5']);
-const a3 =  new Album('3',new Date,[ex3,ex1,ex2],['tag6']);
+const a3 =  new Album('3',new Date,[ex3],['tag6']);
 
 const dummyItem:Album[] = [
    a1,a2,a3

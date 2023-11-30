@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import arrow_forward from "@/public/assets/images/arrow_forward.svg";
 import arrow_back from "@/public/assets/images/arrow_back.svg";
-import Link from "next/link";
-
+import Album from "@/templates/Album";
+import { curAlbumState } from "@/lib/recoil/curAlbumState";
+import { useRecoilValue } from "recoil";
+import LoadingPage from "../Loading";
 export interface PIC {
   // src: string;
   src: StaticImageData;
@@ -47,7 +49,7 @@ const Arrows = ({next,prev}:{next:()=>void,prev:()=>void}) => {
 };
 
 const BackDrop = () =>{
-  return <div className="w-screen h-screen fixed top-0 left-0 bg-white opacity-[0.15]"></div>
+  return <div className="w-screen h-screen fixed top-0 left-0 bg-black opacity-80"></div>
 }
 
 const Slides = ({pics}:{pics:React.JSX.Element[]}) => {
@@ -73,13 +75,17 @@ const Indicators = ({
     );
   }
   
-  return <div className="w-min h-min fixed left-1/2 -translate-x-1/2 bottom-12 flex gap-3 justify-center">
+  return <div className="w-min h-min fixed left-1/2 -translate-x-1/2 bottom-10 flex gap-3 justify-center
+  ">
     {...indicators}
   </div>;
 };
 
-function PicoCarousel({ pics }: carouselProps) {
-  const length = pics.length;
+function PicoCarousel() {
+  const album = useRecoilValue(curAlbumState);
+  if(!album) return <LoadingPage/>
+
+  const length = album.getImageURLs.length;
   const [activeIndex, setActiveIndex] = useState(0);
   const screenRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
@@ -134,16 +140,19 @@ function PicoCarousel({ pics }: carouselProps) {
     setActiveIndex(newIndex);
   };
 
-  const imageList = pics.map((url,idx) => (
+  const imageList = album.getImageURLs.map((url,idx) => (
     <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative">
       <Image
         src={url.src}
         alt={`${url}`}
-        className="relative object-contain scale-90 translate-y-[-5%]"
+        fill
+        className="relative object-contain scale-[85%]"
         draggable={false}
       ></Image>
     </div>
   ));
+
+  
 
   return (
     <div className="(background) w-screen h-screen absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide"
