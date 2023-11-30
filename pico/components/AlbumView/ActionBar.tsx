@@ -1,16 +1,14 @@
 import Button from "@/components/ui/Button";
-import { poppins } from "@/public/assets/fonts/poppins";
-import styles from '@/styles/animation.module.css';
-import { useEffect, useState, useRef } from "react";
-import { overrideTailwindClasses as ovr } from "tailwind-override";
-import logo from "@/public/assets/images/logo.png";
-import link from "@/public/assets/images/link.svg";
-import { IoMenu } from "react-icons/io5";
-import { IoIosClose } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
-import { useSetRecoilState } from "recoil";
-import { curAlbumState } from "@/lib/recoil/curAlbumState";
+import styles from '@/styles/animation.module.css';
+import logo from "@/public/assets/images/logo.png";
+import link from "@/public/assets/images/link.svg";
+import { poppins } from "@/public/assets/fonts/poppins";
+import { useEffect, useState, useRef } from "react";
+import { overrideTailwindClasses as ovr } from "tailwind-override";
+import { IoMenu } from "react-icons/io5";
+import { IoIosClose } from "react-icons/io";
 
 const MenuBar = ({open,first,menuClose}:{open:Boolean,first:Boolean,menuClose:()=>void}) =>{
     
@@ -32,14 +30,13 @@ const MenuBar = ({open,first,menuClose}:{open:Boolean,first:Boolean,menuClose:()
     return <p className={ovr(`absolute top-[120%] text-2xl left-[24%] ${initial} ${show && styles.showmsg} `)}>Copied!</p>
   }
 
-const Actionbar = () => {
+const Actionbar = ({resetAlbum}:{resetAlbum:()=>void}) => {
     const [menuOpen,setMenuOpen] = useState<Boolean>(false);
     const [first,setFirst] = useState<Boolean>(true);
     const [showcopymsg,setShowcopymsg] = useState<Boolean>(false);
     const btnRef = useRef<HTMLImageElement>(null);
     const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
-    const setCurAlbum = useSetRecoilState(curAlbumState);
-    const resetCurAlbum = setCurAlbum(null);
+
 
     useEffect(() => {
       const handleClick = () => {
@@ -64,13 +61,10 @@ const Actionbar = () => {
       };
     }, []); //throttling for clicking copy btn
 
-
-    
-    
     return (
       <div className={`w-max h-max fixed flex items-center gap-x-8 right-0 top-0 m-10 ${poppins.className} z=[102]`}>
           <IoIosClose className="w-14 h-14 fixed top-0 left-0 m-8 cursor-pointer fill-[#aaaaaa]"
-             onClick={()=>{resetCurAlbum}}/>
+             onClick={resetAlbum}/>
 
           <IoMenu className="w-10 h-10 cursor-pointer hover:scale-[115%]" 
             onClick={(e:Event)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}/>  

@@ -5,7 +5,7 @@ import styles from "@/styles/icons.module.css";
 import dynamic from "next/dynamic";
 import {useEffect, useState} from "react";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import PicoCarousel from "@/components/ui/carousel";
 import Actionbar from "@/components/AlbumView/ActionBar";
 
@@ -46,11 +46,17 @@ const AddPic = ({open}:{open:()=>void}) =>{
 
 const GalleryPage = () => {
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
-  const [albumViewOpen,setAlbumViewOpen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
-  const curAlbum = useRecoilValue(curAlbumState);
+  const [curAlbum,setCurAlbum] = useRecoilState(curAlbumState);
+  // console.log(curAlbum);
+  useEffect(()=>{
+    document.onkeydown = function(e) {
+      if ("key" in e) {
+          if (e.key === "Escape") setCurAlbum(null);
+      }
+  };
+  },[]);
 
-  console.log(curAlbum);
 
   
   return (
@@ -61,7 +67,7 @@ const GalleryPage = () => {
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)}/>}
       {curAlbum && <>
         <PicoCarousel/>
-        <Actionbar/>
+        <Actionbar resetAlbum={()=>setCurAlbum(null)}/>
         </>}
     </div>
   );

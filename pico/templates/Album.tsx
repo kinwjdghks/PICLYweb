@@ -22,6 +22,10 @@ export default class Album{
         return this.albumID;
     }
 
+    get getTags(){
+        return this.tags;
+    }
+    
     set editTags(newTags:string[]){
         this.tags = [...newTags];
     }

@@ -1,18 +1,24 @@
 import AlbumComponent from "./AlbumComponent";
 import { useEffect, useState,useRef } from "react";
-import { StaticImageData } from "next/image";
 import ex1 from "@/public/assets/images/ex1.jpeg";
 import ex2 from "@/public/assets/images/ex2.jpeg";
 import ex3 from "@/public/assets/images/ex3.jpeg";
 import Album from "@/templates/Album";
 
-const a1 = new Album('1',new Date,[ex1,ex2,ex3],['tag1','tag2']);
-const a2 = new Album('2',new Date,[ex2,ex3,ex1],['tag3','tag4','tag5']);
-const a3 =  new Album('3',new Date,[ex3],['tag6']);
+const a1 = new Album('1',new Date(),[ex1,ex2,ex3],['tag1','tag2']);
+const a2 = new Album('2',new Date(),[ex2,ex3,ex1],['tag3','tag4','tag5']);
+const a3 =  new Album('3',new Date(),[ex3],['tag6']);
 
 const dummyItem:Album[] = [
    a1,a2,a3
 ];
+
+const NoResult = () =>{
+
+   return <div className="col-span-2">
+      <p className="text-white text-center text-[2.5rem] mt-40">No Result Found.</p>
+   </div>
+}
 
 const AlbumContainer = ({tagInput}:{tagInput:string}) =>{
     const [albumList, setAlbumList] = useState<Album[]>(dummyItem);
@@ -43,6 +49,7 @@ const AlbumContainer = ({tagInput}:{tagInput:string}) =>{
 
     return <div className= {media + `w-full h-min pt-[4.5rem] pb-10 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
         {filteredAlbumList.map((item,idx)=><AlbumComponent key={idx} item={item}/>)}
+        {!filteredAlbumList.length && <NoResult/>}
     </div>
 }
 
