@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useRecoilState } from "recoil";
 import PicoCarousel from "@/components/ui/carousel";
-import Actionbar from "@/components/AlbumView/ActionBar";
+import Actionbar from "@/components/Gallery/ActionBar";
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'),{
@@ -66,8 +66,8 @@ const GalleryPage = () => {
       <AddPic open={()=>setNewAlbumModalopen(true)}/>
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)}/>}
       {curAlbum && <>
-        <PicoCarousel/>
-        <Actionbar resetAlbum={()=>setCurAlbum(null)}/>
+        <PicoCarousel />
+        <Actionbar resetAlbum={()=>setCurAlbum(null)} mode="user"/>
         </>}
     </div>
   );

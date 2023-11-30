@@ -26,7 +26,7 @@ const Login = () => {
         <Image src="" alt="logo"></Image>
         <form className="w-full h-max m-10">
           <fieldset>
-            <input className={inputCN} type='text' placeholder="아이디 또는 전화번호"></input>
+            <input className={inputCN} type='text' placeholder="아이디"></input>
           </fieldset>
           <fieldset>
             <input className={inputCN} type='password' placeholder="비밀번호" ></input>

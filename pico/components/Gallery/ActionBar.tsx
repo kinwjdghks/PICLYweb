@@ -25,18 +25,20 @@ const MenuBar = ({open,first,menuClose}:{open:Boolean,first:Boolean,menuClose:()
     </ul>
   }
 
-  const CopiedMSG = ({show}:{show:Boolean}) =>{
-    const initial = '-translate-y-[20%] opacity-0 scale[0.95] ';
-    return <p className={ovr(`absolute top-[120%] text-2xl left-[24%] ${initial} ${show && styles.showmsg} `)}>Copied!</p>
-  }
+  
 
-const Actionbar = ({resetAlbum}:{resetAlbum:()=>void}) => {
+const Actionbar = ({resetAlbum,mode}:{resetAlbum:()=>void,mode:"user"|"guest"}) => {
     const [menuOpen,setMenuOpen] = useState<Boolean>(false);
     const [first,setFirst] = useState<Boolean>(true);
     const [showcopymsg,setShowcopymsg] = useState<Boolean>(false);
     const btnRef = useRef<HTMLImageElement>(null);
     const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
+    const user:Boolean = mode=="user";
 
+    const CopiedMSG = ({show}:{show:Boolean}) =>{
+      const initial = '-translate-y-[20%] opacity-0 scale[0.95] ';
+      return <p className={ovr(`absolute top-[120%] text-2xl ${user ? 'left-[25%]' : 'left-[-18%]'} ${initial} ${show && styles.showmsg} `)}>Copied!</p>
+    }
 
     useEffect(() => {
       const handleClick = () => {
@@ -63,24 +65,19 @@ const Actionbar = ({resetAlbum}:{resetAlbum:()=>void}) => {
 
     return (
       <div className={`w-max h-max fixed flex items-center gap-x-8 right-0 top-0 m-10 ${poppins.className} z=[102]`}>
-          <IoIosClose className="w-14 h-14 fixed top-0 left-0 m-8 cursor-pointer fill-[#aaaaaa]"
-             onClick={resetAlbum}/>
+          {user && <IoIosClose className="w-14 h-14 fixed top-0 left-0 m-8 cursor-pointer fill-[#aaaaaa]"
+             onClick={resetAlbum}/>}
 
-          <IoMenu className="w-10 h-10 cursor-pointer hover:scale-[115%]" 
-            onClick={(e:Event)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}/>  
-          <MenuBar open = {menuOpen} first={first} menuClose={()=>{setMenuOpen(false)}}/>
+          {user &&<IoMenu className="w-10 h-10 cursor-pointer hover:scale-[115%]" 
+            onClick={(e:Event)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}/> } 
+           <MenuBar open = {menuOpen} first={first} menuClose={()=>{setMenuOpen(false)}}/>
           <Image src={link} alt='linkcopy' width={40} height={40}
             className="cursor-pointer hover:scale-[115%]"
             onClick={()=>{}}
             ref={btnRef}/>
           <CopiedMSG show={showcopymsg}/>
-          <Link href={"/"} className="w-max h-max">
-            <Image
-              src={logo}
-              alt="pico"
-              width={70}
-              height={70}
-              className="cursor-pointer hover:scale-[110%]"
+          <Link href={"/"} className="w-max h-max" onClick={resetAlbum}>
+            <Image src={logo} alt="pico" width={70} height={70} className="cursor-pointer hover:scale-[110%]"
             />
           </Link>
       </div>

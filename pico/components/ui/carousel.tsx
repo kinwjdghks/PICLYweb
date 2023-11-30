@@ -6,15 +6,6 @@ import Album from "@/templates/Album";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useRecoilValue } from "recoil";
 import LoadingPage from "../Loading";
-export interface PIC {
-  // src: string;
-  src: StaticImageData;
-  key: number;
-}
-
-type carouselProps = {
-  pics: PIC[];
-};
 
 const Arrow = ({
   onClick,
@@ -26,17 +17,11 @@ const Arrow = ({
   const pos = dir == "back" ? "left-0" : "right-0";
 
   return (
-    <div
-      className={`(${dir} action) lg:w-24 w-20 h-full fixed top-0 ${pos} flex justify-center items-center lg:opacity-1 opacity-50`}
-    >
-      
-        <Image
-          src={dir == "back" ? arrow_back : arrow_forward}
+    <div className={`(${dir} action) lg:w-24 w-20 h-full fixed top-0 ${pos} flex justify-center items-center lg:opacity-1 opacity-50`}>
+      <Image src={dir == "back" ? arrow_back : arrow_forward} 
           alt="arrow"
           className="lg:w-16 lg:h-16 w-8 h-8 cursor-pointer"
-          onClick= {onClick}
-        />
-      
+          onClick= {onClick}/>
     </div>
   );
 };
@@ -81,8 +66,9 @@ const Indicators = ({
   </div>;
 };
 
-function PicoCarousel() {
+const PicoCarousel = ()=> {
   const album = useRecoilValue(curAlbumState);
+  
   if(!album) return <LoadingPage/>
 
   const length = album.getImageURLs.length;
@@ -90,6 +76,9 @@ function PicoCarousel() {
   const screenRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
   
+  // useEffect(()=>{
+
+  // },[]);
 
   useEffect(()=>{
     if (screenRef.current) {
