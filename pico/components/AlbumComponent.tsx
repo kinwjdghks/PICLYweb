@@ -25,11 +25,11 @@ const AlbumComponent= ({ item }: { item: Album }) => {
 
     return <div className="(info) w-full aspect-[3/1] pb-2 p-4 flex flex-col justify-between">
       <div className="flex justify-between">
-        <div className="(creation) p-2 pb-0 text-[2.5rem]">{formatDateString(created)}</div>
-        <div className="(d-day) p-2 text-[2.5rem]">D-{dateDiffAsString(expire,new Date())}</div>
+        <div className="(creation) lg:text-[2vw]">{formatDateString(created)}</div>
+        <div className="(d-day) lg:text-[1.8vw]">D-{dateDiffAsString(expire,new Date())}</div>
       </div>
       <ul className="px-2 overflow-hidden whitespace-nowrap">{item.getTags.map((tag)=>
-        <li className="(tags) inline-block list-none mr-3 text-[#aaaaaa] text-[2rem]" key={tag}>#{tag}</li>)}
+        <li className="(tags) inline-block list-none mr-3 text-[#aaaaaa] lg:text-[1.3vw]" key={tag}>#{tag}</li>)}
       </ul>
       <div className="absolute"></div>
     </div>

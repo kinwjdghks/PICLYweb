@@ -1,10 +1,11 @@
 import Image from "next/image";
-import logo_big_bright from "@/public/assets/images/logo_big_bright.svg";
+import logo_big_bright from "@/public/assets/images/PiCo_Logo.svg";
 import Button from "@/components/ui/Button";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import { useRouter } from "next/router";
 import { poppins } from "@/public/assets/fonts/poppins";
 import styles from '@/styles/icons.module.css';
+import { useRef } from "react";
 
 const Logos = () => {
   return (
@@ -12,7 +13,7 @@ const Logos = () => {
       <Image
         alt="logo"
         src={logo_big_bright}
-        className={`lg:absolute lg:w-[40%] lg:h-[40%] lg:min-w-[40rem] lg:min-h-[40rem] lg:left-[10%] lg:top-20 hidden lg:block lg:rotate-6`}
+        className={`lg:absolute lg:w-[30%] lg:h-[30%] lg:min-w-[40rem] lg:min-h-[40rem] lg:left-[10%] lg:top-20 hidden lg:block lg:rotate-6`}
       />
       <Image
       alt="logo"
@@ -23,21 +24,25 @@ const Logos = () => {
   );
 };
 
-const ActionBar = () => {
-  const router = useRouter();
-  return (
-    <div className="(action) w-full h-max flex flex-col mb-16 p-3 gap-6 lg:w-1/2 lg:justify-center lg:mb-0 lg:items-center">
-      <Button onClick={() => {}} textsize="l" >
-        <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>See More</div>
-      </Button>
-      <Button onClick={() =>router.push({pathname: "/Login",query: { userid: 123 }})} textsize="l">
-        <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>Log in</div>
-        </Button>
-    </div>
-  );
-};
 
 export default function Home() {
+  const detailsRef = useRef<HTMLDivElement|null>(null);
+  
+  const ActionBar = () => {
+    const router = useRouter();
+    return (
+      <div className="(action) w-full h-max flex flex-col mb-16 p-3 gap-6 lg:w-1/2 lg:justify-center lg:mb-0 lg:items-center">
+        <Button onClick={() => detailsRef?.current?.scrollIntoView({behavior:"smooth",})} textsize="l" >
+          <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>See More</div>
+        </Button>
+        <Button onClick={() =>router.push({pathname: "/Login",query: { userid: 123 }})} textsize="l">
+          <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>Log in</div>
+          </Button>
+      </div>
+    );
+  };
+  
+
   const gradient = 'bg-gradient-to-b from-black to-[#444452] from-0%to-100%';
   return (
     <div className="(mainpage) w-screen h-max relative bg-black flex flex-col align-middle overflow-hidden">
@@ -55,7 +60,7 @@ export default function Home() {
       <ActionBar />
       </div>
       <div className={`(gradientbox) w-screen h-[25vh] lg:h-[80vh] ${gradient}`}></div>
-      <div className={`(details) w-full h-max bg-pico_default flex flex-col items-center overflow-auto`}>
+      <div className={`(details) w-full h-max bg-pico_default flex flex-col items-center overflow-auto`} ref={detailsRef}>
         <div className={`(manual) w-11/12 lg:w-[40rem] h-[90vh] border-solid border-2 border-white box-border rounded-xl mt-16`}></div>
         <div className={`(manual) w-11/12 lg:w-[40rem] h-[90vh] border-solid border-2 border-white box-border rounded-xl my-16`}></div>
       </div>

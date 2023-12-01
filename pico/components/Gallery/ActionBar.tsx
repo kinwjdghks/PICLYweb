@@ -2,7 +2,7 @@ import Button from "@/components/ui/Button";
 import Image from "next/image";
 import Link from "next/link";
 import styles from '@/styles/animation.module.css';
-import logo from "@/public/assets/images/logo.png";
+import logo from "@/public/assets/images/PiCo_Logo_white.svg";
 import link from "@/public/assets/images/link.svg";
 import { poppins } from "@/public/assets/fonts/poppins";
 import { useEffect, useState, useRef } from "react";
@@ -77,7 +77,7 @@ const Actionbar = ({resetAlbum,mode}:{resetAlbum:()=>void,mode:"user"|"guest"}) 
             ref={btnRef}/>
           <CopiedMSG show={showcopymsg}/>
           <Link href={"/"} className="w-max h-max" onClick={resetAlbum}>
-            <Image src={logo} alt="pico" width={70} height={70} className="cursor-pointer hover:scale-[110%]"
+            <Image src={logo} alt="pico" width={30} height={30} className="cursor-pointer hover:scale-[110%] rotate-12"
             />
           </Link>
       </div>
