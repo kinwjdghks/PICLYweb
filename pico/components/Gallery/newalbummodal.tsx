@@ -4,6 +4,8 @@ import { IoIosClose } from "react-icons/io";
 import { FaHashtag } from "react-icons/fa";
 import { BsSendFill } from "react-icons/bs";
 import styles from "@/styles/animation.module.css";
+import Album from "@/templates/Album";
+import { StaticImageData } from "next/image";
 
 
 const ErrorModal = ({errorNo,maxTag,maxImg,reset}:{errorNo: number, maxTag:number, maxImg:number,reset:()=>void}) =>{
@@ -33,6 +35,7 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
     const scrollTagRef = useRef<HTMLDivElement>(null);
     const [imgfiles,setImgfiles] = useState<File[]>([]);
     const [tagList, setTagList] = useState<string[]>([]);
+    const [dueDate,setDueDate] = useState<Date|null>(null);
     const [error,setError] = useState<number>(0); //0: no error 1: tags overflow 2:duplicate tags 3: image overflow 4: duplicate imgs
     const maxImgNum = 5;
     const maxTagNum = 5;
@@ -73,7 +76,12 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
         }
     }
 
-    const onAlbumCreate = () =>{
+    const onAlbumCreate = async () =>{
+        //save image to ths storage and get url array.
+        const urlList:StaticImageData[] = [];
+        
+        if(dueDate == null) return;
+        const newAlbum = new Album(dueDate,urlList,tagList);
 
         
     }

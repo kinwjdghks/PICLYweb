@@ -1,7 +1,6 @@
 import { StaticImageData } from "next/image";
 
 export default class Album{
-    private readonly albumID: string;
     private readonly creationTime: Date;
     private expireTime: Date;
     private tags: string[];
@@ -9,17 +8,12 @@ export default class Album{
     private imageURLs: StaticImageData[]; //for development & test
     private viewCount: number;
 
-    constructor(albumID:string, expireTime:Date, imageURLs:StaticImageData[],tags:string[]){
-        this.albumID = albumID;
+    constructor(expireTime:Date, imageURLs:StaticImageData[],tags:string[]){
         this.creationTime = new Date();
         this.expireTime = expireTime;
-        this.tags =[...tags];
-        this.imageURLs = [...imageURLs]; //address for images in storage
+        this.tags =tags;
+        this.imageURLs = imageURLs; //address for images in storage
         this.viewCount = 0;
-    }
-
-    get getAlbumID():string{
-        return this.albumID;
     }
 
     get getCreationTime():Date{

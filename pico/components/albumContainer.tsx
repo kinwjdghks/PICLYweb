@@ -5,9 +5,9 @@ import ex2 from "@/public/assets/images/ex2.jpeg";
 import ex3 from "@/public/assets/images/ex3.jpeg";
 import Album from "@/templates/Album";
 
-const a1 = new Album('1',new Date('2023-12-22T19:00:00'),[ex1,ex2,ex3],['tag1','tag2']);
-const a2 = new Album('2',new Date('2023-12-22T01:00:00'),[ex2,ex3,ex1],['tag3','tag4','tag5','superlongtag','supersupersuperlongtag']);
-const a3 =  new Album('3',new Date('2024-01-22T22:00:00'),[ex3],['tag6']);
+const a1 = new Album(new Date('2023-12-22T19:00:00'),[ex1,ex2,ex3],['tag1','tag2']);
+const a2 = new Album(new Date('2023-12-22T01:00:00'),[ex2,ex3,ex1],['tag3','tag4','tag5','superlongtag','supersupersuperlongtag']);
+const a3 =  new Album(new Date('2024-01-22T22:00:00'),[ex3],['tag6']);
 
 const dummyItem:Album[] = [
    a1,a2,a3

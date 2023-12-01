@@ -18,6 +18,7 @@ export const formatTimeString = (date:Date):string=> {
 
 
  export const dateDiffAsString = (date1:Date, date2:Date):string =>{
+    if(!(date1 instanceof Date && date2 instanceof Date)) return 'not defined';
     const timeDifference = Math.abs(date1.getTime() - date2.getTime());
     const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     const hoursDifference = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
