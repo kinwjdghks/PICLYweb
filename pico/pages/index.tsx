@@ -51,7 +51,7 @@ export default function Home() {
       <Logos />
        
       <div className={`(container) lg:w-1/2 w-full h-full p-12 pt-20 text-center ${nanumgothic.className}`}>
-        <h1 className={`text-[2.5rem] ${poppins.className} lg:text-[5rem]`}>PiCo:</h1>
+        <h1 className={`text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>PiCo</h1>
         <h2 className="text-xl lg:text-3xl">손쉬운 익명 사진 공유</h2>
         <h3 className="p-8 pt-12 leading-[1.8rem] lg:text-xl lg:leading-[2.5rem]">PiCo는 사진을 빠르고 안전하게 공유하는 새로운 방법입니다.<br/>익명으로 사진을 업로드하고,<br/> 링크를 통해 손쉽게 공유하세요.</h3>
       </div>
