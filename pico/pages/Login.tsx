@@ -1,7 +1,6 @@
 import Image from "next/image";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import Button from "@/components/ui/Button";
-import styles from '@/styles/animation.module.css';
 import { _user_ } from "@/templates/user";
 import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -10,13 +9,13 @@ import arrow from '@/public/assets/images/arrow_back.svg';
 import PiCologo from '@/public/assets/images/PiCo_Logo_white.svg';
 import { useRouter } from "next/router";
 import { auth } from "@/lib/firebase/firebase";
-import { MouseEventHandler, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import { UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "@/lib/recoil/loginstate";
 import { db } from "@/lib/firebase/firebase";
-import { collection,doc,getDoc, setDoc } from "firebase/firestore";
-import { resolve } from "path";
+import { doc,getDoc, setDoc } from "firebase/firestore";
+
 
 type loginMethod = 'google'|'apple'|'email'
 

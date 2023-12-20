@@ -25,9 +25,7 @@ const AlbumContainer = ({tagInput}:{tagInput:string}) =>{
     const [filteredAlbumList,setFilteredAlbumList]= useState<Album[]>(albumList);
 
     const timer = useRef<NodeJS.Timeout|null>(null);
-    // const media = 'lg:px-40 lg:gap-[5%] lg:py-48 '
     const media = 'lg:px-64 lg:pt-32 pb-8 lg:gap-[4rem] ';
-   //  console.log(albumList);
 
     const filterByTag = (tagInput:string) =>{
       if(tagInput.trim() == ''){

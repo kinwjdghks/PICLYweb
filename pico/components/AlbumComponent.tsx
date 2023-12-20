@@ -9,7 +9,7 @@ import { formatDateString,formatTimeString, dateDiffAsString } from "@/lib/funct
 const ThumbNail = ({ src, len }: { src: StaticImageData, len:number }) => {
   return (
     <div className={`(frame) w-full aspect-square rounded-md overflow-hidden relative`}>
-    <Image src={src} alt="pic" className="object-cover w-full h-full" />
+    <Image src={src} alt="pic" className="object-cover w-full h-full" draggable='false' />
     {len > 1 && <TbBoxMultiple className="w-8 h-8 absolute bottom-4 right-4"/>}
   </div>
   );

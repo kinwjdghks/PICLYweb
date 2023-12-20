@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useRecoilValue } from "recoil";
 import nextImg from '@/public/assets/images/arrow_forward.svg'
@@ -47,26 +47,36 @@ const Indicators = ({
 
 const PicoCarousel = ()=> {
   const album = useRecoilValue(curAlbumState);
-  
-  if(!album) return <LoadingPage/>
-  const steps = album.getImageURLs.length;
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const screenRef = useRef<HTMLDivElement>(null);
   const slideRef = useRef<HTMLDivElement>(null);
   const activeImgRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
   
-  useEffect(()=>{
 
+  useEffect(() => {
+    const container = screenRef.current;
+    if (container) {
+      container.addEventListener("scroll", updateIndicatorOnScroll);
+
+      return () => {
+        container.removeEventListener("scroll", updateIndicatorOnScroll);
+      };
+    }
+  }, []);
+
+  useEffect(()=>{
+    
     if(activeImgRef.current){
       activeImgRef.current.scrollIntoView({
         behavior:"smooth",
-        // block: "center", // Vertical alignment in the middle of the screen
-        // inline: "center", // Horizontal alignment in the center of the screen
       });
     }
-    console.log(activeIndex);
   },[activeIndex]);
+  
+  if(!album) return <LoadingPage/>
+
+  const steps = album.getImageURLs.length;
 
   const next = () => {
     const nextIndex = activeIndex === steps - 1 ? 0 : activeIndex + 1;
@@ -83,6 +93,7 @@ const PicoCarousel = ()=> {
   };
 
   const updateIndicatorOnScroll = () => {
+    // console.log(screenRef.current?.scrollLeft);
     if(timerRef.current !== null){
       clearTimeout(timerRef.current);
     }
@@ -93,25 +104,16 @@ const PicoCarousel = ()=> {
         console.log(Math.round(screenRef.current.scrollLeft/screenWidth));
         setActiveIndex(Math.round(screenRef.current.scrollLeft/screenWidth));
         }      
-      }, 15); 
+      }, 50); 
   };
 
-  useEffect(() => {
-    const container = screenRef.current;
-    if (container) {
-      container.addEventListener("scroll", updateIndicatorOnScroll);
-      
-      return () => {
-        container.removeEventListener("scroll", updateIndicatorOnScroll);
-      };
-    }
-  }, []);
+  
 
   const imageList = album.getImageURLs.map((url,idx) => (
     <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative" ref={slideRef}>
       {idx == activeIndex && <div className="(anchor) w-1 h-1 absolute" key={idx} ref={activeImgRef}></div>}
       <Image
-        src={url.src}
+        src={url}
         alt={`${url}`}
         fill
         className="relative object-contain scale-[85%]"
