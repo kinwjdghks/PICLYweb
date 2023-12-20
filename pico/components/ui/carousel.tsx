@@ -1,37 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import arrow_forward from "@/public/assets/images/arrow_forward.svg";
-import arrow_back from "@/public/assets/images/arrow_back.svg";
-import Album from "@/templates/Album";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useRecoilValue } from "recoil";
 import LoadingPage from "../Loading";
-
-const Arrow = ({
-  onClick,
-  dir,
-}: {
-  onClick: () => void;
-  dir: "back" | "forward";
-}) => {
-  const pos = dir == "back" ? "left-0" : "right-0";
-
-  return (
-    <div className={`(${dir} action) lg:w-24 w-20 h-full fixed top-0 ${pos} flex justify-center items-center lg:opacity-1 opacity-50`}>
-      <Image src={dir == "back" ? arrow_back : arrow_forward} 
-          alt="arrow"
-          className="lg:w-16 lg:h-16 w-8 h-8 cursor-pointer"
-          onClick= {onClick}/>
-    </div>
-  );
-};
-
-const Arrows = ({next,prev}:{next:()=>void,prev:()=>void}) => {
-  return<>
-    <Arrow onClick={prev} dir="back" />
-    <Arrow onClick={next} dir="forward" />
-  </>;
-};
+import { GrNext,GrPrevious } from "react-icons/gr";
 
 const BackDrop = () =>{
   return <div className="w-screen h-screen fixed top-0 left-0 bg-black opacity-80"></div>
@@ -41,6 +13,17 @@ const Slides = ({pics}:{pics:React.JSX.Element[]}) => {
   return <div className="w-min h-screen flex relative">{pics}</div>
 }
 
+const Action = ({prev,next}:{prev:()=>void, next:()=>void}) =>{
+
+  const cn = "";
+  return<>
+  <div className="fill-white">
+    <GrPrevious onClick={prev} color='white' style={{color:"white", width:'200px',height:'200px'}}/>
+    </div>
+    <GrNext onClick={next} className={``}/>
+  </>
+
+}
 
 const Indicators = ({
   totalNum,
@@ -70,25 +53,26 @@ const PicoCarousel = ()=> {
   const album = useRecoilValue(curAlbumState);
   
   if(!album) return <LoadingPage/>
-
-  const length = album.getImageURLs.length;
-  const [activeIndex, setActiveIndex] = useState(0);
+  const steps = album.getImageURLs.length;
+  const [activeIndex, setActiveIndex] = useState<number>(1);
   const screenRef = useRef<HTMLDivElement>(null);
+  const activeImgRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
   
-  // useEffect(()=>{
-
-  // },[]);
 
   useEffect(()=>{
-    if (screenRef.current) {
-      const scrollPosition = activeIndex * screenRef.current.clientWidth;
-      screenRef.current.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth',
-      });
+    // if (screenRef.current) {
+    //   const scrollPosition = activeIndex * screenRef.current.clientWidth;
+    //   screenRef.current.scrollTo({
+    //     left: scrollPosition,
+    //     behavior: 'smooth',
+    //   });
+    // }
+    if(activeImgRef.current){
+      activeImgRef.current.scrollIntoView({behavior:"smooth"});
+      console.log('scroll');
     }
-    // console.log(activeIndex);
+    console.log(activeIndex);
   },[activeIndex]);
 
   useEffect(() => {
@@ -129,8 +113,10 @@ const PicoCarousel = ()=> {
     setActiveIndex(newIndex);
   };
 
+  setTimeout(()=>next,1000);
   const imageList = album.getImageURLs.map((url,idx) => (
     <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative">
+      {idx == activeIndex && <div ref={activeImgRef}></div> }
       <Image
         src={url.src}
         alt={`${url}`}
@@ -141,6 +127,7 @@ const PicoCarousel = ()=> {
     </div>
   ));
 
+  //mui codes
   
 
   return (
@@ -148,8 +135,7 @@ const PicoCarousel = ()=> {
     ref={screenRef}>
       <BackDrop/>
       <Slides pics={imageList}/>
-      <Arrows prev={prev} next={next}/>
-      <Indicators totalNum={length} curIdx={activeIndex} onClickHandler={goToIndex}/>
+      <Action next={next} prev={prev}/>
     </div>
   );
 }

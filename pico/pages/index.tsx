@@ -42,8 +42,9 @@ export default function Home() {
     );
   };
   
-
   const gradient = 'bg-gradient-to-b from-black to-[#444452] from-0%to-100%';
+
+
   return (
     <div className="(mainpage) w-screen h-max relative bg-black flex flex-col align-middle overflow-hidden">
       <div className="(content) w-full flex-grow flex flex-col  align-middle items-center
