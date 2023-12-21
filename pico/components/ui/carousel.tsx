@@ -14,8 +14,8 @@ const Action = ({prev,next}:{prev:()=>void, next:()=>void}) =>{
 
   const cn = "fixed top-1/2 -translate-y-1/2 w-12 h-12 cursor-pointer opacity-60";
   return<>
-    <Image className={`${cn} left-4`} src={prevImg} alt='prev' onClick={prev}/>
-    <Image className={`${cn} right-4`} src={nextImg} alt='next' onClick={next}/>
+    <Image className={`${cn} left-4`} src={prevImg} alt='prev' width={0} height={0} sizes='100vw' onClick={prev}/>
+    <Image className={`${cn} right-4`} src={nextImg} alt='next' width={0} height={0} sizes='100vw' onClick={next}/>
   </>
 
 }
@@ -49,21 +49,24 @@ const PicoCarousel = ()=> {
   const album = useRecoilValue(curAlbumState);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const screenRef = useRef<HTMLDivElement>(null);
-  const slideRef = useRef<HTMLDivElement>(null);
+  const isScrollListenerAdded = useRef<boolean>(false);
   const activeImgRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
-  
 
   useEffect(() => {
     const container = screenRef.current;
-    if (container) {
+    console.log("containerRef: "+ container);
+    if (container && !isScrollListenerAdded.current) {
       container.addEventListener("scroll", updateIndicatorOnScroll);
+      console.log('eventhandler attached')
+      isScrollListenerAdded.current = true;
 
       return () => {
         container.removeEventListener("scroll", updateIndicatorOnScroll);
+        isScrollListenerAdded.current = false;
       };
     }
-  }, []);
+  }, [screenRef.current]);
 
   useEffect(()=>{
     
@@ -101,20 +104,21 @@ const PicoCarousel = ()=> {
     timerRef.current = setTimeout(() => {
       if (screenRef.current) {
         const screenWidth = screenRef.current.clientWidth;
-        console.log(Math.round(screenRef.current.scrollLeft/screenWidth));
+        // console.log(Math.round(screenRef.current.scrollLeft/screenWidth));
         setActiveIndex(Math.round(screenRef.current.scrollLeft/screenWidth));
         }      
-      }, 50); 
+      }, 20); 
   };
 
-  
-
   const imageList = album.getImageURLs.map((url,idx) => (
-    <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative" ref={slideRef}>
+    <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative">
       {idx == activeIndex && <div className="(anchor) w-1 h-1 absolute" key={idx} ref={activeImgRef}></div>}
       <Image
         src={url}
         alt={`${url}`}
+        width={0}
+        height={0}
+        sizes='100vw'
         fill
         className="relative object-contain scale-[85%]"
         draggable={false}
@@ -122,10 +126,10 @@ const PicoCarousel = ()=> {
     </div>
   ));
   
-  
 
   return (
-    <div className="(background) w-screen h-screen absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide" ref={screenRef}>
+    <div className="(background) w-screen h-screen absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide" 
+         ref={screenRef}>
       <BackDrop/>
       <div className="(screen) w-min h-screen flex relative" >{imageList}</div>
       <Action next={next} prev={prev}/>

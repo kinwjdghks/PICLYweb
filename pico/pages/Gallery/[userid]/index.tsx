@@ -8,6 +8,10 @@ import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useRecoilState } from "recoil";
 import PicoCarousel from "@/components/ui/carousel";
 import Actionbar from "@/components/Gallery/ActionBar";
+import { loginState as loginstate } from "@/lib/recoil/loginstate";
+import { useRouter } from "next/router";
+import Album from "@/templates/Album";
+import { getEntireAlbum } from "@/lib/functions/functions";
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'),{
@@ -48,20 +52,50 @@ const GalleryPage = () => {
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
   const [curAlbum,setCurAlbum] = useRecoilState(curAlbumState);
-  // console.log(curAlbum);
-  useEffect(()=>{
-    document.onkeydown = function(e) {
-      if ("key" in e) {
-          if (e.key === "Escape") setCurAlbum(null);
+  const [loginState,setLoginState] = useRecoilState(loginstate);
+  const [userAlbumList,setUserAlbumList] = useState<Album[]>([]);
+  
+  const router = useRouter();
+  useEffect(() => {
+    const handleKeyDown = (e:KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setCurAlbum(null);
       }
-  };
+    };
+  
+    document.addEventListener("keydown", handleKeyDown);
+  
+    return () => {
+      // Clean up the event listener when the component unmounts
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [setCurAlbum]);
+
+
+
+  useEffect(()=>{
+    if(!loginState){
+      router.push('/');
+      return;
+    }
+    getAllAlbumsFromUser();
+    setCurAlbum(null);
   },[]);
 
+  const getAllAlbumsFromUser = async () =>{
+    const albumNum = loginState!.albumIDs.length;
+    for(let i=0; i<albumNum ;i++){
+      const album:Album|undefined = await getEntireAlbum(loginState!.albumIDs[i]);
+      if(album){
+        setUserAlbumList((prev)=>[...prev,album]);
+      }
+    }
+  }
 
   
   return (
     <div className={"w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
-      <AlbumContainer tagInput={tagSearchInput} />
+      <AlbumContainer userAlbumList={userAlbumList} tagInput={tagSearchInput} />
       <Header onChange={(input:string)=>setTagSearchInput(input)}/>
       <AddPic open={()=>setNewAlbumModalopen(true)}/>
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)}/>}

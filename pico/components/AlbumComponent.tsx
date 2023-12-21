@@ -1,15 +1,14 @@
 import Image from "next/image";
-import { StaticImageData } from "next/image";
 import { TbBoxMultiple } from "react-icons/tb";
 import Album from "@/templates/Album";
 import { useSetRecoilState } from "recoil";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
-import { formatDateString,formatTimeString, dateDiffAsString } from "@/lib/functions/functions";
+import { formatDateString, dateDiffAsString } from "@/lib/functions/functions";
 
-const ThumbNail = ({ src, len }: { src: StaticImageData, len:number }) => {
+const ThumbNail = ({ src, len }: { src: string, len:number }) => {
   return (
     <div className={`(frame) w-full aspect-square rounded-md overflow-hidden relative`}>
-    <Image src={src} alt="pic" className="object-cover w-full h-full" draggable='false' />
+    <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false' />
     {len > 1 && <TbBoxMultiple className="w-8 h-8 absolute bottom-4 right-4"/>}
   </div>
   );
@@ -19,7 +18,7 @@ const AlbumComponent= ({ item }: { item: Album }) => {
   const setCurAlbum = useSetRecoilState(curAlbumState);
   
   const Info = () =>{
-    if(!item) return null
+    if(!item) return <></>
     const created = item.getCreationTime;
     const expire = item.getExpireTime;
 

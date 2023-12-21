@@ -1,4 +1,13 @@
 
+export interface Album_t{
+    albumURL : string,
+    creationTime : Date,
+    expireTime : Date,
+    tags : string[],
+    imageURLs : string[], //address for images in storage
+    viewCount : number,
+}
+
 export default class Album{
     private readonly albumURL:string;
     private readonly creationTime: Date;
@@ -8,13 +17,16 @@ export default class Album{
     private imageURLs: string[]; //for development & test
     private viewCount: number;
 
-    constructor(albumURL:string,creationTime:Date ,expireTime:Date,tags:string[],imageURLs:string[],viewCount:number){
-        this.albumURL = albumURL;
-        this.creationTime = creationTime;
-        this.expireTime = expireTime;
-        this.tags =tags;
-        this.imageURLs = imageURLs; //address for images in storage
-        this.viewCount = viewCount;
+    constructor(album:Album_t){
+        this.albumURL = album.albumURL;
+        this.creationTime = album.creationTime;
+        this.expireTime = album.expireTime;
+        this.tags = album.tags;
+        this.imageURLs = album.imageURLs; //address for images in storage
+        this.viewCount = album.viewCount;
+    }
+    get getAlbumURL():string{
+        return this.albumURL;
     }
 
     get getCreationTime():Date{
@@ -57,5 +69,5 @@ export default class Album{
     get getViewCount():number{
         return this.viewCount;
     }
-
+ 
 }

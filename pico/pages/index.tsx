@@ -35,7 +35,7 @@ export default function Home() {
         <Button onClick={() => detailsRef?.current?.scrollIntoView({behavior:"smooth",})} textsize="l" >
           <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>See More</div>
         </Button>
-        <Button onClick={() =>router.push({pathname: "/Login",query: { userid: 123 }})} textsize="l">
+        <Button onClick={() =>router.push("/Login")} textsize="l">
           <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>Log in</div>
           </Button>
       </div>
