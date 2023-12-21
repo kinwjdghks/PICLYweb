@@ -81,7 +81,7 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
         const urlList:StaticImageData[] = [];
         
         if(dueDate == null) return;
-        const newAlbum = new Album(dueDate,urlList,tagList);
+        // const newAlbum = new Album(dueDate,urlList,tagList);
 
         
     }
