@@ -86,7 +86,7 @@ const Login = () => {
     
 
       if(userInfo.exists()){
-        const loggedInUser:_user_ = {socialID:id, authProvider:"Email", creationTime:userInfo.get('creationTime'), albumIDs:userInfo.get('albumIDs')};
+        const loggedInUser:_user_ = {uid:user.uid, email:id, authProvider:"Email", creationTime:userInfo.get('creationTime'), albumIDs:userInfo.get('albumIDs')};
         console.log(loggedInUser);
         setLoginstate(loggedInUser);
         sessionStorage.setItem('picoweb_loginState',JSON.stringify(loggedInUser));
@@ -142,7 +142,8 @@ const Login = () => {
     try{
       //create firebase user doc
     const user_doc = {
-      socialID: email,
+      uid: user.uid,
+      email: email,
       authProvider: 'Email',
       creationTime: new Date(),
       albumIDs: [],
@@ -173,9 +174,10 @@ const Login = () => {
     const pw = pwRef?.current?.value.trim();
     const pwc = pwcRef?.current?.value.trim();
     
-    // if(!inputValidation(id,pw,pwc)){
-    //   return;
-    // }
+    if(pw !== pwc){
+      setMsg('비밀번호가 일치하지 않습니다.');
+      return;
+    }
 
     // const result = loginMethod == 'google' ? await register_Google(id! , pw!)
     // : loginMethod == 'apple' ? await register_Apple(id!, pw!)

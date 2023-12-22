@@ -29,7 +29,7 @@ export const ImageBlock = ({file,ondelete}:{file:File,ondelete:(img:string)=>voi
 export const EmptyBlock = ({updatefiles}:{updatefiles:(fileList:FileList|null)=>void}) =>{
     const inputImgRef = useRef<HTMLInputElement>(null);
 
-    return <div className="h-full aspect-[2/3] relative border-solid border-2 border-pico-default rounded-lg flex justify-center items-center">
+    return <div className="h-full aspect-square relative border-solid border-2 border-pico-default rounded-lg flex justify-center items-center">
         <LuImagePlus className = "w-10 h-10 "/>
         <input className="w-full h-full absolute top-0 left-0 cursor-pointer opacity-0" type='file' accept="img/*" multiple
         ref={inputImgRef}
@@ -40,14 +40,9 @@ export const EmptyBlock = ({updatefiles}:{updatefiles:(fileList:FileList|null)=>
 }
 
 export const TagBlock = ({tag,ondelete}:{tag:string,ondelete:(tag:string)=>void}) =>{
-    return <div className="w-max h-12 p-2 mr-2 my-2 text-2xl flex rounded-md text-black bg-pico_blue">
+    return <div className="w-max h-11 p-2 mr-2 text-xl flex rounded-md text-white bg-pico_darker">
         <h2 className="mx-1">{tag}</h2>
         <IoIosClose className="w-8 h-8 cursor-pointer" onClick={()=>ondelete(tag)}/>
         </div>
 }
 
-
-export const Calender = () =>{
-
-    return <div className=""></div>
-}

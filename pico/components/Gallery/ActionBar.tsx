@@ -10,6 +10,7 @@ import { overrideTailwindClasses as ovr } from "tailwind-override";
 import { IoMenu } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 
+
 const MenuBar = ({open,first,menuClose}:{open:Boolean,first:Boolean,menuClose:()=>void}) =>{
     
     const liCN = "w-full h-12 text-right";
@@ -70,6 +71,7 @@ const Actionbar = ({resetAlbum,mode}:{resetAlbum:()=>void,mode:"user"|"guest"}) 
 
           {user &&<IoMenu className="w-10 h-10 cursor-pointer hover:scale-[115%]" 
             onClick={(e:Event)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}/> } 
+
            <MenuBar open = {menuOpen} first={first} menuClose={()=>{setMenuOpen(false)}}/>
           <Image src={link} alt='linkcopy' width={40} height={40}
             className="cursor-pointer hover:scale-[115%]"
@@ -77,8 +79,7 @@ const Actionbar = ({resetAlbum,mode}:{resetAlbum:()=>void,mode:"user"|"guest"}) 
             ref={btnRef}/>
           <CopiedMSG show={showcopymsg}/>
           <Link href={"/"} className="w-max h-max" onClick={resetAlbum}>
-            <Image src={logo} alt="pico" width={30} height={30} className="cursor-pointer hover:scale-[110%] rotate-12"
-            />
+            <Image src={logo} alt="pico" width={30} height={30} className="cursor-pointer hover:scale-[110%] rotate-12"/>
           </Link>
       </div>
     );

@@ -1,12 +1,12 @@
 import AlbumComponent from "./AlbumComponent";
 import { useEffect, useState,useRef } from "react";
 
-import Album from "@/templates/Album";
+import { Album } from "@/templates/Album";
 
 const NoResult = () =>{
 
    return <div className="col-span-2">
-      <p className="text-white text-center text-[2.5rem] mt-40">No Result Found.</p>
+      <p className="text-white text-center text-[2rem] mt-40">앨범이 없습니다</p>
    </div>
 }
 
@@ -22,7 +22,7 @@ const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[],tagInput
          setFilteredAlbumList(userAlbumList);
          return;
       }
-      const newList = userAlbumList.filter((album)=> album.searchForTag(tagInput));
+      const newList = userAlbumList.filter((album)=> album.tags.findIndex((tag)=>tag === tagInput) != -1);
       setFilteredAlbumList(newList);
     }
 

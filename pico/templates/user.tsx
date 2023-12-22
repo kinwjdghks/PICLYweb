@@ -1,7 +1,7 @@
 
 export interface _user_{
-    socialID: string;
+    uid: string;
+    email: string;
     authProvider: string;
     creationTime: Date;
-    albumIDs: string[];
 };

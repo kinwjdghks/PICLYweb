@@ -6,17 +6,16 @@ import dynamic from "next/dynamic";
 import {useEffect, useState} from "react";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useRecoilState } from "recoil";
-import PicoCarousel from "@/components/ui/carousel";
 import Actionbar from "@/components/Gallery/ActionBar";
 import { loginState as loginstate } from "@/lib/recoil/loginstate";
 import { useRouter } from "next/router";
-import Album from "@/templates/Album";
+import { Album } from "@/templates/Album";
 import { getEntireAlbum } from "@/lib/functions/functions";
+import { IoPersonSharp } from "react-icons/io5";
 
 //dynamic import component
-const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'),{
-  ssr:false
-})
+const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'));
+const PicoCarousel = dynamic(()=>import('@/components/ui/carousel'));
 
 const Header = ({onChange}:{onChange:(input:string)=>void}) => {
 
@@ -35,6 +34,7 @@ const Header = ({onChange}:{onChange:(input:string)=>void}) => {
           onChange={(e)=>onChange(e.target.value)}
         />
       </div>
+        <IoPersonSharp className="w-8 h-8"/>
     </div>
   );
 };
