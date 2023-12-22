@@ -64,11 +64,9 @@ import PicoCarousel from "@/components/ui/carousel";
 import { useSetRecoilState } from "recoil";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import Album, { Album_t } from "@/templates/Album";
 import { getEntireAlbum as getEntireAlbum_ } from "@/lib/functions/functions";
 import FallbackPage from "@/components/Fallback";
-import LoadingPage from "@/components/Loading";
+import Album from "@/templates/Album";
 
 const ImageView = () => {
   const setCurAlbum = useSetRecoilState(curAlbumState);

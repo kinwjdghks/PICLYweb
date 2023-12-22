@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, RefObject } from "react";
 import { EmptyBlock, ImageBlock, TagBlock } from "./Blocks";
 import { IoIosClose } from "react-icons/io";
 import { FaHashtag } from "react-icons/fa";
@@ -22,10 +22,62 @@ const ErrorModal = ({errorNo,maxTag,maxImg,reset}:{errorNo: number, maxTag:numbe
             },1200);
         }
     },[errorNo]);
-    return <div className="absolute left-1/2 -translate-x-1/2 bottom-[105%]"><div className={`${errorNo && styles.showmsg} p-2 px-4 bg-pico_lighter rounded-xl`}>
+    return <div className="absolute left-1/2 -translate-x-1/2"><div className={`${errorNo && styles.showmsg} p-2 px-4 bg-pico_lighter rounded-xl`}>
         <p className={`text-xl`}>{errorMessage[errorNo]}</p>
     </div>
     </div>
+}
+type ImgDisplayProps={
+    imgfiles:File[]
+    scrollImgRef:RefObject<HTMLDivElement>
+    deleteImageHandler:(filename: string)=>void
+    updatefiles:(fileList:FileList|null)=>void
+}
+
+const ImgDisplay = ({imgfiles,scrollImgRef,deleteImageHandler,updatefiles}:ImgDisplayProps):React.ReactNode =>{
+    return <div className="(image list) w-full flex-auto bg-pico_darker rounded-2xl relative overflow-x-scroll scrollbar-hide basis-0" ref={scrollImgRef}>
+                <div className="min-w-full w-max h-full flex items-center gap-4 p-4">
+                    {imgfiles!.map((img:File)=> <ImageBlock key={img.name} file={img} ondelete={deleteImageHandler}/>)}
+                    <EmptyBlock updatefiles={updatefiles} />
+                </div>
+            </div>
+}
+
+type TagListProps = {
+    scrollTagRef:RefObject<HTMLDivElement>
+    tagList:string[]
+    deleteTagHandler:(filename:string)=>void
+    error:number,
+    inputTagRef:RefObject<HTMLInputElement>,
+    addTagHandler:()=>void
+}
+
+const TagList = ({scrollTagRef,tagList,deleteTagHandler,error,inputTagRef,addTagHandler}:TagListProps):React.ReactNode =>{
+    return <><div className="(tag list) w-full h-[5.5rem] flex overflow-x-scroll scrollbar-hide" ref={scrollTagRef}>
+                    <div className="min-w-max w-min h-full flex items-center" >
+                    {tagList.map((tag)=> <TagBlock key={tag} tag={tag} ondelete={deleteTagHandler}/>)}
+                    </div>
+                </div>
+                <div className="(tag input) w-full h-min flex items-center box-border place-self-end">
+                <span className="w-max mr-3 text-black text-3xl text-center"><FaHashtag/></span>
+            
+                <input type="text" disabled={error==1 || error==2} className={`disabled:opacity-70 w-full p-2 border-solid border-2 border-black text-black text-xl`}
+                     ref={inputTagRef}
+                     onKeyDown={(e)=>{
+                        if((e.key == 'Enter' || e.keyCode == 13)&& !e.nativeEvent.isComposing){
+                            e.preventDefault();
+                            addTagHandler();
+                            }
+                     }}
+                     autoFocus
+                     placeholder="해쉬태그를 입력하세요"
+                     />
+            </div>
+            </>
+}
+
+const DateInput = ():React.ReactNode =>{
+    return <div className="w-"></div>
 }
 
 const NewAlbumModal = ({close}:{close:()=>void}) =>{
@@ -148,34 +200,11 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
                         onClick={()=>{onAlbumCreate();close()}}/>
             {error!=0 && <ErrorModal errorNo={error} maxTag={maxTagNum} maxImg={maxImgNum} reset={()=>setError(0)}/>}
             <h1 className="text-black text-3xl mb-6">새 앨범</h1>
-            <div className="(image list) w-full flex-auto bg-pico_darker rounded-2xl relative overflow-x-scroll scrollbar-hide basis-0" ref={scrollImgRef}>
-                <div className="min-w-full w-max h-full flex items-center gap-4 p-4">
-                    {imgfiles!.map((img:File)=> <ImageBlock key={img.name} file={img} ondelete={deleteImageHandler}/>)}
-                    <EmptyBlock updatefiles={updatefiles} />
-                </div>
-            </div>
-
-                <div className="(tag list) w-full h-[5.5rem] flex overflow-x-scroll scrollbar-hide" ref={scrollTagRef}>
-                    <div className="min-w-max w-min h-full flex items-center" >
-                    {tagList.map((tag)=> <TagBlock key={tag} tag={tag} ondelete={deleteTagHandler}/>)}
-                    </div>
-                </div>
-                
-            <div className="(tag input) w-full h-min flex items-center box-border place-self-end">
-                <span className="w-max mr-3 text-black text-3xl text-center"><FaHashtag/></span>
             
-                <input type="text" disabled={error==1 || error==2} className={`disabled:opacity-70 w-full p-2 border-solid border-2 border-black text-black text-xl`}
-                     ref={inputTagRef}
-                     onKeyDown={(e)=>{
-                        if((e.key == 'Enter' || e.keyCode == 13)&& !e.nativeEvent.isComposing){
-                            e.preventDefault();
-                            addTagHandler();
-                            }
-                     }}
-                     autoFocus
-                     placeholder="해쉬태그를 입력하세요"
-                     />
-            </div>
+            <ImgDisplay imgfiles={imgfiles} scrollImgRef={scrollImgRef} deleteImageHandler ={deleteImageHandler} updatefiles={updatefiles} />
+            <TagList scrollTagRef={scrollTagRef} tagList={tagList} deleteTagHandler={deleteTagHandler} error={error} inputTagRef={inputTagRef} addTagHandler={addTagHandler}/>  
+            <DateInput/>
+            
         </div>
     </div>
 }

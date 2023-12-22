@@ -15,7 +15,6 @@ import { useSetRecoilState } from "recoil";
 import { loginState } from "@/lib/recoil/loginstate";
 import { db } from "@/lib/firebase/firebase";
 import { DocumentSnapshot, doc,getDoc, setDoc } from "firebase/firestore";
-import { AuthErrorCodes } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
 type loginMethod = 'google'|'apple'|'email'
@@ -90,6 +89,7 @@ const Login = () => {
         const loggedInUser:_user_ = {socialID:id, authProvider:"Email", creationTime:userInfo.get('creationTime'), albumIDs:userInfo.get('albumIDs')};
         console.log(loggedInUser);
         setLoginstate(loggedInUser);
+        sessionStorage.setItem('picoweb_loginState',JSON.stringify(loggedInUser));
         router.push(`/Gallery/${user.uid}`)
         return true;
       }

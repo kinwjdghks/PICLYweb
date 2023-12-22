@@ -74,7 +74,13 @@ const GalleryPage = () => {
 
 
   useEffect(()=>{
+    
     if(!loginState){
+      const kookie = sessionStorage.getItem('picoweb_loginState');
+      if(kookie){
+        setLoginState(JSON.parse(kookie));
+        return;
+      }
       router.push('/');
       return;
     }

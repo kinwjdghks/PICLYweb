@@ -107,7 +107,7 @@ const PicoCarousel = ()=> {
         // console.log(Math.round(screenRef.current.scrollLeft/screenWidth));
         setActiveIndex(Math.round(screenRef.current.scrollLeft/screenWidth));
         }      
-      }, 20); 
+      }, 50); 
   };
 
   const imageList = album.getImageURLs.map((url,idx) => (
