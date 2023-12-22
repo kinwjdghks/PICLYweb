@@ -2,17 +2,16 @@ import Actionbar from "@/components/Gallery/ActionBar";
 import { useSetRecoilState } from "recoil";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useEffect } from "react";
-import Album, { Album_t } from "@/templates/Album";
-import { getEntireAlbum as getEntireAlbum_ } from "@/lib/functions/functions";
+import { Album } from "@/templates/Album";
 import LoadingPage from "@/components/Loading";
 import dynamic from "next/dynamic";
+import { getAlbumByID, getImagesByID } from "@/lib/functions/functions";
 const PicoCarousel = dynamic(()=>import('@/components/ui/carousel'));
 
-const ImageView = ({ albumData }: { albumData: Album_t|null }) => {
-  console.log(albumData);
-  if(!albumData) return <LoadingPage/>
+const ImageView = ({ album }: { album: Album|null }) => {
+  console.log(album);
+  if(!album) return <LoadingPage/>
 
-  const album = new Album(albumData);
   const setCurAlbum = useSetRecoilState(curAlbumState);
 
   useEffect(() => {
@@ -33,24 +32,28 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
   const albumID = query.albumID as string;
 
   try {
-    const album_: Album | undefined = await getEntireAlbum_(albumID);
-    // console.log(album_);
-    if (album_) {
-      const albumData:Album_t = {
-        albumID : album_.getAlbumID,
-        creationTime : JSON.parse(JSON.stringify(album_.getCreationTime)),
-        expireTime : JSON.parse(JSON.stringify(album_.getExpireTime)),
-        tags : album_.getTags || [],
-        viewCount : album_.getViewCount || 0,
+    const album_: Album | undefined = await getAlbumByID(albumID);
+    const images:string[]|undefined = await getImagesByID(albumID);
+    
+    if (album_ && images) {
+      const album:Album = {
+        albumID : album_.albumID,
+        ownerID : album_.ownerID,
+        creationTime : JSON.parse(JSON.stringify(album_.creationTime)),
+        expireTime : JSON.parse(JSON.stringify(album_.expireTime)),
+        tags : album_.tags || [],
+        images : images,
+        imageCount: album_.imageCount || 0,
+        viewCount : album_.viewCount || 0,
       }
       return {
-        props: { albumData } ,
+        props: { album } ,
       };
     }
-    else return { props: { albumData:null } }
+    else return { props: { album: null } }
   } catch (error) {
     console.error("Error fetching album:", error);
-    return { props: { albumData:null } };
+    return { props: { album: null } };
   }
 }
 

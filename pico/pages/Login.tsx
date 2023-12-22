@@ -86,7 +86,7 @@ const Login = () => {
     
 
       if(userInfo.exists()){
-        const loggedInUser:_user_ = {uid:user.uid, email:id, authProvider:"Email", creationTime:userInfo.get('creationTime'), albumIDs:userInfo.get('albumIDs')};
+        const loggedInUser:_user_ = {uid:user.uid, email:id, authProvider:"Email", creationTime:userInfo.get('creationTime')};
         console.log(loggedInUser);
         setLoginstate(loggedInUser);
         sessionStorage.setItem('picoweb_loginState',JSON.stringify(loggedInUser));
@@ -146,7 +146,6 @@ const Login = () => {
       email: email,
       authProvider: 'Email',
       creationTime: new Date(),
-      albumIDs: [],
     }
     const docRef = doc(db,'Users',user.uid);
     await setDoc(docRef, user_doc);

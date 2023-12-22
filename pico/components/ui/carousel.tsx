@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 import nextImg from '@/public/assets/images/arrow_forward.svg'
 import prevImg from '@/public/assets/images/arrow_back.svg'
 import LoadingPage from "../Loading";
+import { Album } from "@/templates/Album";
 
 const BackDrop = () =>{
   return <div className="w-screen h-screen fixed top-0 left-0 bg-black opacity-80"></div>
@@ -46,7 +47,7 @@ const Indicators = ({
 };
 
 const PicoCarousel = ()=> {
-  const album = useRecoilValue(curAlbumState);
+  const album:Album|null = useRecoilValue(curAlbumState);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const screenRef = useRef<HTMLDivElement>(null);
   const isScrollListenerAdded = useRef<boolean>(false);
@@ -77,9 +78,9 @@ const PicoCarousel = ()=> {
     }
   },[activeIndex]);
   
-  if(!album) return <LoadingPage/>
+  if(!album || !album.images) return <LoadingPage/>
 
-  const steps = album.getImageURLs.length;
+  const steps = album.images.length;
 
   const next = () => {
     const nextIndex = activeIndex === steps - 1 ? 0 : activeIndex + 1;
@@ -110,7 +111,7 @@ const PicoCarousel = ()=> {
       }, 50); 
   };
 
-  const imageList = album.getImageURLs.map((url,idx) => (
+  const imageList = album.images.map((url,idx) => (
     <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative">
       {idx == activeIndex && <div className="(anchor) w-1 h-1 absolute" key={idx} ref={activeImgRef}></div>}
       <Image

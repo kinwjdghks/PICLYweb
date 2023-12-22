@@ -5,7 +5,8 @@ export interface Album{
     creationTime : Date,
     expireTime : Date,
     tags : string[],
-    thumbnail: string,
+    thumbnail?: string,
+    images?:string[],
     imageCount: number,
     viewCount : number,
 }

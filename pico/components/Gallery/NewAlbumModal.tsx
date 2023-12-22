@@ -5,13 +5,12 @@ import { FaHashtag } from "react-icons/fa";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { BsSendFill } from "react-icons/bs";
 import styles from "@/styles/animation.module.css";
-import { StaticImageData } from "next/image";
-import { doc, setDoc } from "firebase/firestore";
-import { ref } from "firebase/storage";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "@/lib/firebase/firebase";
-import { Album_t } from "@/templates/Album";
-import { v4 as uuidv4 } from 'uuid';
-
+import { Album } from "@/templates/Album";
+import { loginState as loginState_ } from "@/lib/recoil/loginstate";
+import { useRecoilValue } from "recoil";
 
 const ErrorModal = ({errorNo,maxTag,maxImg,reset}:{errorNo: number, maxTag:number, maxImg:number,reset:()=>void}) =>{
     
@@ -105,6 +104,7 @@ const DateInput = ({handleDateChange, handleTimeChange,dateDiff}:DateInputProps)
 }
 
 const NewAlbumModal = ({close}:{close:()=>void}) =>{
+    const loginState = useRecoilValue(loginState_);
    
     const oneWeekLaterFromNow = new Date();
     oneWeekLaterFromNow.setDate(oneWeekLaterFromNow.getDate() + 7);
@@ -158,22 +158,40 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
     }
 
     const onAlbumCreate = async () =>{
-        const albumRef = doc(db,'Albums');
-        const uuid_ = uuidv4(); //create uuid
-        const uuid = uuid_.split('-').join('');
-        console.log(uuid);
-        console.log(albumRef);
-        const album:Album_t = {
-            albumURL: `https://picoweb.vercel.app/Album/${uuid}`,
+
+        //create album and post
+        
+        const album:Album = {
+            ownerID: loginState!.uid,
             creationTime: new Date(),
             expireTime: dueDate,
             tags: tagList,
-            imageURLs: [],
+            imageCount:imgfiles.length,
             viewCount: 0
         }
-        const setInitialAlbum = await setDoc(albumRef,album);
-        setInitialAlbum
-
+        let albumID:string;
+        try{
+        const docref = await addDoc(collection(db,"Albums"),album);
+        albumID = docref.id
+        }catch(error){
+            console.log(error);
+            return;
+        }
+        
+        //post images
+        for (let i = 0; i < imgfiles.length; i++) {
+            const imgFile = imgfiles[i];
+            const fileName = `${albumID}/${i}.jpeg`; // Generate a unique file name
+            const storageRef = ref(storage, fileName);
+        
+            try {
+              // Upload the image file to Firestore Storage
+              await uploadBytes(storageRef, imgFile);
+              console.log(`Image ${i + 1} uploaded successfully.`);
+            } catch (error) {
+              console.error(`Error uploading image ${i + 1}:`, error);
+            }
+          }
     }
 
 

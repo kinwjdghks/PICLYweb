@@ -10,8 +10,10 @@ import Actionbar from "@/components/Gallery/ActionBar";
 import { loginState as loginstate } from "@/lib/recoil/loginstate";
 import { useRouter } from "next/router";
 import { Album } from "@/templates/Album";
-import { getEntireAlbum } from "@/lib/functions/functions";
 import { IoPersonSharp } from "react-icons/io5";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase/firebase";
+import { getThumbNailByID } from "@/lib/functions/functions";
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'));
@@ -88,14 +90,40 @@ const GalleryPage = () => {
     setCurAlbum(null);
   },[]);
 
-  const getAllAlbumsFromUser = async () =>{
-    const albumNum = loginState!.albumIDs.length;
-    for(let i=0; i<albumNum ;i++){
-      const album:Album|undefined = await getEntireAlbum(loginState!.albumIDs[i]);
-      if(album){
-        setUserAlbumList((prev)=>[...prev,album]);
-      }
-    }
+  const getAllAlbumsFromUser = async ():Promise<Album[]> =>{
+    const uid = loginState!.uid;
+    console.log('uid:'+uid);
+    const albumQuery = query(collection(db, 'Albums'), where('ownerID', '==', uid));
+    const userAlbums:Album[] = []
+    try{
+    await getDocs(albumQuery)
+    .then((querySnapshot)=>{
+      querySnapshot.forEach(async (doc) => {
+        console.log(doc);
+        // Get data from each matching document
+        const albumData = doc.data();
+        console.log(albumData);
+        const thumbnail = await getThumbNailByID(albumData.albumID);
+        const album:Album ={
+          albumID :albumData.albumID || '',
+          ownerID : albumData.ownerID || '',
+          creationTime : albumData.creationTime,
+          expireTime : albumData.expireTime,
+          tags : albumData.tags || [],
+          thumbnail: thumbnail || '',
+          imageCount: albumData.imageCount || 0,
+          viewCount : albumData.viewCount || 0,
+        };
+        userAlbums.push(album);
+      });
+      setUserAlbumList(userAlbums);
+    })
+  }catch(error){
+    console.log(error);
+    return []
+  }
+  return []
+    // console.log('userAlbums:'+userAlbums);
   }
 
   

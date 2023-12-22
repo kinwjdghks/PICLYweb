@@ -1,4 +1,4 @@
-import Album from "@/templates/Album";
+import { Album } from "@/templates/Album";
 import { db,storage } from "../firebase/firebase";
 import { DocumentSnapshot, doc,getDoc } from "firebase/firestore";
 import { ListResult, getDownloadURL, listAll, ref } from "firebase/storage";
@@ -41,14 +41,14 @@ export const formatTimeString = (date:Date):string=> {
     return result;
   }
 
-  export const getEntireAlbum = async (albumURL:string|undefined):Promise<Album|undefined> =>{
-    // console.log('getEntireAlbum albumURL:'+albumURL);
-    if(!albumURL) return;
-    const albumRef = doc(db,'Albums',albumURL);
+  //need for random access
+  export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undefined> =>{
+    if(!albumID) return;
+    const albumRef = doc(db,'Albums',albumID);
     
     //get Album
     let album:Album;
-    let getAlbum:DocumentSnapshot
+    let getAlbum:DocumentSnapshot;
     try{
       getAlbum = await getDoc(albumRef);
     }catch(error){
@@ -57,36 +57,56 @@ export const formatTimeString = (date:Date):string=> {
     }
     
     if(getAlbum.exists()){
-      album = new Album({
-        albumURL:getAlbum.get('albumURL') as string,
-        creationTime:getAlbum.get('creationTime') as Date,
-        expireTime:getAlbum.get('expireTime') as Date,
-        tags:getAlbum.get('tags') as string[],
-        imageURLs:[],
-        viewCount:getAlbum.get('viewCount') as number
-        }
-      );
+      album = {
+        albumID: albumID,
+        ownerID: getAlbum.get('ownerID') as string,
+        creationTime: getAlbum.get('creationTime') as Date,
+        expireTime: getAlbum.get('expireTime') as Date,
+        tags: getAlbum.get('tags') as string[],
+        // thumbnail:getAlbum.get('thumbnail') as string,
+        imageCount: getAlbum.get('imageCount') as number,
+        viewCount: getAlbum.get('viewCount') as number,
+        };
     }
     else{
       console.log("Album not found");
       return;
     }
+    return album;
+  }
+  
+  export const getThumbNailByID = async (albumID:string|undefined):Promise<string|undefined> =>{
+    if (!albumID) {
+      return undefined;
+    }
+    const albumSRef = ref(storage, `${albumID}/0.jpeg`);
+    let thumbnail:string|undefined;
+    try {
+      const thumbnail = getDownloadURL(ref(storage, `${albumID}/0.jpeg`))
+    } catch (error) {
+      console.error('Error fetching thumbnail:', error);
+      return undefined;
+    }
+    return thumbnail;
+  }
 
-    //get imageURLs
-    const albumSRef = ref(storage, albumURL);
+  export const getImagesByID = async (albumID:string|undefined):Promise<string[]|undefined> =>{
+    if (!albumID) {
+      return undefined;
+    }
+    const albumSRef = ref(storage, albumID);
     let dataList:ListResult;
     try{
     dataList = await listAll(albumSRef);
     }catch(error){
       console.log(error);
-      return;
+      return undefined;
     }
-    const imageURLs = await Promise.all(
+    const images:string[] = await Promise.all(
       dataList.items.map(async (item) => {
         const downloadURL = await getDownloadURL(item);
         return downloadURL;
       })
     );
-    album.editImageURLs= imageURLs;
-    return album
+    return images;
   }

@@ -38,7 +38,7 @@ const AlbumComponent= ({ item }: { item: Album }) => {
     <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer"
         onClick = {()=>setCurAlbum(item)}>
       <div className="w-full h-full relative rounded-md bg-pico_lighter">
-        <ThumbNail src={item.thumbnail} len={item.imageCount}/>
+        <ThumbNail src={item.thumbnail!} len={item.imageCount}/>
         <Info/>
       </div>
     </div>
