@@ -14,6 +14,7 @@ import { IoPersonSharp } from "react-icons/io5";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebase";
 import { getThumbNailByID } from "@/lib/functions/functions";
+import { _user_ } from "@/templates/user";
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'));
@@ -76,54 +77,62 @@ const GalleryPage = () => {
 
 
   useEffect(()=>{
-    
+    const fetchUserAlbums = async (uid:string) => {
+      const userAlbums = await getAllAlbumsByID(uid);
+      // console.log(userAlbums);
+      setUserAlbumList(userAlbums);
+    };
     if(!loginState){
       const kookie = sessionStorage.getItem('picoweb_loginState');
       if(kookie){
-        setLoginState(JSON.parse(kookie));
+        const savedLoginState:_user_ = JSON.parse(kookie);
+        setLoginState(savedLoginState);
+        console.log('fetch user albums');
+        fetchUserAlbums(savedLoginState.uid);
+        setCurAlbum(null);
         return;
       }
       router.push('/');
       return;
     }
-    getAllAlbumsFromUser();
-    setCurAlbum(null);
+    else{
+      fetchUserAlbums(loginState.uid);
+      setCurAlbum(null);
+    }
   },[]);
 
-  const getAllAlbumsFromUser = async ():Promise<Album[]> =>{
-    const uid = loginState!.uid;
-    console.log('uid:'+uid);
+  const getAllAlbumsByID = async (uid:string):Promise<Album[]> =>{
+    // console.log('uid:'+uid);
     const albumQuery = query(collection(db, 'Albums'), where('ownerID', '==', uid));
-    const userAlbums:Album[] = []
-    try{
-    await getDocs(albumQuery)
-    .then((querySnapshot)=>{
-      querySnapshot.forEach(async (doc) => {
-        console.log(doc);
-        // Get data from each matching document
+    
+    try {
+      const querySnapshot = await getDocs(albumQuery);
+  
+      const fetchThumbnails = querySnapshot.docs.map(async (doc) => {
         const albumData = doc.data();
-        console.log(albumData);
-        const thumbnail = await getThumbNailByID(albumData.albumID);
-        const album:Album ={
-          albumID :albumData.albumID || '',
-          ownerID : albumData.ownerID || '',
-          creationTime : albumData.creationTime,
-          expireTime : albumData.expireTime,
-          tags : albumData.tags || [],
+        const thumbnail = await getThumbNailByID(doc.id);
+  
+        const album: Album = {
+          albumID: doc.id || '',
+          ownerID: albumData.ownerID || '',
+          creationTime: albumData.creationTime,
+          expireTime: albumData.expireTime,
+          tags: albumData.tags || [],
           thumbnail: thumbnail || '',
           imageCount: albumData.imageCount || 0,
-          viewCount : albumData.viewCount || 0,
+          viewCount: albumData.viewCount || 0,
         };
-        userAlbums.push(album);
+  
+        return album;
       });
-      setUserAlbumList(userAlbums);
-    })
-  }catch(error){
-    console.log(error);
-    return []
-  }
-  return []
-    // console.log('userAlbums:'+userAlbums);
+      const userAlbums:Album[] = await Promise.all(fetchThumbnails);
+
+      // console.log(userAlbums);
+      return userAlbums;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   }
 
   

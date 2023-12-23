@@ -1,7 +1,7 @@
 
 export interface _user_{
     uid: string;
-    email: string;
+    email?: string;
     authProvider: string;
     creationTime: Date;
 };

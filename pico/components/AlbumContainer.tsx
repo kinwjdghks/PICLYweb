@@ -11,9 +11,12 @@ const NoResult = () =>{
 }
 
 const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[],tagInput:string}) =>{
+   console.log('userAlbumList:'+userAlbumList);
 
     const [filteredAlbumList,setFilteredAlbumList]= useState<Album[]>(userAlbumList);
-
+    useEffect(()=>{
+      setFilteredAlbumList(userAlbumList);
+      },[userAlbumList])
     const timer = useRef<NodeJS.Timeout|null>(null);
     const media = 'lg:px-64 lg:pt-32 pb-8 lg:gap-[4rem] ';
 
@@ -34,6 +37,8 @@ const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[],tagInput
          filterByTag(tagInput);
       },500)
     },[tagInput]);
+
+    
 
     return <div className= {media + `w-full h-min pt-[4.5rem] pb-10 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
         {filteredAlbumList.map((item,idx)=><AlbumComponent key={idx} item={item}/>)}

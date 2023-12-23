@@ -79,15 +79,16 @@ export const formatTimeString = (date:Date):string=> {
     if (!albumID) {
       return undefined;
     }
-    const albumSRef = ref(storage, `${albumID}/0.jpeg`);
+    // const albumSRef = ref(storage, `${albumID}/0.jpeg`);
     let thumbnail:string|undefined;
     try {
-      const thumbnail = getDownloadURL(ref(storage, `${albumID}/0.jpeg`))
+      const thumbnail = await getDownloadURL(ref(storage, `${albumID}/0.jpeg`))
+      // console.log('thumbnail:'+thumbnail);
+      return thumbnail;
     } catch (error) {
       console.error('Error fetching thumbnail:', error);
       return undefined;
     }
-    return thumbnail;
   }
 
   export const getImagesByID = async (albumID:string|undefined):Promise<string[]|undefined> =>{
