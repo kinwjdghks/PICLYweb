@@ -33,7 +33,7 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
 
   try {
     const album_: Album | undefined = await getAlbumByID(albumID);
-    const images:string[]|undefined = await getImagesByID(albumID);
+    const images: string[]|undefined = await getImagesByID(albumID);
     
     if (album_ && images) {
       const album:Album = {

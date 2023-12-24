@@ -33,11 +33,12 @@ const Login = () => {
 
   const login_Google = async () => {
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ display: 'popup' });
+    provider.setCustomParameters({ display: 'popup',prompt:'select_account' });
     const auth = getAuth();
     signInWithPopup(auth,provider)
     .then( async (result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
+      console.log(result);
       const credential_ = GoogleAuthProvider.credentialFromResult(result);
       // const token = credential!.accessToken;
       const id_token = credential_?.idToken;

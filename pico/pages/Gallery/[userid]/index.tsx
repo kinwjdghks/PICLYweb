@@ -13,7 +13,7 @@ import { Album } from "@/templates/Album";
 import { IoPersonSharp } from "react-icons/io5";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebase";
-import { getThumbNailByID } from "@/lib/functions/functions";
+import { getImagesByID, getThumbNailByID } from "@/lib/functions/functions";
 import { _user_ } from "@/templates/user";
 
 //dynamic import component
@@ -100,6 +100,16 @@ const GalleryPage = () => {
       setCurAlbum(null);
     }
   },[]);
+
+  //complete the albums by fetching all images
+  useEffect(()=>{
+    userAlbumList.forEach(async (album)=>{
+      if(!album.images){
+        const fetchedAlbum = await getImagesByID(album.albumID);
+        album.images = fetchedAlbum;
+      }
+    })
+  },[userAlbumList]);
 
   const getAllAlbumsByID = async (uid:string):Promise<Album[]> =>{
     // console.log('uid:'+uid);
