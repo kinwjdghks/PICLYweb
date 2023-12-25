@@ -5,38 +5,41 @@ import { useSetRecoilState } from "recoil";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { formatDateString, dateDiffAsString, getImagesByID } from "@/lib/functions/functions";
 
-const ThumbNail = ({ src, len }: { src: string, len:number }) => {
+const ThumbNail = ({ src, len, priority }: { src: string, len:number, priority?:boolean }) => {
   return (
-    <div className={`(frame) w-full aspect-square rounded-md overflow-hidden relative`}>
-    <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false' />
+    <div className={`(frame) w-full aspect-square rounded-t-md overflow-hidden relative`}>
+    {priority ? <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false'  />
+      :<Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false' priority/>}
     {len > 1 && <TbBoxMultiple className="w-8 h-8 absolute bottom-4 right-4"/>}
   </div>
   );
 };
 
 
-const AlbumComponent= ({ item }: { item: Album }) => {
+const AlbumComponent= ({ item, priority }: { item: Album, priority?:boolean }) => {
   const setCurAlbum = useSetRecoilState(curAlbumState);
-  // console.log('item:'+item);
+  console.log('item:'+item);
  
   const fetchAllImages = async () =>{
-    const images = await getImagesByID(item.albumID);
-    item.images =  images ? [...images] : [];
-    setCurAlbum(item);
+    const images = await getImagesByID(item.albumID,item.imageCount);
+    if (images) {
+      const updatedItem = { ...item, images }; // Create a new object with updated properties
+      setCurAlbum(updatedItem);
+    }
   }
   
   const Info = () =>{
     if(!item) return <></>
-    const created = item.creationTime;
+    // const created = item.creationTime; 
     const expire = item.expireTime;
     
 
     return <div className="(info) w-full aspect-[3/1] pb-2 p-4 flex flex-col justify-between">
       <div className="flex justify-between">
-        <div className="(creation) lg:text-[2vw]">{formatDateString(new Date(created))}</div>
+        <div className="(creation) lg:text-[2vw]">{formatDateString(new Date(expire))}</div>
         <div className="(d-day) lg:text-[1.8vw]">D-{dateDiffAsString(new Date(expire),new Date())}</div>
       </div>
-      <ul className="px-2 overflow-hidden whitespace-nowrap">{item.tags.map((tag)=>
+      <ul className="overflow-hidden whitespace-nowrap">{item.tags.map((tag)=>
         <li className="(tags) inline-block list-none mr-3 text-[#aaaaaa] lg:text-[1.3vw]" key={tag}>#{tag}</li>)}
       </ul>
       <div className="absolute"></div>
@@ -47,7 +50,7 @@ const AlbumComponent= ({ item }: { item: Album }) => {
     <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer"
         onClick = {fetchAllImages}>
       <div className="w-full h-full relative rounded-md bg-pico_lighter">
-        <ThumbNail src={item.thumbnail!} len={item.imageCount}/>
+        <ThumbNail src={item.thumbnail! as string} len={item.imageCount} priority={priority && true}/>
         <Info/>
       </div>
     </div>

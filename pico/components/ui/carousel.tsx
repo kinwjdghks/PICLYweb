@@ -48,6 +48,8 @@ const Indicators = ({
 
 const PicoCarousel = ()=> {
   const album:Album|null = useRecoilValue(curAlbumState);
+  console.log('curAlbumState',album);
+  console.log(new Date());
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const screenRef = useRef<HTMLDivElement>(null);
   const isScrollListenerAdded = useRef<boolean>(false);

@@ -7,12 +7,11 @@ import {useEffect, useState} from "react";
 import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { useRecoilState } from "recoil";
 import Actionbar from "@/components/Gallery/ActionBar";
-import { loginState as loginstate } from "@/lib/recoil/loginstate";
 import { useRouter } from "next/router";
 import { Album } from "@/templates/Album";
 import { IoPersonSharp } from "react-icons/io5";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "@/lib/firebase/firebase";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase/firebase";
 import { getImagesByID, getThumbNailByID } from "@/lib/functions/functions";
 import { _user_ } from "@/templates/user";
 
@@ -28,16 +27,15 @@ const Header = ({onChange}:{onChange:(input:string)=>void}) => {
       <div className={`w-max h-max pl-4  ${poppins.className} text-[2.5rem] font-[600] `}>
         PiCo
       </div>
-      <div className="w-1/2">
-        {/* <Image src={search} alt="search" className="w-8 h-8 inline-block" /> */}
+      <div className="transla te-x-12 w-1/2 flex justify-end items-center">
         <input
           className={`${styles.search} w-1/2 hover:w-full lg:hover:w-1/2 focus:w-full lg:focus:w-1/2 h-12 float-right border-solid border-[2px] p-2 px-4 m-1 bg-pico_darker border-pico_darker box-border rounded-md text-xl ${transition}`}
           type="text"
           placeholder="#태그 검색"
           onChange={(e)=>onChange(e.target.value)}
         />
+        <IoPersonSharp className="m-4 w-8 h-8"/>
       </div>
-        <IoPersonSharp className="w-8 h-8"/>
     </div>
   );
 };
@@ -55,8 +53,7 @@ const GalleryPage = () => {
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
   const [curAlbum,setCurAlbum] = useRecoilState(curAlbumState);
-  const [loginState,setLoginState] = useRecoilState(loginstate);
-  const [userAlbumList,setUserAlbumList] = useState<Album[]>([]);
+  const [userAlbumList,setUserAlbumList] = useState<Album[]|undefined>(undefined);
   
   const router = useRouter();
   useEffect(() => {
@@ -75,58 +72,73 @@ const GalleryPage = () => {
   }, [setCurAlbum]);
 
 
+  const fetchUserAlbums = async (uid:string) => {
+    const userAlbums:Album[] = await getAllAlbumsByID(uid);
+    // console.log(userAlbums);
+    if(userAlbums.length == 0) setUserAlbumList(undefined);
+    setUserAlbumList(userAlbums);
+  };
 
   useEffect(()=>{
-    const fetchUserAlbums = async (uid:string) => {
-      const userAlbums = await getAllAlbumsByID(uid);
-      // console.log(userAlbums);
-      setUserAlbumList(userAlbums);
-    };
-    if(!loginState){
-      const kookie = sessionStorage.getItem('picoweb_loginState');
-      if(kookie){
-        const savedLoginState:_user_ = JSON.parse(kookie);
-        setLoginState(savedLoginState);
-        console.log('fetch user albums');
-        fetchUserAlbums(savedLoginState.uid);
+    auth.onAuthStateChanged((user)=>{
+      if(user){
+        fetchUserAlbums(user.uid);
         setCurAlbum(null);
-        return;
-      }
-      router.push('/');
+        
+      }else{
+        router.push('/');
       return;
-    }
-    else{
-      fetchUserAlbums(loginState.uid);
-      setCurAlbum(null);
-    }
-  },[]);
-
-  //complete the albums by fetching all images
-  useEffect(()=>{
-    userAlbumList.forEach(async (album)=>{
-      if(!album.images){
-        const fetchedAlbum = await getImagesByID(album.albumID);
-        album.images = fetchedAlbum;
       }
-    })
-  },[userAlbumList]);
+    });
+  },[])
 
+  useEffect(() => {
+    if(userAlbumList === undefined) return;
+    let needsUpdate = false;
+  
+    const updatedAlbums:Promise<Album>[] = userAlbumList.map(async (album) => {
+      // Check if the album has images or not (you can add a condition here)
+      if (!album.images) {
+        // Fetch all images for the album by its albumID
+        const images = await getImagesByID(album.albumID,album.imageCount);
+  
+        // Update the album with the fetched images
+        album.images = images;
+  
+        // Set the flag to indicate an update is needed
+        needsUpdate = true;
+      }
+      return album;
+    });
+  
+    if (needsUpdate) {
+      Promise.all(updatedAlbums)
+        .then((resolvedAlbums) => {
+          setUserAlbumList(resolvedAlbums);
+          console.log('fetched all albums');
+        })
+        .catch((error) => {
+          console.error("Error fetching album images:", error);
+        });
+    }
+  }, [userAlbumList]); // Only run this effect when userAlbumList changes
+  
   const getAllAlbumsByID = async (uid:string):Promise<Album[]> =>{
     // console.log('uid:'+uid);
-    const albumQuery = query(collection(db, 'Albums'), where('ownerID', '==', uid));
+    const albumQuery = query(collection(db, 'Albums'), where('ownerID', '==', uid),orderBy('creationTime','desc'));
     
     try {
       const querySnapshot = await getDocs(albumQuery);
   
-      const fetchThumbnails = querySnapshot.docs.map(async (doc) => {
+      const fetchThumbnails:Promise<Album>[] = querySnapshot.docs.map(async (doc) => {
         const albumData = doc.data();
         const thumbnail = await getThumbNailByID(doc.id);
   
         const album: Album = {
           albumID: doc.id || '',
           ownerID: albumData.ownerID || '',
-          creationTime: albumData.creationTime,
-          expireTime: albumData.expireTime,
+          creationTime: albumData.creationTime.toDate(),
+          expireTime: albumData.expireTime.toDate(),
           tags: albumData.tags || [],
           thumbnail: thumbnail || '',
           imageCount: albumData.imageCount || 0,
@@ -145,13 +157,17 @@ const GalleryPage = () => {
     }
   }
 
+  const refresh = (newAlbum:Album) =>{
+    if(!userAlbumList) setUserAlbumList([newAlbum]);
+    else setUserAlbumList((prev)=>[newAlbum, ...prev!]);
+  }
   
   return (
     <div className={"w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
       <AlbumContainer userAlbumList={userAlbumList} tagInput={tagSearchInput} />
       <Header onChange={(input:string)=>setTagSearchInput(input)}/>
       <AddPic open={()=>setNewAlbumModalopen(true)}/>
-      {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)}/>}
+      {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)} refresh={refresh}/>}
       {curAlbum && <>
         <PicoCarousel />
         <Actionbar resetAlbum={()=>setCurAlbum(null)} mode="user"/>

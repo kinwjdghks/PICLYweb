@@ -3,14 +3,30 @@ import { EmptyBlock, ImageBlock, TagBlock } from "./Blocks";
 import { IoIosClose } from "react-icons/io";
 import { FaHashtag } from "react-icons/fa";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsSendFill } from "react-icons/bs";
 import styles from "@/styles/animation.module.css";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
-import { db, storage } from "@/lib/firebase/firebase";
+import { auth, db, storage } from "@/lib/firebase/firebase";
 import { Album } from "@/templates/Album";
-import { loginState as loginState_ } from "@/lib/recoil/loginstate";
-import { useRecoilValue } from "recoil";
+import Resizer from "react-image-file-resizer";
+
+const resizeFile = (width:number,height:number,file:File,quality:number) =>
+        new Promise((resolve) => {
+          Resizer.imageFileResizer(
+            file,
+            width,
+            height,
+            "JPEG",
+            quality,
+            0,
+            (uri) => {
+              resolve(uri);
+            },
+            "file"
+          );
+        });
 
 const ErrorModal = ({errorNo,maxTag,maxImg,reset}:{errorNo: number, maxTag:number, maxImg:number,reset:()=>void}) =>{
     
@@ -103,8 +119,7 @@ const DateInput = ({handleDateChange, handleTimeChange,dateDiff}:DateInputProps)
     </div>
 }
 
-const NewAlbumModal = ({close}:{close:()=>void}) =>{
-    const loginState = useRecoilValue(loginState_);
+const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album)=>void}) =>{
    
     const oneWeekLaterFromNow = new Date();
     oneWeekLaterFromNow.setDate(oneWeekLaterFromNow.getDate() + 7);
@@ -118,6 +133,7 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
     const [dateDiff,setDateDiff] = useState<number>(0);
     const [errorMsg,setErrorMsg] = useState<number>(0);
     const [error,setError] = useState<boolean>(true);
+    const [isLoading,setIsLoading] = useState<boolean>(false);
     const maxImgNum = 5;
     const maxTagNum = 5;
 
@@ -157,42 +173,7 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
         }
     }
 
-    const onAlbumCreate = async () =>{
-
-        //create album and post
-        
-        const album:Album = {
-            ownerID: loginState!.uid,
-            creationTime: new Date(),
-            expireTime: dueDate,
-            tags: tagList,
-            imageCount:imgfiles.length,
-            viewCount: 0
-        }
-        let albumID:string;
-        try{
-        const docref = await addDoc(collection(db,"Albums"),album);
-        albumID = docref.id
-        }catch(error){
-            console.log(error);
-            return;
-        }
-        
-        //post images
-        for (let i = 0; i < imgfiles.length; i++) {
-            const imgFile = imgfiles[i];
-            const fileName = `${albumID}/${i}.jpeg`; // Generate a unique file name
-            const storageRef = ref(storage, fileName);
-        
-            try {
-              // Upload the image file to Firestore Storage
-              await uploadBytes(storageRef, imgFile);
-              console.log(`Image ${i + 1} uploaded successfully.`);
-            } catch (error) {
-              console.error(`Error uploading image ${i + 1}:`, error);
-            }
-          }
-    }
+    
 
 
     //autoscroll to very left when list updated.
@@ -292,15 +273,70 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
         else setError(true);
       },[imgfiles,dateDiff])
 
-    
+      const onAlbumCreate = async () =>{
+        setIsLoading(true);
+        //create album and post
+        const album:Album = {
+            ownerID: auth.currentUser!.uid,
+            creationTime: new Date(),
+            expireTime: dueDate,
+            tags: tagList,
+            thumbnail: imgfiles[0],
+            imageCount:imgfiles.length,
+            viewCount: 0
+        }
+        let albumID:string;
+        try{
+        const docref = await addDoc(collection(db,"Albums"),album);
+        albumID = docref.id
+        }catch(error){
+            console.log(error);
+            return;
+        }
+        
+        //generate thumbnail
+        const storageRef = ref(storage,`${albumID}/thumbnail.jpeg`);
+        const thumbnail = await resizeFile(600,600,imgfiles[0],100) as File;
+        const metadata = {
+            contentType: 'image/jpeg',
+          };
+        try{
+            await uploadBytes(storageRef,thumbnail,metadata);
+        }catch(error){
+            console.log(error);
+        }
+
+        //post images
+        try {
+            // Create an array of promises for uploading image files
+            const uploadPromises = imgfiles.map(async (imgFile, i) => {
+                const fileName = `${albumID}/${i}.jpeg`; // Generate a unique file name
+                const storageRef = ref(storage, fileName);
+                await uploadBytes(storageRef, imgFile, metadata);
+                // console.log(`Image ${i + 1} uploaded successfully.`);
+            });
+        
+            // Wait for all uploads to complete
+            await Promise.all(uploadPromises);
+        } catch (error) {
+            console.error('Error uploading images:', error);
+        } finally {
+            setIsLoading(false);
+            refresh(album);
+            close();
+        }
+        
+          
+        }
 
    return  <div className={`w-screen h-screen fixed top-0 left-0 z-[102]`}>
         <div className="(backdrop) w-full h-full fixed bg-black opacity-50 z-100" ></div>
         <div className="(modal) lg:w-[900px] lg:h-[700px] w-full h-screen p-5 relative z-101 lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2 lg:bg-white rounded-xl flex flex-col items-center
                                 content-start bg-pico_default">
-            <BsSendFill className = "hidden lg:block w-8 h-8 absolute right-0 top-0 m-6 fill-black cursor-pointer hover:scale-[115%] "
-                        onClick={()=>{onAlbumCreate();close()}}/>
-            {!error && <button onClick={onAlbumCreate} className="lg:hidden absolute right-0 top-0 m-5 text-2xl text-pico_blue">완료</button>}
+            {!error && !isLoading && <BsSendFill className = "hidden lg:block w-8 h-8 absolute right-0 top-0 m-6 fill-black cursor-pointer hover:scale-[115%] "
+                        onClick={onAlbumCreate}/>}
+            {!error && !isLoading && <button onClick={onAlbumCreate} className="lg:hidden absolute right-0 top-0 m-5 text-2xl text-pico_blue">완료</button>}
+            {isLoading && <AiOutlineLoading3Quarters className='w-10 h-10 absolute right-0 top-0 m-6 lg:fill-black animate-spin'/>}
             {errorMsg!=0 && <ErrorModal errorNo={errorMsg} maxTag={maxTagNum} maxImg={maxImgNum} reset={()=>setErrorMsg(0)}/>}
             <h1 className="lg:text-black text-3xl mb-6">새 앨범</h1>
             
@@ -314,7 +350,7 @@ const NewAlbumModal = ({close}:{close:()=>void}) =>{
             <TagList scrollTagRef={scrollTagRef} tagList={tagList} deleteTagHandler={deleteTagHandler} error={errorMsg} inputTagRef={inputTagRef} addTagHandler={addTagHandler}/>  
             <p className="lg:text-black pt-12 text-sm text-center">선정적이거나 모욕적인 이미지, 비속어, 개인정보가 <br/>포함된 내용은 제재의 대상이 될 수 있습니다.</p>
         </div>
-        <IoIosClose className="w-16 h-16 absolute top-0 right-auto lg:right-0 lg:m-8 m-2 cursor-pointer" onClick={()=>{close()}}/>
+       {!isLoading && <IoIosClose className="w-16 h-16 absolute top-0 right-auto lg:right-0 lg:m-8 m-2 cursor-pointer" onClick={close}/>}
 
     </div>
 }

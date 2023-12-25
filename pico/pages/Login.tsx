@@ -9,9 +9,7 @@ import PiCologo from '@/public/assets/images/PiCo_Logo_white.svg';
 import { useRouter } from "next/router";
 import { auth } from "@/lib/firebase/firebase";
 import {  useEffect, useRef, useState } from "react";
-import { signInWithCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
-import { useSetRecoilState } from "recoil";
-import { loginState } from "@/lib/recoil/loginstate";
+import { OAuthProvider,signInWithCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
 import { db } from "@/lib/firebase/firebase";
 import { DocumentSnapshot, doc,getDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
@@ -22,7 +20,6 @@ const Login = () => {
   const pwRef = useRef<HTMLInputElement|null>(null);
   const pwcRef = useRef<HTMLInputElement|null>(null);
   const [isRegistering,setIsRegistering] = useState<boolean>(false);
-  const setLoginstate = useSetRecoilState(loginState);
   const [msg,setMsg] = useState<string>('');
 
   const clearInput = () =>{
@@ -58,16 +55,13 @@ const Login = () => {
           authProvider: 'Google',
           creationTime: new Date(),
         };
-
         // Create a Firebase doc only if the user is registering for the first time
         await setDoc(userRef, user);
       }
   
       await signInWithCredential(auth,credential);
-      if(user) sessionStorage.setItem('picoweb_loginState',JSON.stringify(user));
       router.push(`/Gallery/${user_.uid}`)
     }).catch((error) => {
-      // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
       // The email of the user's account used.
@@ -77,9 +71,57 @@ const Login = () => {
     return;
   };
 
-  // const login_Apple = async (id: string, pw: string): Promise<_user_|undefined> => {
-  //     return false;
-  // };
+  const login_Apple = async () => {
+    const provider = new OAuthProvider('apple.com');
+    provider.addScope('email');
+    provider.addScope('name');
+    provider.setCustomParameters({
+      locale: 'ko'
+    });
+    const auth = getAuth();
+    signInWithPopup(auth, provider)
+    .then(async (result) => {
+
+      // Apple credential
+      const credential_ = OAuthProvider.credentialFromResult(result);
+      const accessToken = credential_?.accessToken;
+      const idToken = credential_?.idToken;
+
+      const user_ = result.user;
+      let user:_user_|undefined;
+
+      const userRef = doc(db, 'Users', user_.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (!userDoc.exists()) {
+        // This is the first time the user is registering
+        user = {
+          uid: user_.uid,
+          email: '',
+          authProvider: 'Google',
+          creationTime: new Date(),
+        };
+
+        // Create a Firebase doc only if the user is registering for the first time
+        await setDoc(userRef, user);
+      }
+      // await signInWithCredential(auth,credential);
+      router.push(`/Gallery/${user_.uid}`)
+      
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The credential that was used.
+      const credential = OAuthProvider.credentialFromError(error);
+    });
+  return;
+  };
     
 
   const login_Email = async () => {
@@ -130,7 +172,6 @@ const Login = () => {
           creationTime:userInfo.get('creationTime')
         };
         // console.log(loggedInUser);
-        setLoginstate(loggedInUser);
         sessionStorage.setItem('picoweb_loginState',JSON.stringify(loggedInUser));
         router.push(`/Gallery/${user.uid}`)
       }
@@ -200,7 +241,6 @@ const Login = () => {
     }).catch((error) => {
       console.log(error);
     });
-    sessionStorage.removeItem('picoweb_loginState');
   },[]);
 
 
@@ -234,7 +274,7 @@ const Login = () => {
                   <FcGoogle className="w-10 h-10"/>
                 </span>
                 <span className={`w-16 h-16 rounded-full border-4 flex justify-center items-center cursor-pointer hover:scale-[105%]`}
-                  onClick={()=>{}}>
+                  onClick={login_Apple}>
                   <FaApple className="w-10 h-10 -translate-y-[2px]"/>
                 </span>
             </div>

@@ -10,10 +10,17 @@ const NoResult = () =>{
    </div>
 }
 
-const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[],tagInput:string}) =>{
-   console.log('userAlbumList:'+userAlbumList);
+const Loading = () =>{
 
-    const [filteredAlbumList,setFilteredAlbumList]= useState<Album[]>(userAlbumList);
+   return <div className="col-span-2">
+      <p className="text-white text-center text-[2rem] mt-40">앨범을 가져오는 중입니다..</p>
+   </div>
+}
+
+const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[]|undefined,tagInput:string}) =>{
+   // console.log('userAlbumList:'+userAlbumList);
+
+    const [filteredAlbumList,setFilteredAlbumList]= useState<Album[]|undefined>(userAlbumList);
     useEffect(()=>{
       setFilteredAlbumList(userAlbumList);
       },[userAlbumList])
@@ -25,8 +32,10 @@ const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[],tagInput
          setFilteredAlbumList(userAlbumList);
          return;
       }
-      const newList = userAlbumList.filter((album)=> album.tags.findIndex((tag)=>tag === tagInput) != -1);
-      setFilteredAlbumList(newList);
+      if(userAlbumList){
+         const newList = userAlbumList.filter((album)=> album.tags.some((tag)=>tag.includes(tagInput)));
+         setFilteredAlbumList(newList);
+      }
     }
 
     useEffect(()=>{
@@ -41,8 +50,10 @@ const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[],tagInput
     
 
     return <div className= {media + `w-full h-min pt-[4.5rem] pb-10 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
-        {filteredAlbumList.map((item,idx)=><AlbumComponent key={idx} item={item}/>)}
-        {!filteredAlbumList.length && <NoResult/>}
+        {!filteredAlbumList && <Loading/>}
+        {filteredAlbumList && filteredAlbumList.length == 0 && <NoResult/>}
+        {filteredAlbumList && filteredAlbumList.length > 0 && 
+            filteredAlbumList.map((item,idx)=><AlbumComponent key={idx} item={item} priority={idx<4 && true}/>)}
     </div>
 }
 

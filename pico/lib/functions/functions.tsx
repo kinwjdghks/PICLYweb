@@ -1,7 +1,7 @@
 import { Album } from "@/templates/Album";
 import { db,storage } from "../firebase/firebase";
 import { DocumentSnapshot, doc,getDoc } from "firebase/firestore";
-import { ListResult, getDownloadURL, listAll, ref } from "firebase/storage";
+import { ListResult, getDownloadURL, listAll, ref, getBytes } from "firebase/storage";
 
 export const formatDateString = (date:Date):string=> {
     const year = date.getFullYear();
@@ -63,7 +63,6 @@ export const formatTimeString = (date:Date):string=> {
         creationTime: getAlbum.get('creationTime') as Date,
         expireTime: getAlbum.get('expireTime') as Date,
         tags: getAlbum.get('tags') as string[],
-        // thumbnail:getAlbum.get('thumbnail') as string,
         imageCount: getAlbum.get('imageCount') as number,
         viewCount: getAlbum.get('viewCount') as number,
         };
@@ -79,11 +78,8 @@ export const formatTimeString = (date:Date):string=> {
     if (!albumID) {
       return undefined;
     }
-    // const albumSRef = ref(storage, `${albumID}/0.jpeg`);
-    let thumbnail:string|undefined;
     try {
-      const thumbnail = await getDownloadURL(ref(storage, `${albumID}/0.jpeg`))
-      // console.log('thumbnail:'+thumbnail);
+      const thumbnail = await getDownloadURL(ref(storage, `${albumID}/thumbnail.jpeg`));
       return thumbnail;
     } catch (error) {
       console.error('Error fetching thumbnail:', error);
@@ -91,23 +87,29 @@ export const formatTimeString = (date:Date):string=> {
     }
   }
 
-  export const getImagesByID = async (albumID:string|undefined):Promise<string[]|undefined> =>{
+  export const getImagesByID = async (albumID:string|undefined,imageCount:number):Promise<string[]|undefined> =>{
     if (!albumID) {
       return undefined;
     }
-    const albumSRef = ref(storage, albumID);
-    let dataList:ListResult;
-    try{
-    dataList = await listAll(albumSRef);
-    }catch(error){
+    
+    try {
+    // Initialize an array to hold promises for image download URLs
+    const imagePromises: Promise<string>[] = [];
+
+    // Iterate through the dataList items
+    for (let i = 0; i < imageCount; i++) {
+      // Check if the file exists with the expected name
+      const fileRef = ref(storage, `${albumID}/${i}.jpeg`);
+        const downloadURL = getDownloadURL(fileRef);
+        imagePromises.push(downloadURL);
+    }
+
+    // Wait for all image download promises to resolve
+    const images: string[] = await Promise.all(imagePromises);
+
+    return images;
+    } catch (error) {
       console.log(error);
       return undefined;
     }
-    const images:string[] = await Promise.all(
-      dataList.items.map(async (item) => {
-        const downloadURL = await getDownloadURL(item);
-        return downloadURL;
-      })
-    );
-    return images;
   }
