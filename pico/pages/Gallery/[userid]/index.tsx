@@ -72,6 +72,7 @@ const GalleryPage = () => {
   }, [setCurAlbum]);
 
 
+
   const fetchUserAlbums = async (uid:string) => {
     const userAlbums:Album[] = await getAllAlbumsByID(uid);
     // console.log(userAlbums);
@@ -92,6 +93,10 @@ const GalleryPage = () => {
     });
   },[])
 
+  useEffect(()=>{
+    console.log(userAlbumList?.[0]);
+  })
+
   useEffect(() => {
     if(userAlbumList === undefined) return;
     let needsUpdate = false;
@@ -100,7 +105,7 @@ const GalleryPage = () => {
       // Check if the album has images or not (you can add a condition here)
       if (!album.images) {
         // Fetch all images for the album by its albumID
-        const images = await getImagesByID(album.albumID,album.imageCount);
+        const images = await getImagesByID(album.albumID);
   
         // Update the album with the fetched images
         album.images = images;

@@ -87,29 +87,28 @@ export const formatTimeString = (date:Date):string=> {
     }
   }
 
-  export const getImagesByID = async (albumID:string|undefined,imageCount:number):Promise<string[]|undefined> =>{
+  export const getImagesByID = async (albumID: string | undefined): Promise<string[] | undefined> => {
     if (!albumID) {
       return undefined;
     }
-    
+    const albumSRef = ref(storage, albumID);
+    let dataList: ListResult;
     try {
-    // Initialize an array to hold promises for image download URLs
-    const imagePromises: Promise<string>[] = [];
-
-    // Iterate through the dataList items
-    for (let i = 0; i < imageCount; i++) {
-      // Check if the file exists with the expected name
-      const fileRef = ref(storage, `${albumID}/${i}.jpeg`);
-        const downloadURL = getDownloadURL(fileRef);
-        imagePromises.push(downloadURL);
-    }
-
-    // Wait for all image download promises to resolve
-    const images: string[] = await Promise.all(imagePromises);
-
-    return images;
+      dataList = await listAll(albumSRef);
     } catch (error) {
       console.log(error);
       return undefined;
     }
-  }
+  
+    // Filter out items with the file name 'thumbnail.jpeg'
+    const filteredItems = dataList.items.filter((item) => item.name !== 'thumbnail.jpeg');
+  
+    const images: string[] = await Promise.all(
+      filteredItems.map(async (item) => {
+        const downloadURL = await getDownloadURL(item);
+        return downloadURL;
+      })
+    );
+    return images;
+  };
+  

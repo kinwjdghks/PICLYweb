@@ -276,12 +276,11 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
       const onAlbumCreate = async () =>{
         setIsLoading(true);
         //create album and post
-        const album:Album = {
+        let album:Album = {
             ownerID: auth.currentUser!.uid,
             creationTime: new Date(),
             expireTime: dueDate,
             tags: tagList,
-            thumbnail: imgfiles[0],
             imageCount:imgfiles.length,
             viewCount: 0
         }
@@ -322,6 +321,8 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
             console.error('Error uploading images:', error);
         } finally {
             setIsLoading(false);
+            const images = imgfiles.map((image)=>URL.createObjectURL(image));
+            album = {...album,thumbnail: images[0], images: images};
             refresh(album);
             close();
         }
