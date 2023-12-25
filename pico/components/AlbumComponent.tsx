@@ -26,7 +26,7 @@ const AlbumComponent= ({ item, priority }: { item: Album, priority?:boolean }) =
 
     const images = await getImagesByID(item.albumID);
     if (images) {
-      const updatedItem = { ...item, images }; // Create a new object with updated properties
+      const updatedItem = { ...item, images:images }; // Create a new object with updated properties
       setCurAlbum(updatedItem);
     }
     else if(item.images){

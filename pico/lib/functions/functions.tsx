@@ -91,8 +91,10 @@ export const formatTimeString = (date:Date):string=> {
     if (!albumID) {
       return undefined;
     }
+  
     const albumSRef = ref(storage, albumID);
     let dataList: ListResult;
+  
     try {
       dataList = await listAll(albumSRef);
     } catch (error) {
@@ -100,15 +102,33 @@ export const formatTimeString = (date:Date):string=> {
       return undefined;
     }
   
-    // Filter out items with the file name 'thumbnail.jpeg'
-    const filteredItems = dataList.items.filter((item) => item.name !== 'thumbnail.jpeg');
+    const imageUrls: string[] = [];
+    const downloadPromises: Promise<void>[] = [];
   
-    const images: string[] = await Promise.all(
-      filteredItems.map(async (item) => {
-        const downloadURL = await getDownloadURL(item);
-        return downloadURL;
-      })
-    );
-    return images;
+    // Start downloading download URLs in parallel
+    dataList.items.forEach((item) => {
+      if (item.name !== 'thumbnail.jpeg') {
+        const downloadPromise = getDownloadURL(item)
+          .then((downloadURL) => {
+            imageUrls.push(downloadURL);
+          })
+          .catch((error) => {
+            console.error(`Error fetching download URL for ${item.name}: ${error}`);
+          });
+  
+        downloadPromises.push(downloadPromise);
+      }
+    });
+  
+    try {
+      // Wait for all download promises to complete
+      await Promise.all(downloadPromises);
+    } catch (error) {
+      console.error('Error downloading images:', error);
+      return undefined;
+    }
+  
+    return imageUrls;
   };
+  
   
