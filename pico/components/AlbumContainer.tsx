@@ -18,17 +18,24 @@ const Loading = () =>{
 }
 
 const AlbumContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Album[]|undefined,tagInput:string,selectAlbum:(album:Album)=>void}) =>{
-   // console.log('userAlbumList:'+userAlbumList);
 
     const [filteredAlbumList,setFilteredAlbumList]= useState<Album[]|undefined>(userAlbumList);
     useEffect(()=>{
+      // console.log(userAlbumList);
+      if(userAlbumList === undefined) return;
       setFilteredAlbumList(userAlbumList);
-      },[userAlbumList])
+      },[userAlbumList]);
+
+   useEffect(()=>{
+      console.log(filteredAlbumList);
+      console.log(userAlbumList);
+   },[filteredAlbumList])
+
     const timer = useRef<NodeJS.Timeout|null>(null);
     const media = 'lg:px-64 lg:pt-32 pb-8 lg:gap-[4rem] ';
 
     const filterByTag = (tagInput:string) =>{
-      if(tagInput.trim() == ''){
+      if(tagInput.trim() === '' && userAlbumList){
          setFilteredAlbumList(userAlbumList);
          return;
       }
@@ -49,12 +56,19 @@ const AlbumContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Albu
 
     
 
-    return <div className= {media + `w-full h-min pt-[4.5rem] pb-10 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
-        {!filteredAlbumList && <Loading/>}
-        {filteredAlbumList && filteredAlbumList.length == 0 && <NoResult/>}
-        {filteredAlbumList && filteredAlbumList.length > 0 && 
-            filteredAlbumList.map((item,idx)=><AlbumComponent key={idx} item={item} priority={idx<4 && true} selectAlbum={selectAlbum}/>)}
-    </div>
+    return (
+      <div className={media + `w-full h-min pt-[4.5rem] pb-10 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
+        {!filteredAlbumList ? <Loading /> : (
+          <>
+            {filteredAlbumList.length === 0 && <NoResult />}
+            {filteredAlbumList.length > 0 &&
+              filteredAlbumList.map((item, idx) => (
+                <AlbumComponent key={idx} item={item} priority={idx < 4 && true} selectAlbum={selectAlbum} />
+              ))}
+          </>
+        )}
+      </div>
+    );
 }
 
 export default AlbumContainer;

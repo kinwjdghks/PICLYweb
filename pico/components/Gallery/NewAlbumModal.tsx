@@ -6,8 +6,8 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsSendFill } from "react-icons/bs";
 import styles from "@/styles/animation.module.css";
-import { addDoc, collection } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "@/lib/firebase/firebase";
 import { Album } from "@/templates/Album";
 import Resizer from "react-image-file-resizer";
@@ -173,9 +173,6 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
         }
     }
 
-    
-
-
     //autoscroll to very left when list updated.
     const tagAutoscroll = () => {
         const scrollContainer = scrollTagRef.current;
@@ -277,42 +274,51 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
         setIsLoading(true);
         //create album and post
         let album:Album = {
+            albumID:'',
             ownerID: auth.currentUser!.uid,
             creationTime: new Date(),
             expireTime: dueDate,
             tags: tagList,
+            thumbnail:'',
+            images:[],
             imageCount:imgfiles.length,
             viewCount: 0
         }
         let albumID:string;
+
         try{
-        const docref = await addDoc(collection(db,"Albums"),album);
-        albumID = docref.id
+        const doc = await addDoc(collection(db,"Albums"),album);
+        albumID = doc.id;
         }catch(error){
             console.log(error);
             return;
         }
         
         //generate thumbnail
-        const storageRef = ref(storage,`${albumID}/thumbnail.jpeg`);
+        const thumbnailRef = ref(storage,`${albumID}/thumbnail.jpeg`);
         const thumbnail = await resizeFile(600,600,imgfiles[0],100) as File;
+        let thumbnailURL:string;
         const metadata = {
             contentType: 'image/jpeg',
           };
         try{
-            await uploadBytes(storageRef,thumbnail,metadata);
+            await uploadBytes(thumbnailRef,thumbnail,metadata);
+            thumbnailURL = await getDownloadURL(thumbnailRef);
         }catch(error){
             console.log(error);
         }
 
+        const images:string[] = [];
         //post images
         try {
             // Create an array of promises for uploading image files
             const uploadPromises = imgfiles.map(async (imgFile, i) => {
                 const fileName = `${albumID}/${i}.jpeg`; // Generate a unique file name
-                const storageRef = ref(storage, fileName);
-                await uploadBytes(storageRef, imgFile, metadata);
-                // console.log(`Image ${i + 1} uploaded successfully.`);
+                const imageRef = ref(storage, fileName);
+                await uploadBytes(imageRef, imgFile, metadata);
+
+                const imageURL = await getDownloadURL(imageRef);
+                images.push(imageURL);
             });
         
             // Wait for all uploads to complete
@@ -321,8 +327,14 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
             console.error('Error uploading images:', error);
         } finally {
             setIsLoading(false);
-            const images = imgfiles.map((image)=>URL.createObjectURL(image));
-            album = {...album,thumbnail: images[0], images: images};
+            const tempImagesURL = imgfiles.map((image)=>URL.createObjectURL(image));
+            
+            await updateDoc(doc(db,"Albums",albumID),{
+                albumID:albumID,
+                thumbnail: images[0],
+                images: images
+            })
+            album = {...album,albumID:albumID,thumbnail: tempImagesURL[0], images: tempImagesURL};
             refresh(album);
             close();
         }

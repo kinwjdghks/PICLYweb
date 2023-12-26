@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { TbBoxMultiple } from "react-icons/tb";
 import { Album } from "@/templates/Album";
-import { formatDateString, dateDiffAsString, getImagesByID } from "@/lib/functions/functions";
+import { formatDateString, dateDiffAsString } from "@/lib/functions/functions";
 import noImage from "@/public/assets/images/icons8-default-image-64.png";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
@@ -17,23 +17,11 @@ const ThumbNail = ({ src, len, priority }: { src: string|StaticImport, len:numbe
 
 
 const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?:boolean, selectAlbum:(album:Album)=>void }) => {
-  console.log('item:'+item);
- 
-  const fetchAllImages = async () =>{
+  // console.log('item:'+item);
 
-    const images = await getImagesByID(item.albumID);
-    if (images) {
-      const updatedItem = { ...item, images:images }; // Create a new object with updated properties
-      selectAlbum(updatedItem);
-    }
-    else if(item.images){
-      selectAlbum(item);
-    }
-  }
   
   const Info = () =>{
     if(!item) return <></>
-    // const created = item.creationTime; 
     const expire = item.expireTime;
     
 
@@ -51,7 +39,7 @@ const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?
   
   return (
     <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer"
-        onClick = {fetchAllImages}>
+        onClick = {()=>selectAlbum(item)}>
       <div className="w-full h-full relative rounded-md bg-pico_lighter">
         <ThumbNail src={item.thumbnail ?? noImage} len={item.imageCount} priority={priority && true}/>
         <Info/>

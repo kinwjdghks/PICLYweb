@@ -10,7 +10,6 @@ import { Album } from "@/templates/Album";
 import { IoPersonSharp } from "react-icons/io5";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/firebase";
-import { getImagesByID, getThumbNailByID } from "@/lib/functions/functions";
 import { _user_ } from "@/templates/user";
 
 //dynamic import component
@@ -53,6 +52,10 @@ const GalleryPage = () => {
   const [userAlbumList,setUserAlbumList] = useState<Album[]|undefined>(undefined);
   const [displayingAlbum,setDisplayingAlbum] = useState<Album|undefined>(undefined);
   
+
+  // useEffect(()=>{
+  //   console.log(userAlbumList)
+  // },[userAlbumList]);
   const router = useRouter();
   useEffect(() => {
     const handleKeyDown = (e:KeyboardEvent) => {
@@ -69,19 +72,11 @@ const GalleryPage = () => {
     };
   }, [setDisplayingAlbum]);
 
-
-
-  const fetchUserAlbums = async (uid:string) => {
-    const userAlbums:Album[] = await getAllAlbumsByID(uid);
-    // console.log(userAlbums);
-    if(userAlbums.length == 0) setUserAlbumList(undefined);
-    setUserAlbumList(userAlbums);
-  };
-
   useEffect(()=>{
+    console.log('useEffect authchange')
     auth.onAuthStateChanged((user)=>{
       if(user){
-        fetchUserAlbums(user.uid);
+        getAllAlbumsByID(user.uid);
         setDisplayingAlbum(undefined);
         
       }else{
@@ -91,51 +86,16 @@ const GalleryPage = () => {
     });
   },[])
 
-  useEffect(()=>{
-    console.log(userAlbumList?.[0]);
-  })
 
-  useEffect(() => {
-    if(userAlbumList === undefined) return;
-    let needsUpdate = false;
-  
-    const updatedAlbums:Promise<Album>[] = userAlbumList.map(async (album) => {
-      // Check if the album has images or not (you can add a condition here)
-      if (!album.images) {
-        // Fetch all images for the album by its albumID
-        const images = await getImagesByID(album.albumID);
-  
-        // Update the album with the fetched images
-        album.images = images;
-  
-        // Set the flag to indicate an update is needed
-        needsUpdate = true;
-      }
-      return album;
-    });
-  
-    if (needsUpdate) {
-      Promise.all(updatedAlbums)
-        .then((resolvedAlbums) => {
-          setUserAlbumList(resolvedAlbums);
-          console.log('fetched all albums');
-        })
-        .catch((error) => {
-          console.error("Error fetching album images:", error);
-        });
-    }
-  }, [userAlbumList]); // Only run this effect when userAlbumList changes
-  
-  const getAllAlbumsByID = async (uid:string):Promise<Album[]> =>{
-    // console.log('uid:'+uid);
+  const getAllAlbumsByID = async (uid:string) =>{
+    console.log("getAllAlbumsByID executed");
     const albumQuery = query(collection(db, 'Albums'), where('ownerID', '==', uid),orderBy('creationTime','desc'));
     
     try {
       const querySnapshot = await getDocs(albumQuery);
   
-      const fetchThumbnails:Promise<Album>[] = querySnapshot.docs.map(async (doc) => {
+      const fetchAlbum:Promise<Album>[] = querySnapshot.docs.map(async (doc) => {
         const albumData = doc.data();
-        const thumbnail = await getThumbNailByID(doc.id);
   
         const album: Album = {
           albumID: doc.id || '',
@@ -143,20 +103,19 @@ const GalleryPage = () => {
           creationTime: albumData.creationTime.toDate(),
           expireTime: albumData.expireTime.toDate(),
           tags: albumData.tags || [],
-          thumbnail: thumbnail || '',
+          thumbnail: albumData.thumbnail || '',
+          images: albumData.images || [],
           imageCount: albumData.imageCount || 0,
           viewCount: albumData.viewCount || 0,
         };
   
         return album;
       });
-      const userAlbums:Album[] = await Promise.all(fetchThumbnails);
-
-      // console.log(userAlbums);
-      return userAlbums;
+      const userAlbums:Album[] = await Promise.all(fetchAlbum);
+      setUserAlbumList(userAlbums);
     } catch (error) {
       console.error(error);
-      return [];
+      setUserAlbumList([]);
     }
   }
 

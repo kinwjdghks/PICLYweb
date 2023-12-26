@@ -37,14 +37,14 @@
 //     const album_: Album | undefined = await getAlbumByID(albumID);
 //     const images: string[]|undefined = await getImagesByID(albumID);
     
-//     if (album_ && images) {
+//     if (album_) {
 //       const album:Album = {
 //         albumID : album_.albumID,
 //         ownerID : album_.ownerID,
 //         creationTime : JSON.parse(JSON.stringify(album_.creationTime)),
 //         expireTime : JSON.parse(JSON.stringify(album_.expireTime)),
 //         tags : album_.tags || [],
-//         images : images,
+//         images : album_.images,
 //         imageCount: album_.imageCount || 0,
 //         viewCount : album_.viewCount || 0,
 //       }
@@ -114,7 +114,7 @@ import Actionbar from "@/components/Gallery/ActionBar";
 import { Album } from "@/templates/Album";
 import LoadingPage from "@/components/Loading";
 import dynamic from "next/dynamic";
-import { getAlbumByID, getImagesByID } from "@/lib/functions/functions";
+import { getAlbumByID } from "@/lib/functions/functions";
 const PicoCarousel = dynamic(()=>import('@/components/ui/carousel'));
 
 const ImageView = ({ album }: { album: Album|null }) => {
@@ -134,16 +134,16 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
 
   try {
     const album_: Album | undefined = await getAlbumByID(albumID);
-    const images: string[]|undefined = await getImagesByID(albumID);
     
-    if (album_ && images) {
+    if (album_) {
       const album:Album = {
         albumID : album_.albumID,
         ownerID : album_.ownerID,
         creationTime : JSON.parse(JSON.stringify(album_.creationTime)),
         expireTime : JSON.parse(JSON.stringify(album_.expireTime)),
         tags : album_.tags || [],
-        images : images,
+        thumbnail : '',
+        images : album_.images,
         imageCount: album_.imageCount || 0,
         viewCount : album_.viewCount || 0,
       }

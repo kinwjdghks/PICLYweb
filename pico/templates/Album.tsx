@@ -1,12 +1,12 @@
 
 export interface Album{
-    albumID ?: string,
+    albumID : string,
     ownerID : string,
     creationTime : Date,
     expireTime : Date,
     tags : string[],
     thumbnail?: string,
-    images?:string[],
+    images:string[],
     imageCount: number,
     viewCount : number,
 }

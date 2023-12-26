@@ -63,6 +63,7 @@ export const formatTimeString = (date:Date):string=> {
         creationTime: getAlbum.get('creationTime') as Date,
         expireTime: getAlbum.get('expireTime') as Date,
         tags: getAlbum.get('tags') as string[],
+        images: getAlbum.get('images') as string[],
         imageCount: getAlbum.get('imageCount') as number,
         viewCount: getAlbum.get('viewCount') as number,
         };
@@ -74,61 +75,61 @@ export const formatTimeString = (date:Date):string=> {
     return album;
   }
   
-  export const getThumbNailByID = async (albumID:string|undefined):Promise<string|undefined> =>{
-    if (!albumID) {
-      return undefined;
-    }
-    try {
-      const thumbnail = await getDownloadURL(ref(storage, `${albumID}/thumbnail.jpeg`));
-      return thumbnail;
-    } catch (error) {
-      console.error('Error fetching thumbnail:', error);
-      return undefined;
-    }
-  }
+  // export const getThumbNailByID = async (albumID:string|undefined):Promise<string|undefined> =>{
+  //   if (!albumID) {
+  //     return undefined;
+  //   }
+  //   try {
+  //     const thumbnail = await getDownloadURL(ref(storage, `${albumID}/thumbnail.jpeg`));
+  //     return thumbnail;
+  //   } catch (error) {
+  //     console.error('Error fetching thumbnail:', error);
+  //     return undefined;
+  //   }
+  // }
 
-  export const getImagesByID = async (albumID: string | undefined): Promise<string[] | undefined> => {
-    if (!albumID) {
-      return undefined;
-    }
+  // export const getImagesByID = async (albumID: string | undefined): Promise<string[] | undefined> => {
+  //   if (!albumID) {
+  //     return undefined;
+  //   }
   
-    const albumSRef = ref(storage, albumID);
-    let dataList: ListResult;
+  //   const albumSRef = ref(storage, albumID);
+  //   let dataList: ListResult;
   
-    try {
-      dataList = await listAll(albumSRef);
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
+  //   try {
+  //     dataList = await listAll(albumSRef);
+  //   } catch (error) {
+  //     console.log(error);
+  //     return undefined;
+  //   }
   
-    const imageUrls: string[] = [];
-    const downloadPromises: Promise<void>[] = [];
+  //   const imageUrls: string[] = [];
+  //   const downloadPromises: Promise<void>[] = [];
   
-    // Start downloading download URLs in parallel
-    dataList.items.forEach((item) => {
-      if (item.name !== 'thumbnail.jpeg') {
-        const downloadPromise = getDownloadURL(item)
-          .then((downloadURL) => {
-            imageUrls.push(downloadURL);
-          })
-          .catch((error) => {
-            console.error(`Error fetching download URL for ${item.name}: ${error}`);
-          });
+  //   // Start downloading download URLs in parallel
+  //   dataList.items.forEach((item) => {
+  //     if (item.name !== 'thumbnail.jpeg') {
+  //       const downloadPromise = getDownloadURL(item)
+  //         .then((downloadURL) => {
+  //           imageUrls.push(downloadURL);
+  //         })
+  //         .catch((error) => {
+  //           console.error(`Error fetching download URL for ${item.name}: ${error}`);
+  //         });
   
-        downloadPromises.push(downloadPromise);
-      }
-    });
+  //       downloadPromises.push(downloadPromise);
+  //     }
+  //   });
   
-    try {
-      // Wait for all download promises to complete
-      await Promise.all(downloadPromises);
-    } catch (error) {
-      console.error('Error downloading images:', error);
-      return undefined;
-    }
+  //   try {
+  //     // Wait for all download promises to complete
+  //     await Promise.all(downloadPromises);
+  //   } catch (error) {
+  //     console.error('Error downloading images:', error);
+  //     return undefined;
+  //   }
   
-    return imageUrls;
-  };
+  //   return imageUrls;
+  // };
   
   

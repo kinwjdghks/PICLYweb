@@ -45,7 +45,7 @@ const Indicators = ({
 };
 
 const PicoCarousel = ({album}:{album:Album})=> {
-  // const album:Album|null = useRecoilValue(curAlbumState);
+  console.log(album);
   console.log('curAlbumState',album);
   console.log(new Date());
   const [activeIndex, setActiveIndex] = useState<number>(0);
