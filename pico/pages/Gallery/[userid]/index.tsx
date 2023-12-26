@@ -173,7 +173,7 @@ const GalleryPage = () => {
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)} refresh={refresh}/>}
       {displayingAlbum && <>
         <PicoCarousel album={displayingAlbum}/>
-        <Actionbar resetAlbum={()=>setDisplayingAlbum(undefined)} mode="user"/>
+        <Actionbar resetAlbum={()=>setDisplayingAlbum(undefined)} album={displayingAlbum} mode="user"/>
         </>}
     </div>
   );

@@ -9,6 +9,7 @@ import { useEffect, useState, useRef } from "react";
 import { overrideTailwindClasses as ovr } from "tailwind-override";
 import { IoMenu } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
+import { Album } from "@/templates/Album";
 
 
 const MenuBar = ({open,first,menuClose}:{open:Boolean,first:Boolean,menuClose:()=>void}) =>{
@@ -28,13 +29,22 @@ const MenuBar = ({open,first,menuClose}:{open:Boolean,first:Boolean,menuClose:()
 
   
 
-const Actionbar = ({resetAlbum,mode}:{resetAlbum:()=>void,mode:"user"|"guest"}) => {
+const Actionbar = ({resetAlbum,mode,album}:{resetAlbum:()=>void,mode:"user"|"guest",album:Album}) => {
     const [menuOpen,setMenuOpen] = useState<Boolean>(false);
     const [first,setFirst] = useState<Boolean>(true);
     const [showcopymsg,setShowcopymsg] = useState<Boolean>(false);
     const btnRef = useRef<HTMLImageElement>(null);
     const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
     const user:Boolean = mode=="user";
+
+    const handleCopyURL = async () => {
+      try {
+        await navigator.clipboard.writeText(`localhost:3000/Album/${album.albumID}`);
+        console.log('클립보드에 링크가 복사되었습니다.');
+      } catch (e) {
+        console.log('복사에 실패하였습니다');
+      }
+  };
 
     const CopiedMSG = ({show}:{show:Boolean}) =>{
       const initial = '-translate-y-[20%] opacity-0 scale[0.95] ';
@@ -43,6 +53,7 @@ const Actionbar = ({resetAlbum,mode}:{resetAlbum:()=>void,mode:"user"|"guest"}) 
 
     useEffect(() => {
       const handleClick = () => {
+        handleCopyURL();    
         if (timerRef.current !== null){
           clearTimeout(timerRef.current);
         }
@@ -51,7 +62,7 @@ const Actionbar = ({resetAlbum,mode}:{resetAlbum:()=>void,mode:"user"|"guest"}) 
           if (btnRef.current) {
             setShowcopymsg(false);
           }
-        }, 1200);        
+        }, 1200);
       }
     
       if (btnRef.current) {
@@ -75,7 +86,6 @@ const Actionbar = ({resetAlbum,mode}:{resetAlbum:()=>void,mode:"user"|"guest"}) 
            <MenuBar open = {menuOpen} first={first} menuClose={()=>{setMenuOpen(false)}}/>
           <Image src={link} alt='linkcopy' width={40} height={40}
             className="cursor-pointer hover:scale-[115%]"
-            onClick={()=>{}}
             ref={btnRef}/>
           <CopiedMSG show={showcopymsg}/>
           <Link href={"/"} className="w-max h-max" onClick={resetAlbum}>

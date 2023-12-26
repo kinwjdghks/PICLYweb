@@ -8,8 +8,8 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 const ThumbNail = ({ src, len, priority }: { src: string|StaticImport, len:number, priority?:boolean }) => {
   return (
     <div className={`(frame) w-full aspect-square rounded-t-md overflow-hidden relative`}>
-    {priority ? <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false'  />
-      :<Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false' priority/>}
+    {priority ? <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false'  priority />
+      :<Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false'/>}
     {len > 1 && <TbBoxMultiple className="w-8 h-8 absolute bottom-4 right-4"/>}
   </div>
   );

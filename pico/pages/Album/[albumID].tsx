@@ -124,7 +124,7 @@ const ImageView = ({ album }: { album: Album|null }) => {
   return (
     <div className="(background) w-screen h-screen absolute bg-black">
       <PicoCarousel album={album}/>
-      <Actionbar resetAlbum={() => {}} mode="guest" />
+      <Actionbar resetAlbum={() => {}} mode="guest" album={album}/>
     </div>
   );
 };
