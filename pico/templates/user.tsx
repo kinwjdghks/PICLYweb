@@ -1,6 +1,6 @@
 
 export interface _user_{
-    uid: string;
+    // uid: string;
     email?: string;
     authProvider: string;
     creationTime: Date;

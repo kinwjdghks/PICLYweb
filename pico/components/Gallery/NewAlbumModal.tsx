@@ -10,23 +10,23 @@ import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "@/lib/firebase/firebase";
 import { Album } from "@/templates/Album";
-import Resizer from "react-image-file-resizer";
+import { imageCompressGetFile } from "@/lib/functions/imageCompress";
 
-const resizeFile = (width:number,height:number,file:File,quality:number) =>
-        new Promise((resolve) => {
-          Resizer.imageFileResizer(
-            file,
-            width,
-            height,
-            "JPEG",
-            quality,
-            0,
-            (uri) => {
-              resolve(uri);
-            },
-            "file"
-          );
-        });
+// const resizeFile = (width:number,height:number,file:File,quality:number) =>
+//         new Promise((resolve) => {
+//           Resizer.imageFileResizer(
+//             file,
+//             width,
+//             height,
+//             "JPEG",
+//             quality,
+//             0,
+//             (uri) => {
+//               resolve(uri);
+//             },
+//             "file"
+//           );
+//         });
 
 const ErrorModal = ({errorNo,maxTag,maxImg,reset}:{errorNo: number, maxTag:number, maxImg:number,reset:()=>void}) =>{
     
@@ -279,8 +279,8 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
             creationTime: new Date(),
             expireTime: dueDate,
             tags: tagList,
-            thumbnail:'',
-            images:[],
+            thumbnailURL:'',
+            imageURLs:[],
             imageCount:imgfiles.length,
             viewCount: 0
         }
@@ -296,29 +296,37 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
         
         //generate thumbnail
         const thumbnailRef = ref(storage,`${albumID}/thumbnail.jpeg`);
-        const thumbnail = await resizeFile(600,600,imgfiles[0],100) as File;
-        let thumbnailURL:string;
+        // const thumbnail = await resizeFile(600,600,imgfiles[0],100) as File;
+        let thumbnailURL:string = '';
         const metadata = {
             contentType: 'image/jpeg',
-          };
+        };
         try{
-            await uploadBytes(thumbnailRef,thumbnail,metadata);
+            const thumbnail = await imageCompressGetFile(0.5,1920,imgfiles[0]);
+            await uploadBytes(thumbnailRef,thumbnail!,metadata);
             thumbnailURL = await getDownloadURL(thumbnailRef);
         }catch(error){
             console.log(error);
         }
 
-        const images:string[] = [];
-        //post images
+        const imageURLs:string[] = [];
+        //post imageURLs
         try {
             // Create an array of promises for uploading image files
             const uploadPromises = imgfiles.map(async (imgFile, i) => {
+                //compress uploading image.
+                const compressedFile = await imageCompressGetFile(0.5,1920,imgFile);
+                // console.log('compressed file:',compressedFile);
+                if(!compressedFile){
+                    console.log('compression error');
+                    return;
+                }
                 const fileName = `${albumID}/${i}.jpeg`; // Generate a unique file name
                 const imageRef = ref(storage, fileName);
-                await uploadBytes(imageRef, imgFile, metadata);
+                await uploadBytes(imageRef, compressedFile, metadata);
 
                 const imageURL = await getDownloadURL(imageRef);
-                images.push(imageURL);
+                imageURLs.push(imageURL);
             });
         
             // Wait for all uploads to complete
@@ -329,12 +337,17 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
             setIsLoading(false);
             const tempImagesURL = imgfiles.map((image)=>URL.createObjectURL(image));
             
+            console.log(imageURLs);
             await updateDoc(doc(db,"Albums",albumID),{
                 albumID:albumID,
-                thumbnail: images[0],
-                images: images
+                thumbnailURL: thumbnailURL,
+                imageURLs: imageURLs
             })
-            album = {...album,albumID:albumID,thumbnail: tempImagesURL[0], images: tempImagesURL};
+            album = {...album,
+                albumID:albumID,
+                thumbnailURL: tempImagesURL[0], 
+                imageURLs: tempImagesURL
+            };
             refresh(album);
             close();
         }

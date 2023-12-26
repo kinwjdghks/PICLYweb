@@ -63,7 +63,7 @@ export const formatTimeString = (date:Date):string=> {
         creationTime: getAlbum.get('creationTime') as Date,
         expireTime: getAlbum.get('expireTime') as Date,
         tags: getAlbum.get('tags') as string[],
-        images: getAlbum.get('images') as string[],
+        imageURLs: getAlbum.get('imageURLs') as string[],
         imageCount: getAlbum.get('imageCount') as number,
         viewCount: getAlbum.get('viewCount') as number,
         };

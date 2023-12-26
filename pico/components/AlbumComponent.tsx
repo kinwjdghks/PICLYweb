@@ -41,7 +41,7 @@ const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?
     <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer"
         onClick = {()=>selectAlbum(item)}>
       <div className="w-full h-full relative rounded-md bg-pico_lighter">
-        <ThumbNail src={item.thumbnail ?? noImage} len={item.imageCount} priority={priority && true}/>
+        <ThumbNail src={item.thumbnailURL ?? noImage} len={item.imageCount} priority={priority && true}/>
         <Info/>
       </div>
     </div>

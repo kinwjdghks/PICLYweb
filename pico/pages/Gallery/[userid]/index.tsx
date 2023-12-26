@@ -103,8 +103,8 @@ const GalleryPage = () => {
           creationTime: albumData.creationTime.toDate(),
           expireTime: albumData.expireTime.toDate(),
           tags: albumData.tags || [],
-          thumbnail: albumData.thumbnail || '',
-          images: albumData.images || [],
+          thumbnailURL: albumData.thumbnailURL || '',
+          imageURLs: albumData.imageURLs || [],
           imageCount: albumData.imageCount || 0,
           viewCount: albumData.viewCount || 0,
         };

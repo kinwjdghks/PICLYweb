@@ -45,9 +45,7 @@ const Indicators = ({
 };
 
 const PicoCarousel = ({album}:{album:Album})=> {
-  console.log(album);
   console.log('curAlbumState',album);
-  console.log(new Date());
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const screenRef = useRef<HTMLDivElement>(null);
   const isScrollListenerAdded = useRef<boolean>(false);
@@ -78,9 +76,9 @@ const PicoCarousel = ({album}:{album:Album})=> {
     }
   },[activeIndex]);
   
-  if(!album || !album.images) return <LoadingPage/>
+  if(!album || !album.imageURLs) return <LoadingPage/>
 
-  const steps = album.images.length;
+  const steps = album.imageURLs.length;
 
   const next = () => {
     const nextIndex = activeIndex === steps - 1 ? 0 : activeIndex + 1;
@@ -111,7 +109,7 @@ const PicoCarousel = ({album}:{album:Album})=> {
       }, 50); 
   };
 
-  const imageList = album.images.map((url,idx) => (
+  const imageList = album.imageURLs.map((url,idx) => (
     <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative">
       {idx == activeIndex && <div className="(anchor) w-1 h-1 absolute" key={idx} ref={activeImgRef}></div>}
       <Image

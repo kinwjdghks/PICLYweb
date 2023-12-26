@@ -50,7 +50,7 @@ const Login = () => {
       if (!userDoc.exists()) {
         // This is the first time the user is registering
         user = {
-          uid: user_.uid,
+          // uid: user_.uid,
           email: '',
           authProvider: 'Google',
           creationTime: new Date(),
@@ -71,57 +71,57 @@ const Login = () => {
     return;
   };
 
-  const login_Apple = async () => {
-    const provider = new OAuthProvider('apple.com');
-    provider.addScope('email');
-    provider.addScope('name');
-    provider.setCustomParameters({
-      locale: 'ko'
-    });
-    const auth = getAuth();
-    signInWithPopup(auth, provider)
-    .then(async (result) => {
+  // const login_Apple = async () => {
+  //   const provider = new OAuthProvider('apple.com');
+  //   provider.addScope('email');
+  //   provider.addScope('name');
+  //   provider.setCustomParameters({
+  //     locale: 'ko'
+  //   });
+  //   const auth = getAuth();
+  //   signInWithPopup(auth, provider)
+  //   .then(async (result) => {
 
-      // Apple credential
-      const credential_ = OAuthProvider.credentialFromResult(result);
-      const accessToken = credential_?.accessToken;
-      const idToken = credential_?.idToken;
+  //     // Apple credential
+  //     const credential_ = OAuthProvider.credentialFromResult(result);
+  //     const accessToken = credential_?.accessToken;
+  //     const idToken = credential_?.idToken;
 
-      const user_ = result.user;
-      let user:_user_|undefined;
+  //     const user_ = result.user;
+  //     let user:_user_|undefined;
 
-      const userRef = doc(db, 'Users', user_.uid);
-      const userDoc = await getDoc(userRef);
+  //     const userRef = doc(db, 'Users', user_.uid);
+  //     const userDoc = await getDoc(userRef);
 
-      if (!userDoc.exists()) {
-        // This is the first time the user is registering
-        user = {
-          uid: user_.uid,
-          email: '',
-          authProvider: 'Google',
-          creationTime: new Date(),
-        };
+  //     if (!userDoc.exists()) {
+  //       // This is the first time the user is registering
+  //       user = {
+  //         // uid: user_.uid,
+  //         email: '',
+  //         authProvider: 'Google',
+  //         creationTime: new Date(),
+  //       };
 
-        // Create a Firebase doc only if the user is registering for the first time
-        await setDoc(userRef, user);
-      }
-      // await signInWithCredential(auth,credential);
-      router.push(`/Gallery/${user_.uid}`)
+  //       // Create a Firebase doc only if the user is registering for the first time
+  //       await setDoc(userRef, user);
+  //     }
+  //     // await signInWithCredential(auth,credential);
+  //     router.push(`/Gallery/${user_.uid}`)
       
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode);
-      console.log(errorMessage);
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The credential that was used.
-      const credential = OAuthProvider.credentialFromError(error);
-    });
-  return;
-  };
+  //   })
+  //   .catch((error) => {
+  //     // Handle Errors here.
+  //     const errorCode = error.code;
+  //     const errorMessage = error.message;
+  //     console.log(errorCode);
+  //     console.log(errorMessage);
+  //     // The email of the user's account used.
+  //     const email = error.customData.email;
+  //     // The credential that was used.
+  //     const credential = OAuthProvider.credentialFromError(error);
+  //   });
+  // return;
+  // };
     
 
   const login_Email = async () => {
@@ -166,7 +166,7 @@ const Login = () => {
     
       if(userInfo.exists()){
         const loggedInUser:_user_ = {
-          uid:user.uid,
+          // uid:user.uid,
           email:id!,
           authProvider:"Email",
           creationTime:userInfo.get('creationTime')
@@ -197,7 +197,7 @@ const Login = () => {
     user_ = userCredential.user;
       
     const user:_user_ = {
-      uid: user_.uid,
+      // uid: user_.uid,
       email: email!,
       authProvider: 'Email',
       creationTime: new Date(),
@@ -207,7 +207,7 @@ const Login = () => {
     setIsRegistering(false);
     setMsg('정상적으로 가입되었습니다');
     //create firebase doc
-    const docRef = doc(db,'Users',user.uid);
+    const docRef = doc(db,'Users',user_.uid);
     setDoc(docRef, user);
 
     }catch (error) {
@@ -273,10 +273,10 @@ const Login = () => {
                   onClick={login_Google}>
                   <FcGoogle className="w-10 h-10"/>
                 </span>
-                <span className={`w-16 h-16 rounded-full border-4 flex justify-center items-center cursor-pointer hover:scale-[105%]`}
+                {/* <span className={`w-16 h-16 rounded-full border-4 flex justify-center items-center cursor-pointer hover:scale-[105%]`}
                   onClick={login_Apple}>
                   <FaApple className="w-10 h-10 -translate-y-[2px]"/>
-                </span>
+                </span> */}
             </div>
         </div>
         
