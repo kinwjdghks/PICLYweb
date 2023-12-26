@@ -14,7 +14,7 @@ import { _user_ } from "@/templates/user";
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'));
-const PicoCarousel = dynamic(()=>import('@/components/ui/carousel'));
+const PicoCarousel = dynamic(()=>import('@/components/carousel'));
 
 const Header = ({onChange}:{onChange:(input:string)=>void}) => {
 
@@ -24,9 +24,9 @@ const Header = ({onChange}:{onChange:(input:string)=>void}) => {
       <div className={`w-max h-max pl-4  ${poppins.className} text-[2.5rem] font-[600] `}>
         PiCo
       </div>
-      <div className="transla te-x-12 w-1/2 flex justify-end items-center">
+      <div className="w-1/2 flex justify-end items-center">
         <input
-          className={`${styles.search} w-1/2 hover:w-full lg:hover:w-1/2 focus:w-full lg:focus:w-1/2 h-12 float-right border-solid border-[2px] p-2 px-4 m-1 bg-pico_darker border-pico_darker box-border rounded-md text-xl ${transition}`}
+          className={`${styles.search} lg:visible invisible w-1/2 hover:w-full lg:hover:w-1/2 focus:w-full lg:focus:w-1/2 h-12 float-right border-solid border-[2px] p-2 px-4 m-1 bg-pico_darker border-pico_darker box-border rounded-md text-xl ${transition}`}
           type="text"
           placeholder="#태그 검색"
           onChange={(e)=>onChange(e.target.value)}
@@ -41,8 +41,8 @@ const Header = ({onChange}:{onChange:(input:string)=>void}) => {
 const AddPic = ({open}:{open:()=>void}) =>{
 
   return <button className={`
-  ${styles.addbtn}
-   w-24 h-24 m-12 rounded-full bg-pico_darker fixed right-0 bottom-0 border-solid border-4 border-[#8cb4f3] hover:scale-[110%]`} 
+  ${styles.addbtn} w-16 h-16 m-8
+   lg:w-24 lg:h-24 lg:m-12 rounded-full bg-pico_darker fixed right-0 bottom-0 border-solid border-4 border-[#8cb4f3] hover:scale-[110%]`} 
    onClick={(e)=>{e.preventDefault();open()}}></button>
 }
 

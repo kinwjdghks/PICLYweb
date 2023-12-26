@@ -2,7 +2,6 @@ import Image from "next/image";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import Button from "@/components/ui/Button";
 import { _user_ } from "@/templates/user";
-import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import arrow from '@/public/assets/images/arrow_back.svg';
 import PiCologo from '@/public/assets/images/PiCo_Logo_white.svg';
@@ -264,19 +263,15 @@ const Login = () => {
         <p className="h-7 m-2 text-lg">{msg}</p>
         
         <div className="(options) w-full flex-grow flex flex-col items-center ">
-              <button className={`${inputCN} text-white hover:bg-white hover:text-black`} 
-                 onClick={isRegistering ? register_Email : login_Email}>{isRegistering ? '가입하기':'로그인'}</button>
+            <button className={`${inputCN} text-white hover:bg-white hover:text-black`} 
+            onClick={isRegistering ? register_Email : login_Email}>{isRegistering ? '가입하기':'로그인'}</button>
 
             <p className="mt-4">또는</p>
-            <div className="(login method) flex h-max w-max gap-8 m-4">
-                <span className={`w-16 h-16 rounded-full border-4 flex justify-center items-center cursor-pointer hover:scale-[105%]`}
-                  onClick={login_Google}>
-                  <FcGoogle className="w-10 h-10"/>
-                </span>
-                {/* <span className={`w-16 h-16 rounded-full border-4 flex justify-center items-center cursor-pointer hover:scale-[105%]`}
-                  onClick={login_Apple}>
-                  <FaApple className="w-10 h-10 -translate-y-[2px]"/>
-                </span> */}
+            <div className="flex h-max w-full  mt-4 items-center">
+              <FcGoogle className="w-12 h-12 mx-2"/>
+              <button className={`${inputCN} m-0 text-white hover:bg-white hover:text-black`} 
+              onClick={login_Google}>구글 로그인
+              </button>
             </div>
         </div>
         

@@ -15,9 +15,10 @@
     background-position:right center;
 }
 
+
 .addbtn{
     background-image: url('../public/assets/images/addbtn.svg');
-    background-size:4.5rem;
+    background-size: contain;
     background-repeat:no-repeat;
     background-position:center center;
 }

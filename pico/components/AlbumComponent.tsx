@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { TbBoxMultiple } from "react-icons/tb";
 import { Album } from "@/templates/Album";
-import { formatDateString, dateDiffAsString } from "@/lib/functions/functions";
+import { formatDateString,dateDiffAsString } from "@/lib/functions/dateFormating";
 import noImage from "@/public/assets/images/icons8-default-image-64.png";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
@@ -25,7 +25,7 @@ const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?
     const expire = item.expireTime;
     
 
-    return <div className="(info) w-full aspect-[3/1] pb-2 p-4 flex flex-col justify-between">
+    return <div className="(info) w-full aspect-[3/1] pb-2 lg:p-4 p-2 flex flex-col justify-between">
       <div className="flex justify-between">
         <div className="(creation) lg:text-[2vw]">{formatDateString(new Date(expire))}</div>
         <div className="(d-day) lg:text-[1.8vw]">D-{dateDiffAsString(new Date(expire),new Date())}</div>

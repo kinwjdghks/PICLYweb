@@ -1,4 +1,4 @@
-//SSR code
+//SSR
 
 // import Actionbar from "@/components/Gallery/ActionBar";
 // import { useSetRecoilState } from "recoil";
@@ -65,11 +65,11 @@
 //CSR
 
 import Actionbar from "@/components/Gallery/ActionBar";
-import PicoCarousel from "@/components/ui/carousel";
+import PicoCarousel from "@/components/carousel";
 import { useRouter } from "next/router";
 import FallbackPage from "@/components/Fallback";
 import { Album } from "@/templates/Album";
-import { getAlbumByID } from "@/lib/functions/functions";
+import { getAlbumByID } from "@/lib/functions/dataFetch";
 import { useEffect, useState } from "react";
 import LoadingPage from "@/components/Loading";
 

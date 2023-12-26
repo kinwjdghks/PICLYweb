@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import nextImg from '@/public/assets/images/arrow_forward.svg'
 import prevImg from '@/public/assets/images/arrow_back.svg'
-import LoadingPage from "../Loading";
+import LoadingPage from "./Loading";
 import { Album } from "@/templates/Album";
 
 const BackDrop = () =>{
@@ -121,6 +121,7 @@ const PicoCarousel = ({album}:{album:Album})=> {
         fill
         className="relative object-contain scale-[85%]"
         draggable={false}
+        priority={true}
       ></Image>
     </div>
   ));
