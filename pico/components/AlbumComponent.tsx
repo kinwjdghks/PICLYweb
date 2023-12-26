@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { TbBoxMultiple } from "react-icons/tb";
 import { Album } from "@/templates/Album";
-import { useSetRecoilState } from "recoil";
-import { curAlbumState } from "@/lib/recoil/curAlbumState";
 import { formatDateString, dateDiffAsString, getImagesByID } from "@/lib/functions/functions";
 import noImage from "@/public/assets/images/icons8-default-image-64.png";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
@@ -18,8 +16,7 @@ const ThumbNail = ({ src, len, priority }: { src: string|StaticImport, len:numbe
 };
 
 
-const AlbumComponent= ({ item, priority }: { item: Album, priority?:boolean }) => {
-  const setCurAlbum = useSetRecoilState(curAlbumState);
+const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?:boolean, selectAlbum:(album:Album)=>void }) => {
   console.log('item:'+item);
  
   const fetchAllImages = async () =>{
@@ -27,10 +24,10 @@ const AlbumComponent= ({ item, priority }: { item: Album, priority?:boolean }) =
     const images = await getImagesByID(item.albumID);
     if (images) {
       const updatedItem = { ...item, images:images }; // Create a new object with updated properties
-      setCurAlbum(updatedItem);
+      selectAlbum(updatedItem);
     }
     else if(item.images){
-      setCurAlbum(item);
+      selectAlbum(item);
     }
   }
   

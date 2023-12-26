@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { curAlbumState } from "@/lib/recoil/curAlbumState";
-import { useRecoilValue } from "recoil";
 import nextImg from '@/public/assets/images/arrow_forward.svg'
 import prevImg from '@/public/assets/images/arrow_back.svg'
 import LoadingPage from "../Loading";
@@ -46,8 +44,8 @@ const Indicators = ({
   </div>;
 };
 
-const PicoCarousel = ()=> {
-  const album:Album|null = useRecoilValue(curAlbumState);
+const PicoCarousel = ({album}:{album:Album})=> {
+  // const album:Album|null = useRecoilValue(curAlbumState);
   console.log('curAlbumState',album);
   console.log(new Date());
   const [activeIndex, setActiveIndex] = useState<number>(0);

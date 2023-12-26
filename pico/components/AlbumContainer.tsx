@@ -17,7 +17,7 @@ const Loading = () =>{
    </div>
 }
 
-const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[]|undefined,tagInput:string}) =>{
+const AlbumContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Album[]|undefined,tagInput:string,selectAlbum:(album:Album)=>void}) =>{
    // console.log('userAlbumList:'+userAlbumList);
 
     const [filteredAlbumList,setFilteredAlbumList]= useState<Album[]|undefined>(userAlbumList);
@@ -53,7 +53,7 @@ const AlbumContainer = ({userAlbumList,tagInput}:{userAlbumList:Album[]|undefine
         {!filteredAlbumList && <Loading/>}
         {filteredAlbumList && filteredAlbumList.length == 0 && <NoResult/>}
         {filteredAlbumList && filteredAlbumList.length > 0 && 
-            filteredAlbumList.map((item,idx)=><AlbumComponent key={idx} item={item} priority={idx<4 && true}/>)}
+            filteredAlbumList.map((item,idx)=><AlbumComponent key={idx} item={item} priority={idx<4 && true} selectAlbum={selectAlbum}/>)}
     </div>
 }
 

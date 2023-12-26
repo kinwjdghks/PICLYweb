@@ -111,9 +111,6 @@
 //CSR+SSR
 
 import Actionbar from "@/components/Gallery/ActionBar";
-import { useSetRecoilState } from "recoil";
-import { curAlbumState } from "@/lib/recoil/curAlbumState";
-import { useEffect } from "react";
 import { Album } from "@/templates/Album";
 import LoadingPage from "@/components/Loading";
 import dynamic from "next/dynamic";
@@ -124,17 +121,9 @@ const ImageView = ({ album }: { album: Album|null }) => {
   console.log(album);
   if(!album) return <LoadingPage/>
 
-  const setCurAlbum = useSetRecoilState(curAlbumState);
-
-  useEffect(() => {
-    if (album) {
-      setCurAlbum(album);
-    }
-  }, [album]);
-
   return (
     <div className="(background) w-screen h-screen absolute bg-black">
-      <PicoCarousel />
+      <PicoCarousel album={album}/>
       <Actionbar resetAlbum={() => {}} mode="guest" />
     </div>
   );

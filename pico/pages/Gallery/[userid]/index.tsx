@@ -4,8 +4,6 @@ import { poppins } from "@/public/assets/fonts/poppins";
 import styles from "@/styles/icons.module.css";
 import dynamic from "next/dynamic";
 import {useEffect, useState} from "react";
-import { curAlbumState } from "@/lib/recoil/curAlbumState";
-import { useRecoilState } from "recoil";
 import Actionbar from "@/components/Gallery/ActionBar";
 import { useRouter } from "next/router";
 import { Album } from "@/templates/Album";
@@ -52,14 +50,14 @@ const AddPic = ({open}:{open:()=>void}) =>{
 const GalleryPage = () => {
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
-  const [curAlbum,setCurAlbum] = useRecoilState(curAlbumState);
   const [userAlbumList,setUserAlbumList] = useState<Album[]|undefined>(undefined);
+  const [displayingAlbum,setDisplayingAlbum] = useState<Album|undefined>(undefined);
   
   const router = useRouter();
   useEffect(() => {
     const handleKeyDown = (e:KeyboardEvent) => {
       if (e.key === "Escape") {
-        setCurAlbum(null);
+        setDisplayingAlbum(undefined);
       }
     };
   
@@ -69,7 +67,7 @@ const GalleryPage = () => {
       // Clean up the event listener when the component unmounts
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [setCurAlbum]);
+  }, [setDisplayingAlbum]);
 
 
 
@@ -84,7 +82,7 @@ const GalleryPage = () => {
     auth.onAuthStateChanged((user)=>{
       if(user){
         fetchUserAlbums(user.uid);
-        setCurAlbum(null);
+        setDisplayingAlbum(undefined);
         
       }else{
         router.push('/');
@@ -169,13 +167,13 @@ const GalleryPage = () => {
   
   return (
     <div className={"w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
-      <AlbumContainer userAlbumList={userAlbumList} tagInput={tagSearchInput} />
+      <AlbumContainer userAlbumList={userAlbumList} tagInput={tagSearchInput} selectAlbum={setDisplayingAlbum}/>
       <Header onChange={(input:string)=>setTagSearchInput(input)}/>
       <AddPic open={()=>setNewAlbumModalopen(true)}/>
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)} refresh={refresh}/>}
-      {curAlbum && <>
-        <PicoCarousel />
-        <Actionbar resetAlbum={()=>setCurAlbum(null)} mode="user"/>
+      {displayingAlbum && <>
+        <PicoCarousel album={displayingAlbum}/>
+        <Actionbar resetAlbum={()=>setDisplayingAlbum(undefined)} mode="user"/>
         </>}
     </div>
   );
