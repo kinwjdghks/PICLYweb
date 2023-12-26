@@ -39,7 +39,7 @@ const Actionbar = ({resetAlbum,mode,album}:{resetAlbum:()=>void,mode:"user"|"gue
 
     const handleCopyURL = async () => {
       try {
-        await navigator.clipboard.writeText(`localhost:3000/Album/${album.albumID}`);
+        await navigator.clipboard.writeText(`picoweb.vercel.app/Album/${album.albumID}`);
         console.log('클립보드에 링크가 복사되었습니다.');
       } catch (e) {
         console.log('복사에 실패하였습니다');
