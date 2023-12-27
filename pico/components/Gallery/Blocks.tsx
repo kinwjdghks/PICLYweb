@@ -31,8 +31,9 @@ export const EmptyBlock = ({updatefiles}:{updatefiles:(fileList:FileList|null)=>
 
     return <div className="h-full aspect-square relative border-solid border-2 border-pico-default rounded-lg flex justify-center items-center">
         <LuImagePlus className = "w-10 h-10 "/>
-        <input className="w-full h-full absolute top-0 left-0 cursor-pointer opacity-0" type='file' accept="img/*" multiple
+        <input className="w-full h-full absolute top-0 left-0 cursor-pointer opacity-0" type='file' accept="image/*" multiple
         ref={inputImgRef}
+        
         onChange={(e)=>{
             updatefiles(e.currentTarget.files);
         }}/>

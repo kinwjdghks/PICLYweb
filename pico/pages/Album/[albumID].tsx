@@ -72,10 +72,14 @@ import { Album } from "@/templates/Album";
 import { getAlbumByID } from "@/lib/functions/dataFetch";
 import { useEffect, useState } from "react";
 import LoadingPage from "@/components/Loading";
+import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 
 const ImageView = () => {
   const [curAlbum,setCurAlbum] = useState<Album|undefined>(undefined);
   const [isLoading,setIsLoading] = useState<boolean>(true);
+  const { lockScroll, openScroll } = useBodyScrollLock();
+  lockScroll();
+  
   const router = useRouter();
   const albumID:string|undefined = router.query.albumID as string;
   // console.log(albumID);
@@ -84,18 +88,18 @@ const ImageView = () => {
     setCurAlbum(album);
     setIsLoading(false);
   };
-
+  
   useEffect(()=>{
     getAlbum(albumID);
   },[]);
-
+  
   if(isLoading) return <LoadingPage/>
   else if(!isLoading && !curAlbum) return <FallbackPage/>
   
   else return (
     <div className="(background) w-screen h-screen absolute bg-black">
       <PicoCarousel album={curAlbum!}/>
-      <Actionbar resetAlbum={() => { } } mode="guest" album={curAlbum!} />
+      <Actionbar resetAlbum={() => {} } mode="guest" album={curAlbum!} />
     </div>
   );
 };
