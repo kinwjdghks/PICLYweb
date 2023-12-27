@@ -26,7 +26,7 @@ const config: Config = {
     },
   },
   safelist:[
-    {pattern: /(bg|from|via|to|text)-pico_(default|lighter|darker|blue)/},
+    {pattern: /(bg|from|via|to|text|border)-pico_(default|lighter|darker|blue)/},
 
   ],
   plugins: [require('tailwind-scrollbar-hide')],

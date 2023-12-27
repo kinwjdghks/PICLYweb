@@ -32,7 +32,6 @@ const AlbumContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Albu
    },[filteredAlbumList])
 
     const timer = useRef<NodeJS.Timeout|null>(null);
-    const media = 'lg:px-64 lg:pt-32 pb-8 lg:gap-[4rem] ';
 
     const filterByTag = (tagInput:string) =>{
       if(tagInput.trim() === '' && userAlbumList){
@@ -57,7 +56,7 @@ const AlbumContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Albu
     
 
     return (
-      <div className={media + `w-full h-min pt-[4.5rem] pb-10 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
+      <div className={`lg:px-48 lg:pt-32 pb-10 lg:gap-[4rem] w-full h-min pt-20 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
         {!filteredAlbumList ? <Loading /> : (
           <>
             {filteredAlbumList.length === 0 && <NoResult />}

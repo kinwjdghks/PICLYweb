@@ -140,7 +140,20 @@ const GalleryPage = () => {
         <Actionbar resetAlbum={()=>setDisplayingAlbum(undefined)} album={displayingAlbum} mode="user"/>
         </>}
     </div>
+import AlbumDisplayPage from "@/components/Gallery/AlbumDisplayPage";
+import Sidebar from "@/components/Gallery/Sidebar";
+import { useState } from "react";
+
+type page = 'albums' | 'profile' | 'about'
+const Gallery = () => {
+   const [page,setPage] = useState<page>('albums');
+   
+
+  return (<div className="flex">
+   <Sidebar/>
+   {page === 'albums' ? <AlbumDisplayPage/> : ''}
+   </div>
   );
 };
 
-export default GalleryPage;
+export default Gallery;
