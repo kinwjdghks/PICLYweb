@@ -11,6 +11,7 @@ import { IoPersonSharp } from "react-icons/io5";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/firebase";
 import { _user_ } from "@/templates/user";
+import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'));
@@ -51,7 +52,7 @@ const GalleryPage = () => {
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
   const [userAlbumList,setUserAlbumList] = useState<Album[]|undefined>(undefined);
   const [displayingAlbum,setDisplayingAlbum] = useState<Album|undefined>(undefined);
-  
+  const { lockScroll, openScroll } = useBodyScrollLock();
 
   // useEffect(()=>{
   //   console.log(userAlbumList)
@@ -124,9 +125,13 @@ const GalleryPage = () => {
     else setUserAlbumList((prev)=>[newAlbum, ...prev!]);
   }
   
+  useEffect(()=>{
+    if(displayingAlbum) lockScroll();
+    else openScroll();
+  },[displayingAlbum])
   return (
     <div className={"w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
-      <AlbumContainer userAlbumList={userAlbumList} tagInput={tagSearchInput} selectAlbum={setDisplayingAlbum}/>
+      <AlbumContainer userAlbumList={userAlbumList} tagInput={tagSearchInput} selectAlbum={setDisplayingAlbum} />
       <Header onChange={(input:string)=>setTagSearchInput(input)}/>
       <AddPic open={()=>setNewAlbumModalopen(true)}/>
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)} refresh={refresh}/>}

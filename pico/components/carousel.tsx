@@ -11,10 +11,10 @@ const BackDrop = () =>{
 
 const Action = ({prev,next}:{prev:()=>void, next:()=>void}) =>{
 
-  const cn = "fixed top-1/2 -translate-y-1/2 w-12 h-12 cursor-pointer opacity-60";
+  const cn = "fixed top-1/2 -translate-y-1/2 lg:w-12 lg:h-12 h-full w-24 lg:opacity-60 opacity-0 cursor-pointer";
   return<>
-    <Image className={`${cn} left-4`} src={prevImg} alt='prev' width={0} height={0} sizes='100vw' onClick={prev}/>
-    <Image className={`${cn} right-4`} src={nextImg} alt='next' width={0} height={0} sizes='100vw' onClick={next}/>
+    <Image className={`${cn} lg:left-4 left-0`} src={prevImg} alt='prev' width={0} height={0} sizes='100vw' onClick={prev}/>
+    <Image className={`${cn} lg:right-4 right-0`} src={nextImg} alt='next' width={0} height={0} sizes='100vw' onClick={next}/>
   </>
 
 }
