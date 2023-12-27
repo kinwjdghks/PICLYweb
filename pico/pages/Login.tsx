@@ -13,6 +13,14 @@ import { db } from "@/lib/firebase/firebase";
 import { DocumentSnapshot, doc,getDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 
+export const logout = async () =>{
+  console.log('logged out');
+  signOut(auth).then(() => {
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+
 const Login = () => {
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement|null>(null);
@@ -234,12 +242,9 @@ const Login = () => {
     }
   }
 
+  
   useEffect(()=>{
-    console.log('logged out');
-    signOut(auth).then(() => {
-    }).catch((error) => {
-      console.log(error);
-    });
+    logout();
   },[]);
 
 

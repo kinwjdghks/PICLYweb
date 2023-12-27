@@ -5,8 +5,10 @@ import prevImg from '@/public/assets/images/arrow_back.svg'
 import LoadingPage from "./Loading";
 import { Album } from "@/templates/Album";
 
-const BackDrop = () =>{
-  return <div className="(backdrop) w-screen h-screen fixed top-0 left-0 bg-black opacity-80"></div>
+const BackDrop = ({children}:{children:any}) =>{
+  return <div className="(backdrop) w-screen h-screen fixed">
+    <div className="w-screen h-screen fixed bg-black opacity-80">{children}</div>
+  </div>
 }
 
 const Action = ({prev,next}:{prev:()=>void, next:()=>void}) =>{
@@ -127,14 +129,14 @@ const PicoCarousel = ({album}:{album:Album})=> {
   ));
   
 
-  return (
+  return (<BackDrop>
     <div className="(carousel background) w-screen h-screen absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide" 
          ref={screenRef}>
-      <BackDrop/>
       <div className="(screen) w-min h-screen flex relative" >{imageList}</div>
       <Action next={next} prev={prev}/>
       <Indicators steps={steps} activeIndex={activeIndex} onClickHandler={goToIndex}/>
     </div>
+    </BackDrop>
   );
 }
 

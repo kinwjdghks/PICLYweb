@@ -56,7 +56,7 @@ const AlbumContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Albu
     
 
     return (
-      <div className={`lg:px-48 lg:pt-32 pb-10 lg:gap-[4rem] w-full h-min pt-20 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
+      <div className={`lg:px-[10%] lg:pt-32 pb-10 lg:gap-[4rem] w-full h-min pt-20 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
         {!filteredAlbumList ? <Loading /> : (
           <>
             {filteredAlbumList.length === 0 && <NoResult />}
