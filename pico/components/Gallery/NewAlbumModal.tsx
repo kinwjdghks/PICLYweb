@@ -12,6 +12,22 @@ import { auth, db, storage } from "@/lib/firebase/firebase";
 import { Album } from "@/templates/Album";
 import { imageCompressGetFile } from "@/lib/functions/imageCompress";
 
+// const resizeFile = (width:number,height:number,file:File,quality:number) =>
+//         new Promise((resolve) => {
+//           Resizer.imageFileResizer(
+//             file,
+//             width,
+//             height,
+//             "JPEG",
+//             quality,
+//             0,
+//             (uri) => {
+//               resolve(uri);
+//             },
+//             "file"
+//           );
+//         });
+
 const ErrorModal = ({errorNo,maxTag,maxImg,reset}:{errorNo: number, maxTag:number, maxImg:number,reset:()=>void}) =>{
     
     const errorMessage = ["",//0

@@ -8,7 +8,6 @@ import Actionbar from "@/components/Gallery/ActionBar";
 import { useRouter } from "next/router";
 import { Album } from "@/templates/Album";
 import { IoPersonSharp } from "react-icons/io5";
-import { HiOutlineMenu } from "react-icons/hi";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/firebase";
 import { _user_ } from "@/templates/user";
@@ -33,7 +32,7 @@ const Header = ({onChange}:{onChange:(input:string)=>void}) => {
           placeholder="#태그 검색"
           onChange={(e)=>onChange(e.target.value)}
         />
-        <HiOutlineMenu className="m-4 w-8 h-8"/>
+        <IoPersonSharp className="m-4 w-8 h-8"/>
       </div>
     </div>
   );
@@ -127,9 +126,9 @@ const GalleryPage = () => {
   }
   
   useEffect(()=>{
-    if(displayingAlbum || newAlbumModalopen) lockScroll();
+    if(displayingAlbum) lockScroll();
     else openScroll();
-  },[displayingAlbum,newAlbumModalopen])
+  },[displayingAlbum])
   return (
     <div className={"w-screen h-screen bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
       <AlbumContainer userAlbumList={userAlbumList} tagInput={tagSearchInput} selectAlbum={setDisplayingAlbum} />
