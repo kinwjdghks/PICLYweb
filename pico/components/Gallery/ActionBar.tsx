@@ -21,7 +21,7 @@ const MenuBar = ({isMenuOpen,first,deleteAlbum,menuClose}:{isMenuOpen:Boolean,fi
 
     return <ul className={ovr(`w-30 h-max absolute top-20 right-0 p-12 text-2xl text-right  text-[#aaaaaa] ${first && initial} ${animation}`)}>
       {/* <li ><Button className={liCN} onClick={()=>{}} textsize="m" >앨범 편집</Button></li> */}
-      <li ><Button className={liCN} onClick={isLoading ? ()=>{} : deleteAlbum } textsize="m" >{isLoading ? '삭제 중...' :'앨범 삭제'}</Button></li>
+      <li ><Button className={liCN} onClick={isLoading ? ()=>{} : ()=>{setIsLoading(true);deleteAlbum();} } textsize="m" >{isLoading ? '삭제 중...' :'앨범 삭제'}</Button></li>
       <li ><Button className={liCN} onClick={menuClose} textsize="m" >취소</Button></li>
     </ul>
   }

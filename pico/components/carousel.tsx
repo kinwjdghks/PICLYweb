@@ -7,10 +7,10 @@ import { Album } from "@/templates/Album";
 
 const Action = ({prev,next}:{prev:()=>void, next:()=>void}) =>{
 
-  const cn = "fixed top-1/2 -translate-y-1/2 lg:w-12 lg:h-12 h-full w-24 lg:opacity-60 opacity-0 cursor-pointer";
+  const arrowClassName = "fixed top-1/2 -translate-y-1/2 lg:w-12 lg:h-12 h-full w-24 lg:opacity-60 lg:visible invisible cursor-pointer";
   return<>
-    <Image className={`${cn} lg:left-4 left-0`} src={prevImg} alt='prev' width={0} height={0} sizes='100vw' onClick={prev}/>
-    <Image className={`${cn} lg:right-4 right-0`} src={nextImg} alt='next' width={0} height={0} sizes='100vw' onClick={next}/>
+    <Image className={`${arrowClassName} lg:left-4 left-0`} src={prevImg} alt='prev' width={0} height={0} sizes='100vw' onClick={prev}/>
+    <Image className={`${arrowClassName} lg:right-4 right-0`} src={nextImg} alt='next' width={0} height={0} sizes='100vw' onClick={next}/>
   </>
 
 }
@@ -107,7 +107,7 @@ const PicoCarousel = ({album}:{album:Album})=> {
   };
 
   const imageList = album.imageURLs.map((url,idx) => (
-    <div key={idx} className="(imagebackground) w-screen h-screen flex justify-center align-middle snap-center relative">
+    <div key={idx} className="(imagebackground) w-screen lg:h-screen h-[calc(100vh-4rem)] flex justify-center align-middle snap-center relative">
       {idx == activeIndex && <div className="(anchor) w-1 h-1 absolute" key={idx} ref={activeImgRef}></div>}
       <Image
         src={url}
@@ -116,7 +116,7 @@ const PicoCarousel = ({album}:{album:Album})=> {
         height={0}
         sizes='100vw'
         fill
-        className="relative object-contain scale-[90%]"
+        className="relative object-contain scale-[90%] translate-y-[2rem]"
         draggable={false}
         priority={true}
       ></Image>

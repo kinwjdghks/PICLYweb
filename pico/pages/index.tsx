@@ -4,7 +4,7 @@ import Button from "@/components/ui/Button";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import { useRouter } from "next/router";
 import { poppins } from "@/public/assets/fonts/poppins";
-import styles from '@/styles/icons.module.css';
+import { IoIosArrowDropright } from "react-icons/io";
 import { useRef } from "react";
 
 const Logos = () => {
@@ -31,13 +31,16 @@ export default function Home() {
   const ActionBar = () => {
     const router = useRouter();
     return (
-      <div className="(action) w-full h-max flex flex-col mb-16 p-12 gap-6 lg:w-1/2 lg:justify-center lg:mb-0">
-        <Button onClick={() => detailsRef?.current?.scrollIntoView({behavior:"smooth",})} textsize="l" >
-          <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>더 알아보기</div>
-        </Button>
-        <Button onClick={() =>router.push("/Login")} textsize="l">
-          <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>로그인</div>
-          </Button>
+      <div className="(action) w-max h-max flex flex-col mb-16 p-12 gap-2 lg:w-1/2 lg:justify-center lg:mb-0">
+        
+          <div className={`w-fit flex items-center text-center text-3xl leading-[4rem] hover:underline underline-offset-8 cursor-pointer`} 
+            onClick={() => detailsRef?.current?.scrollIntoView({behavior:"smooth",})}>더 알아보기
+          <IoIosArrowDropright className="mx-2"/></div>
+       
+          <div className={`w-fit flex items-center text-center text-3xl leading-[4rem] hover:underline underline-offset-8 cursor-pointer`}
+            onClick={() =>router.push("/Login")}>로그인
+          <IoIosArrowDropright className="mx-2"/></div>
+          
       </div>
     );
   };
