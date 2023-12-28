@@ -8,13 +8,6 @@
     
 }
 
-.proceed{
-    background-image: url('../public/assets/images/arrow_forward.svg');
-    background-size:2rem;
-    background-repeat:no-repeat;
-    background-position:right center;
-}
-
 
 .addbtn{
     background-image: url('../public/assets/images/addbtn.svg');

@@ -9,6 +9,7 @@ import { useEffect, useState, useRef } from "react";
 import { overrideTailwindClasses as ovr } from "tailwind-override";
 import { IoMenu } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
+import { BsLink45Deg } from "react-icons/bs";
 import { Album } from "@/templates/Album";
 
 
@@ -21,7 +22,7 @@ const MenuBar = ({isMenuOpen,first,deleteAlbum,menuClose}:{isMenuOpen:Boolean,fi
     const animation = `${isMenuOpen ? styles.menuopen : !first ? styles.menuclose: ''} `; //no class when closed and first
 
 
-    return <ul className={ovr(`w-30 h-max absolute top-full text-2xl text-right text-[#aaaaaa] -left-1/3 ${first && initial} ${animation}`)}>
+    return <ul className={ovr(`w-30 h-max absolute top-20 right-0 p-12 text-2xl text-right  text-[#aaaaaa] ${first && initial} ${animation}`)}>
       {/* <li ><Button className={liCN} onClick={()=>{}} textsize="m" >앨범 편집</Button></li> */}
       <li ><Button className={liCN} onClick={isLoading ? ()=>{} : deleteAlbum } textsize="m" >{isLoading ? '삭제 중...' :'앨범 삭제'}</Button></li>
       <li ><Button className={liCN} onClick={menuClose} textsize="m" >취소</Button></li>
@@ -51,7 +52,7 @@ const Actionbar = ({resetAlbum,mode,album,deleteAlbum}:{resetAlbum:()=>void,mode
 
     const CopiedMSG = ({show}:{show:Boolean}) =>{
       const initial = '-translate-y-[20%] opacity-0 scale[0.95] ';
-      return <p className={ovr(`absolute top-[120%] text-2xl ${user ? 'left-[25%]' : 'left-[-18%]'} ${initial} ${show && styles.showmsg} `)}>Copied!</p>
+      return <p className={ovr(`absolute top-[120%] text-2xl -left-[50%] ${initial} ${show && styles.showmsg} `)}>Copied!</p>
     }
 
     useEffect(() => {
@@ -79,21 +80,23 @@ const Actionbar = ({resetAlbum,mode,album,deleteAlbum}:{resetAlbum:()=>void,mode
     }, []); //throttling for clicking copy btn
 
     return (
-      <div className={`w-max h-max fixed flex items-center gap-x-8 right-0 top-0 m-10 ${poppins.className} z=[102]`}>
-          {user && <IoIosClose className="w-14 h-14 fixed top-0 left-0 m-8 cursor-pointer fill-[#aaaaaa]"
+      <div className={`(actionbar) w-screen h-max fixed flex items-center gap-x-8 top-0 p-12 ${poppins.className} z=[102]`}>
+          {!user && <Link href={"/"} className="w-max h-max" onClick={resetAlbum}>
+             <Image src={logo} alt="pico" width={30} height={30} className="cursor-pointer hover:scale-[110%] rotate-12"/>
+           </Link>}
+
+          {user && <IoIosClose className="w-14 h-14 top-0 left-0 cursor-pointer fill-white"
              onClick={resetAlbum}/>}
 
-          {user &&<IoMenu className="w-10 h-10 cursor-pointer hover:scale-[115%]" 
-            onClick={(e:Event)=>{e.preventDefault(); setisMenuOpen((prev)=>!prev); setFirst(false)}}/> } 
+          {user && <div ref={btnRef} className="ml-auto relative"><BsLink45Deg className="w-11 h-11 cursor-pointer hover:scale-[115%] " />
+          <CopiedMSG show={showcopymsg}/></div>}
+          
+          {user && <><IoMenu className="w-10 h-10 cursor-pointer hover:scale-[115%] relative" 
+            onClick={(e:Event)=>{e.preventDefault(); setisMenuOpen((prev)=>!prev); setFirst(false)}}/>
+            <MenuBar isMenuOpen = {isMenuOpen} first={first} deleteAlbum={deleteAlbum} menuClose={()=>{setisMenuOpen(false)}}/></> } 
 
-           <MenuBar isMenuOpen = {isMenuOpen} first={first} deleteAlbum={deleteAlbum} menuClose={()=>{setisMenuOpen(false)}}/>
-          <Image src={link} alt='linkcopy' width={40} height={40}
-            className="cursor-pointer hover:scale-[115%]"
-            ref={btnRef}/>
-          <CopiedMSG show={showcopymsg}/>
-          <Link href={"/"} className="w-max h-max" onClick={resetAlbum}>
-            <Image src={logo} alt="pico" width={30} height={30} className="cursor-pointer hover:scale-[110%] rotate-12"/>
-          </Link>
+           
+    
       </div>
     );
   };

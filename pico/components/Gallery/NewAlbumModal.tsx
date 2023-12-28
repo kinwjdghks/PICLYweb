@@ -241,7 +241,7 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
         currentDate.setMinutes(+newMinute);
         // Calculate Time difference in hours (with timezone offset)
         const now = new Date();
-        const diff = (currentDate.getTime() - now.getTime()) / 3600000;
+        const diff = (currentDate.getTime() - now.getTime()) / (60 * 1000);
         console.log(diff);
       
         if (diff < 0) {

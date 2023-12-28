@@ -34,7 +34,7 @@ const Indicators = ({
   }
 
   
-  return <div className="w-min h-min fixed left-1/2 -translate-x-1/2 bottom-10 flex gap-3 justify-center
+  return <div className="w-min h-min fixed left-1/2 -translate-x-1/2 bottom-5 flex gap-3 justify-center
   ">
     {...indicators}
   </div>;
@@ -47,6 +47,7 @@ const PicoCarousel = ({album}:{album:Album})=> {
   const isScrollListenerAdded = useRef<boolean>(false);
   const activeImgRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
+  const singlePic = album.imageURLs.length === 1;
 
   useEffect(() => {
     const container = screenRef.current;
@@ -115,7 +116,7 @@ const PicoCarousel = ({album}:{album:Album})=> {
         height={0}
         sizes='100vw'
         fill
-        className="relative object-contain scale-[85%]"
+        className="relative object-contain scale-[90%]"
         draggable={false}
         priority={true}
       ></Image>
@@ -126,8 +127,8 @@ const PicoCarousel = ({album}:{album:Album})=> {
   return (<div className="(carousel background) w-full h-full absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide " 
          ref={screenRef}>
       <div className="(screen) w-min h-screen flex relative" >{imageList}</div>
-      <Action next={next} prev={prev}/>
-      <Indicators steps={steps} activeIndex={activeIndex} onClickHandler={goToIndex}/>
+      {!singlePic && <Action next={next} prev={prev}/>}
+      {!singlePic && <Indicators steps={steps} activeIndex={activeIndex} onClickHandler={goToIndex}/>}
     </div>
   );
 }
