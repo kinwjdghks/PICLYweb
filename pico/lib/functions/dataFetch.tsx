@@ -1,6 +1,6 @@
 import { Album } from "@/templates/Album";
 import { db } from "../firebase/firebase";
-import { DocumentSnapshot, doc,getDoc } from "firebase/firestore";
+import { DocumentSnapshot, collection, doc,getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 
 
 export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undefined> =>{
@@ -34,4 +34,36 @@ export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undef
       return;
     }
     return album;
+  }
+
+  export const getAllAlbumsByID = async (uid:string) =>{
+    console.log("getAllAlbumsByID executed");
+    const albumQuery = query(collection(db, 'Albums'), where('ownerID', '==', uid),orderBy('creationTime','desc'));
+    
+    try {
+      const querySnapshot = await getDocs(albumQuery);
+  
+      const fetchAlbum:Promise<Album>[] = querySnapshot.docs.map(async (doc) => {
+        const albumData = doc.data();
+  
+        const album: Album = {
+          albumID: doc.id || '',
+          ownerID: albumData.ownerID || '',
+          creationTime: albumData.creationTime.toDate(),
+          expireTime: albumData.expireTime.toDate(),
+          tags: albumData.tags || [],
+          thumbnailURL: albumData.thumbnailURL || '',
+          imageURLs: albumData.imageURLs || [],
+          imageCount: albumData.imageCount || 0,
+          viewCount: albumData.viewCount || 0,
+        };
+  
+        return album;
+      });
+      const userAlbums:Album[] = await Promise.all(fetchAlbum);
+      return userAlbums;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   }

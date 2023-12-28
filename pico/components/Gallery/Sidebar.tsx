@@ -8,7 +8,6 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
 import { page } from "@/pages/Gallery/[userid]";
 import Image from "next/image";
-import { auth } from "@/lib/firebase/firebase";
 import { logout } from "@/pages/Login";
 
 const Sidebar = ({switchPage}:{switchPage:(page:page)=>void}):React.ReactNode =>{
@@ -16,8 +15,8 @@ const Sidebar = ({switchPage}:{switchPage:(page:page)=>void}):React.ReactNode =>
 
     return <div className="h-screen lg:w-64 w-0 left-0 top-0 flex flex-col lg:border-r-[1px] border-white bg-pico_default">
         <div className={`w-full text-center p-4 flex flex-col items-center ${poppins.className}  `}>
-        <p className="text-[3rem] font-[600]">PiCo</p>
-        <Image src={appstore} width={0} height={0} alt='appstore' className="w-32"/>
+        <p className="text-[3rem] font-[600]" draggable='false'>PiCo</p>
+        <Image src={appstore} width={0} height={0} alt='appstore' className="w-32" draggable='false'/>
       </div>
 
       <ul className={`w-2/3 text-xl ml-[20%] mt-auto mb-20 ${nanumgothic.className}`}>
