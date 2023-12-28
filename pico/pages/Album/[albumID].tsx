@@ -78,11 +78,10 @@ const ImageView = () => {
   const [curAlbum,setCurAlbum] = useState<Album|undefined>(undefined);
   const [isLoading,setIsLoading] = useState<boolean>(true);
   const { lockScroll, openScroll } = useBodyScrollLock();
-  lockScroll();
   
   const router = useRouter();
   const albumID:string|undefined = router.query.albumID as string;
-  // console.log(albumID);
+  console.log(albumID);
   const getAlbum = async (albumID:string) => { 
     let album: Album | undefined =  await getAlbumByID(albumID);
     setCurAlbum(album);
@@ -91,6 +90,7 @@ const ImageView = () => {
   
   useEffect(()=>{
     getAlbum(albumID);
+    lockScroll();
   },[]);
   
   if(isLoading) return <LoadingPage/>
@@ -99,15 +99,15 @@ const ImageView = () => {
   else return (
     <div className="(background) w-screen h-screen absolute bg-black">
       <PicoCarousel album={curAlbum!}/>
-      <Actionbar resetAlbum={() => {} } mode="guest" album={curAlbum!} />
+      <Actionbar resetAlbum={() => {} } mode="guest" album={curAlbum!} deleteAlbum={()=>{}}/>
     </div>
   );
 };
 
-export async function getServerSideProps({param}:{param:string}) {
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-}
+// export async function getServerSideProps({param}:{param:string}) {
+//   return {
+//     props: {}, // will be passed to the page component as props
+//   }
+// }
 
 export default ImageView;

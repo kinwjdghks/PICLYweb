@@ -12,34 +12,37 @@ import { IoIosClose } from "react-icons/io";
 import { Album } from "@/templates/Album";
 
 
-const MenuBar = ({open,first,menuClose}:{open:Boolean,first:Boolean,menuClose:()=>void}) =>{
-    
+
+const MenuBar = ({isMenuOpen,first,deleteAlbum,menuClose}:{isMenuOpen:Boolean,first:Boolean,deleteAlbum:()=>void,menuClose:()=>void}) =>{
+    const [isLoading,setIsLoading] =  useState<boolean>(false);
     const liCN = "w-full h-12 text-right";
     const initial = "invisible -translate-y-[5%] scale-y-[95%] opacity-0 "; //when closed
     //closing animation should not be seen on first render.
-    const animation = `${open ? styles.menuopen : !first ? styles.menuclose: ''} `; //no class when closed and first
+    const animation = `${isMenuOpen ? styles.menuopen : !first ? styles.menuclose: ''} `; //no class when closed and first
 
 
-    return <ul className={ovr(`w-30 h-max absolute top-full text-2xl text-right text-[#aaaaaa] -left-[55%] ${first && initial} ${animation}`)}>
-      <li ><Button className={liCN} onClick={()=>{}} textsize="m" >Edit Album</Button></li>
-      <li ><Button className={liCN} onClick={()=>{}} textsize="m" >Delete Album</Button></li>
-      <li ><Button className={liCN} onClick={menuClose} textsize="m" >Cancel</Button></li>
+    return <ul className={ovr(`w-30 h-max absolute top-full text-2xl text-right text-[#aaaaaa] -left-1/3 ${first && initial} ${animation}`)}>
+      {/* <li ><Button className={liCN} onClick={()=>{}} textsize="m" >앨범 편집</Button></li> */}
+      <li ><Button className={liCN} onClick={isLoading ? ()=>{} : deleteAlbum } textsize="m" >{isLoading ? '삭제 중...' :'앨범 삭제'}</Button></li>
+      <li ><Button className={liCN} onClick={menuClose} textsize="m" >취소</Button></li>
     </ul>
   }
 
   
 
-const Actionbar = ({resetAlbum,mode,album}:{resetAlbum:()=>void,mode:"user"|"guest",album:Album}) => {
-    const [menuOpen,setMenuOpen] = useState<Boolean>(false);
+const Actionbar = ({resetAlbum,mode,album,deleteAlbum}:{resetAlbum:()=>void,mode:"user"|"guest",album:Album,deleteAlbum:()=>void}) => {
+    const [isMenuOpen,setisMenuOpen] = useState<Boolean>(false);
     const [first,setFirst] = useState<Boolean>(true);
     const [showcopymsg,setShowcopymsg] = useState<Boolean>(false);
     const btnRef = useRef<HTMLImageElement>(null);
     const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
     const user:Boolean = mode=="user";
-
+    const address = {'local': 'picoweb.vercel.app/Album/', 'app': 'picoweb.vercel.app/Album/'};
+    const domain = (string:'local'|'app') => address[string];
+    
     const handleCopyURL = async () => {
       try {
-        await navigator.clipboard.writeText(`picoweb.vercel.app/Album/${album.albumID}`);
+        await navigator.clipboard.writeText(`${domain('app')}${album.albumID}`);
         console.log('클립보드에 링크가 복사되었습니다.');
       } catch (e) {
         console.log('복사에 실패하였습니다');
@@ -81,9 +84,9 @@ const Actionbar = ({resetAlbum,mode,album}:{resetAlbum:()=>void,mode:"user"|"gue
              onClick={resetAlbum}/>}
 
           {user &&<IoMenu className="w-10 h-10 cursor-pointer hover:scale-[115%]" 
-            onClick={(e:Event)=>{e.preventDefault(); setMenuOpen((prev)=>!prev); setFirst(false)}}/> } 
+            onClick={(e:Event)=>{e.preventDefault(); setisMenuOpen((prev)=>!prev); setFirst(false)}}/> } 
 
-           <MenuBar open = {menuOpen} first={first} menuClose={()=>{setMenuOpen(false)}}/>
+           <MenuBar isMenuOpen = {isMenuOpen} first={first} deleteAlbum={deleteAlbum} menuClose={()=>{setisMenuOpen(false)}}/>
           <Image src={link} alt='linkcopy' width={40} height={40}
             className="cursor-pointer hover:scale-[115%]"
             ref={btnRef}/>
