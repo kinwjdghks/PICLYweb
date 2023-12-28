@@ -42,7 +42,7 @@ const Actionbar = ({resetAlbum,mode,album,deleteAlbum}:{resetAlbum:()=>void,mode
 
     const handleCopyURL = async () => {
       try {
-        await navigator.clipboard.writeText(`${domain('local')}${album.albumID}`);
+        await navigator.clipboard.writeText(`${domain('app')}${album.albumID}`);
         console.log('클립보드에 링크가 복사되었습니다.');
       } catch (e) {
         console.log('복사에 실패하였습니다');
