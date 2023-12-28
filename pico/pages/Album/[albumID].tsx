@@ -84,6 +84,7 @@ const ImageView = () => {
   console.log(albumID);
   const getAlbum = async (albumID:string) => { 
     let album: Album | undefined =  await getAlbumByID(albumID);
+    console.log(album);
     setCurAlbum(album);
     setIsLoading(false);
   };
@@ -99,15 +100,15 @@ const ImageView = () => {
   else return (
     <div className="(background) w-screen h-screen absolute bg-black">
       <PicoCarousel album={curAlbum!}/>
-      <Actionbar resetAlbum={() => {} } mode="guest" album={curAlbum!} deleteAlbum={()=>{}}/>
+      <Actionbar resetAlbum={() => {}} mode="guest" album={curAlbum!} deleteAlbum={()=>{}}/>
     </div>
   );
 };
 
-// export async function getServerSideProps({param}:{param:string}) {
-//   return {
-//     props: {}, // will be passed to the page component as props
-//   }
-// }
+export async function getServerSideProps({param}:{param:string}) {
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}
 
 export default ImageView;

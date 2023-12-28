@@ -96,7 +96,7 @@ const DateInput = ({handleDateChange, handleTimeChange,dateDiff}:DateInputProps)
     return <div className="flex flex-col lg:w-full">
         <div className="w-full h-fit flex items-center">
             <input className="text-black h-10 w-42 m-2 p-4 border-2" type='date' onChange={handleDateChange}/>
-            <input className="text-black h-10 w-42 m-2 p-4 border-2" type='time' step={3600} onChange={handleTimeChange}/>
+            <input className="text-black h-10 w-42 m-2 p-4 border-2" type='time' step={60} onChange={handleTimeChange}/>
             <IoMdInformationCircleOutline  className="w-6 h-6" onMouseOver={()=>setInfoOpen(true)} onMouseOut={()=>setInfoOpen(false)}/>
             {infoOpen && <p className="absolute translate-y-[130%] right-4 bg-pico_darker p-2 rounded-lg">앨범 기본 마감기한은 7일입니다.</p>}
         </div>
@@ -215,17 +215,15 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
         // Extract hour and minute components from the current dueDate
         const currentHour = dueDate.getHours();
         const currentMinute = dueDate.getMinutes();
-      
         // Create a new Date object with the selected date and the preserved time
         const newDate = new Date(dateString);
         newDate.setHours(currentHour);
         newDate.setMinutes(currentMinute);
         
-        
         //calculate Time difference
         const now = new Date();
-        const diff = (newDate.getTime() - now.getTime())/3600000;
-
+        const diff = (newDate.getTime() - now.getTime())/(60 * 1000); //minute 단위
+        console.log(diff);
         setDueDate(newDate);
         setDateDiff(Math.floor(diff));
         if(diff<=0){
@@ -236,19 +234,27 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
 
       const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const timeString = event.target.value;
-        const currentDate = dueDate || new Date();
-        const newDate = new Date(`${currentDate.toISOString().slice(0, 10)}T${timeString}`);
+        const [newHour,newMinute] = timeString.split(':');
         
-        //calculate Time difference
+        let currentDate = dueDate || new Date();
+        currentDate.setHours(+newHour);
+        currentDate.setMinutes(+newMinute);
+        // Calculate Time difference in hours (with timezone offset)
         const now = new Date();
-        const diff = (newDate.getTime() - now.getTime())/3600000;
-        if(diff<=0){
-            setErrorMsg(5);
-            return;
+        const diff = (currentDate.getTime() - now.getTime()) / 3600000;
+        console.log(diff);
+      
+        if (diff < 0) {
+          setErrorMsg(5);
+          return;
         }
-        setDueDate(newDate);
+      
+        setDueDate(currentDate);
         setDateDiff(Math.floor(diff));
       };
+
+    
+      
 
       useEffect(()=>{
         if(imgfiles.length > 0 && dateDiff > 0) setError(false);

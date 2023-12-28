@@ -4,9 +4,8 @@ import { DocumentSnapshot, collection, doc,getDoc, getDocs, orderBy, query, wher
 
 
 export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undefined> =>{
-    if(!albumID) return;
+    if(!albumID) return undefined;
     const albumRef = doc(db,'Albums',albumID);
-    
     //get Album
     let album:Album;
     let getAlbum:DocumentSnapshot;

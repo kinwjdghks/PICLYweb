@@ -37,7 +37,7 @@ const Header = ({onChange,onModalOpen}:{onChange:(input:string)=>void,onModalOpe
 
     },[isInputOpen]);
   return (
-    <div className="w-[inherit] h-20 px-2 lg:px-[10%] fixed bg-pico_default flex items-center place-content-between">  
+    <div className="w-[inherit] h-20 px-2 lg:px-[calc(15%-2rem)] fixed bg-pico_default flex items-center place-content-between">  
     <div className={`lg:invisible w-max h-max pl-4  ${poppins.className} text-[2.5rem] font-[600] `}>
         PiCo
       </div>

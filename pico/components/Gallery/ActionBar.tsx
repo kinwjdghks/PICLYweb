@@ -37,12 +37,12 @@ const Actionbar = ({resetAlbum,mode,album,deleteAlbum}:{resetAlbum:()=>void,mode
     const btnRef = useRef<HTMLImageElement>(null);
     const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
     const user:Boolean = mode=="user";
-    const address = {'local': 'picoweb.vercel.app/Album/', 'app': 'picoweb.vercel.app/Album/'};
+    const address = {'local': 'localhost:3000/Album/', 'app': 'picoweb.vercel.app/Album/'};
     const domain = (string:'local'|'app') => address[string];
-    
+
     const handleCopyURL = async () => {
       try {
-        await navigator.clipboard.writeText(`${domain('app')}${album.albumID}`);
+        await navigator.clipboard.writeText(`${domain('local')}${album.albumID}`);
         console.log('클립보드에 링크가 복사되었습니다.');
       } catch (e) {
         console.log('복사에 실패하였습니다');
