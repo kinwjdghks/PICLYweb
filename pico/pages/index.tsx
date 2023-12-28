@@ -31,13 +31,13 @@ export default function Home() {
   const ActionBar = () => {
     const router = useRouter();
     return (
-      <div className="(action) w-max h-max flex flex-col mb-16 p-12 gap-2 lg:w-1/2 lg:justify-center lg:mb-0">
+      <div className="(action) w-full h-max flex flex-col mb-16 p-12 gap-2 lg:w-1/2 lg:justify-center lg:mb-0 lg:items-start items-center">
         
-          <div className={`w-fit flex items-center text-center text-3xl leading-[4rem] hover:underline underline-offset-8 cursor-pointer`} 
+          <div className={`w-fit lg:my-4 mb-2 flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`} 
             onClick={() => detailsRef?.current?.scrollIntoView({behavior:"smooth",})}>더 알아보기
           <IoIosArrowDropright className="mx-2"/></div>
        
-          <div className={`w-fit flex items-center text-center text-3xl leading-[4rem] hover:underline underline-offset-8 cursor-pointer`}
+          <div className={`w-fit lg:my-4 flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
             onClick={() =>router.push("/Login")}>로그인
           <IoIosArrowDropright className="mx-2"/></div>
           
