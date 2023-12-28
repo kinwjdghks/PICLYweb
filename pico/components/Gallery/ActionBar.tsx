@@ -80,9 +80,9 @@ const Actionbar = ({resetAlbum,mode,album,deleteAlbum}:{resetAlbum:()=>void,mode
     }, []); //throttling for clicking copy btn
 
     return (
-      <div className={`(actionbar) w-screen h-max fixed flex items-center gap-x-8 top-0 p-12 ${poppins.className} z=[102]`}>
-          {!user && <Link href={"/"} className="w-max h-max" onClick={resetAlbum}>
-             <Image src={logo} alt="pico" width={30} height={30} className="cursor-pointer hover:scale-[110%] rotate-12"/>
+      <div className={`(actionbar) w-screen h-max fixed flex items-center gap-x-8 top-0 lg:p-12 p-4 pt-2 ${poppins.className} z=[102]`}>
+          {!user && <Link href={"/"} className="w-max h-max font-bold text-2xl" onClick={resetAlbum}>PiCo
+             {/* <Image src={logo} alt="pico" width={30} height={30} className="lg:w-14 lg:h-14 w-10 h-10 cursor-pointer hover:scale-[110%] rotate-12"/> */}
            </Link>}
 
           {user && <IoIosClose className="w-14 h-14 top-0 left-0 cursor-pointer fill-white"
