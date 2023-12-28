@@ -1,9 +1,6 @@
 import Button from "@/components/ui/Button";
-import Image from "next/image";
 import Link from "next/link";
 import styles from '@/styles/animation.module.css';
-import logo from "@/public/assets/images/PiCo_Logo_white.svg";
-import link from "@/public/assets/images/link.svg";
 import { poppins } from "@/public/assets/fonts/poppins";
 import { useEffect, useState, useRef } from "react";
 import { overrideTailwindClasses as ovr } from "tailwind-override";

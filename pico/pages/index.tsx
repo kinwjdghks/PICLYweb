@@ -33,10 +33,10 @@ export default function Home() {
     return (
       <div className="(action) w-full h-max flex flex-col mb-16 p-12 gap-6 lg:w-1/2 lg:justify-center lg:mb-0">
         <Button onClick={() => detailsRef?.current?.scrollIntoView({behavior:"smooth",})} textsize="l" >
-          <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>See More</div>
+          <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>더 알아보기</div>
         </Button>
         <Button onClick={() =>router.push("/Login")} textsize="l">
-          <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>Log in</div>
+          <div className={`${styles.proceed} lg:w-max lg:pr-[50%]`}>로그인</div>
           </Button>
       </div>
     );
