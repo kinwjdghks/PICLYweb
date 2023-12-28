@@ -92,6 +92,9 @@ const ImageView = () => {
   useEffect(()=>{
     getAlbum(albumID);
     lockScroll();
+    return ()=>{
+      // console.log('open scroll');
+      openScroll()};
   },[]);
   
   if(isLoading) return <LoadingPage/>
