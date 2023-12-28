@@ -10,7 +10,7 @@ const ThumbNail = ({ src, len, priority }: { src: string|StaticImport, len:numbe
     <div className={`(frame) w-full aspect-square rounded-t-md overflow-hidden relative`}>
     {priority ? <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false'  priority />
       :<Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false'/>}
-    {len > 1 && <TbBoxMultiple className="w-8 h-8 absolute bottom-4 right-4"/>}
+    {len > 1 && <TbBoxMultiple className="lg:w-8 lg:h-8 w-6 h-6 absolute lg:bottom-4 lg:right-4 bottom-2 right-2"/>}
   </div>
   );
 };

@@ -2,13 +2,12 @@
 import Modal from "./ui/Modal";
 import { poppins } from "@/public/assets/fonts/poppins";
 import dynamic from "next/dynamic";
-import {useEffect, useRef, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
 import Actionbar from "@/components/Gallery/ActionBar";
 import { useRouter } from "next/router";
 import { Album } from "@/templates/Album";
 import { FaSearch } from "react-icons/fa";
 import { HiOutlineMenu } from "react-icons/hi";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { RiImageAddFill } from "react-icons/ri";
 import { auth, db } from "@/lib/firebase/firebase";
 import { _user_ } from "@/templates/user";
@@ -54,10 +53,14 @@ const Header = ({onChange,onModalOpen}:{onChange:(input:string)=>void,onModalOpe
   );
 };
 
-const AlbumDisplayPage = () => {
+type AlbumDisplayPageProps={
+  userAlbumList:Album[]|undefined;
+  setUserAlbumList:Dispatch<SetStateAction<Album[] | undefined>>
+}
+
+const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps) => {
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
-  const [userAlbumList,setUserAlbumList] = useState<Album[]|undefined>(undefined);
   const [displayingAlbum,setDisplayingAlbum] = useState<Album|undefined>(undefined);
   const { lockScroll, openScroll } = useBodyScrollLock();
 

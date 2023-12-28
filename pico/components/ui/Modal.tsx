@@ -6,7 +6,7 @@ type ModalProps={
 }   
 
 const BackDrop = ({children}:ModalProps)=>{
-    return <div className="(backdrop) w-screen h-screen left-0 top-0 fixed ">{children}</div>
+    return <div className="(backdrop) w-screen h-screen left-0 top-0 fixed bg-black/80">{children}</div>
 }
 
 const Modal = (props: PropsWithChildren<ModalProps>) =>{

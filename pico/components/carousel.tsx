@@ -5,10 +5,6 @@ import prevImg from '@/public/assets/images/arrow_back.svg'
 import LoadingPage from "./Loading";
 import { Album } from "@/templates/Album";
 
-const BackDrop = ({children}:{children:any}) =>{
-  return <div className="(backdrop) w-screen h-screen left-0 top-0 absolute bg-black/80">{children}</div>
-}
-
 const Action = ({prev,next}:{prev:()=>void, next:()=>void}) =>{
 
   const cn = "fixed top-1/2 -translate-y-1/2 lg:w-12 lg:h-12 h-full w-24 lg:opacity-60 opacity-0 cursor-pointer";
@@ -127,14 +123,12 @@ const PicoCarousel = ({album}:{album:Album})=> {
   ));
   
 
-  return (<BackDrop>
-    <div className="(carousel background) w-full h-full absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide " 
+  return (<div className="(carousel background) w-full h-full absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide " 
          ref={screenRef}>
       <div className="(screen) w-min h-screen flex relative" >{imageList}</div>
       <Action next={next} prev={prev}/>
       <Indicators steps={steps} activeIndex={activeIndex} onClickHandler={goToIndex}/>
     </div>
-    </BackDrop>
   );
 }
 

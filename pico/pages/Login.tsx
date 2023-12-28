@@ -15,6 +15,7 @@ import { FirebaseError } from "firebase/app";
 
 export const logout = async () =>{
   console.log('logged out');
+  sessionStorage.removeItem('picoweb_loginState');
   signOut(auth).then(() => {
   }).catch((error) => {
     console.log(error);
@@ -248,7 +249,7 @@ const Login = () => {
   },[]);
 
 
-  const inputCN = 'w-full h-12 border-solid border-[1px] p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black';
+  const inputClassName = 'w-full h-12 border-solid border-[1px] p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black';
   return (
     <div className={`w-screen h-screen relative bg-pico_darker flex justify-center items-end ${nanumgothic.className}`}>
       
@@ -256,25 +257,25 @@ const Login = () => {
         <Image src={PiCologo} alt="logo" className="w-16 h-16 rotate-12"></Image>
         <form className="w-full h-max mt-10">
           <fieldset>
-            <input className={inputCN} type='text' placeholder='이메일' ref={emailRef} onFocus={()=>{setMsg('')}}/>
+            <input className={inputClassName} type='text' placeholder='이메일' ref={emailRef} onFocus={()=>{setMsg('')}}/>
           </fieldset>
           <fieldset>
-            <input className={inputCN} type='password' placeholder="비밀번호" ref={pwRef} onFocus={()=>{setMsg('')}}/>
+            <input className={inputClassName} type='password' placeholder="비밀번호" ref={pwRef} onFocus={()=>{setMsg('')}}/>
           </fieldset>
           <fieldset className={`${!isRegistering && 'invisible'}`}>
-            <input className={inputCN} type='password' placeholder="비밀번호 확인" ref={pwcRef} onFocus={()=>{setMsg('')}}/>
+            <input className={inputClassName} type='password' placeholder="비밀번호 확인" ref={pwcRef} onFocus={()=>{setMsg('')}}/>
           </fieldset>
         </form>
         <p className="h-7 m-2 text-lg">{msg}</p>
         
         <div className="(options) w-full flex-grow flex flex-col items-center ">
-            <button className={`${inputCN} text-white hover:bg-white hover:text-black`} 
+            <button className={`${inputClassName} text-white hover:bg-white hover:text-black`} 
             onClick={isRegistering ? register_Email : login_Email}>{isRegistering ? '가입하기':'로그인'}</button>
 
             <p className="mt-4">또는</p>
             <div className="flex h-max w-full  mt-4 items-center">
               <FcGoogle className="w-12 h-12 mx-2"/>
-              <button className={`${inputCN} m-0 text-white hover:bg-white hover:text-black`} 
+              <button className={`${inputClassName} m-0 text-white hover:bg-white hover:text-black`} 
               onClick={login_Google}>구글 로그인
               </button>
             </div>
@@ -295,5 +296,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// e.preventDefault(); router.push({pathname:'/Gallery/anyname'})
