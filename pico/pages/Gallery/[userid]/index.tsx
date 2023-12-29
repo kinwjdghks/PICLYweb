@@ -15,7 +15,7 @@ const Gallery = () => {
   return (<div className="flex">
    <Sidebar switchPage={(page:page)=>setPage(page)}/>
    <AlbumDisplayPage userAlbumList={userAlbumList} setUserAlbumList={setUserAlbumList}/>
-   {page === 'gallery' ? '' : page === 'about' ? <AboutPage /> : <ProfilePage albumCount={userAlbumList?.length} close={setPage}/>}
+   {page === 'gallery' ? '' : page === 'about' ? <AboutPage close={setPage}/> : <ProfilePage albumCount={userAlbumList?.length} close={setPage}/>}
    </div>
   );
 };

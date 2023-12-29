@@ -89,7 +89,9 @@ type DateInputProps ={
 }
 
 const DateInput = ({handleDateChange, handleTimeChange,dateDiff}:DateInputProps):React.ReactNode =>{
-    const dueMsg = `${Math.round(dateDiff/24) ? Math.round(dateDiff/24)+'일' : ''} ${dateDiff % 24}시간 후`;
+    const dueMsg = `${Math.round(dateDiff/(24 * 60)) ? Math.round(dateDiff/(24 * 60))+'일' : ''} 
+                    ${Math.round(dateDiff / 60) ? Math.round(dateDiff / 60)+'시간' : ''}
+                    ${Math.round(dateDiff % 60)}분 후 만료`;
     const [infoOpen,setInfoOpen] = useState<boolean>(false);
 
     
@@ -115,7 +117,7 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
     const [imgfiles,setImgfiles] = useState<File[]>([]);
     const [tagList, setTagList] = useState<string[]>([]);
     const [dueDate,setDueDate] = useState<Date>(oneWeekLaterFromNow);
-    const [dateDiff,setDateDiff] = useState<number>(0);
+    const [dateDiff,setDateDiff] = useState<number>(0); //분단위
     const [errorMsg,setErrorMsg] = useState<number>(0);
     const [error,setError] = useState<boolean>(true);
     const [isLoading,setIsLoading] = useState<boolean>(false);

@@ -51,7 +51,6 @@ const PicoCarousel = ({album}:{album:Album})=> {
 
   useEffect(() => {
     const container = screenRef.current;
-    console.log("containerRef: "+ container);
     if (container && !isScrollListenerAdded.current) {
       container.addEventListener("scroll", updateIndicatorOnScroll);
       console.log('eventhandler attached')
@@ -116,7 +115,7 @@ const PicoCarousel = ({album}:{album:Album})=> {
         height={0}
         sizes='100vw'
         fill
-        className="relative object-contain scale-[90%] translate-y-[2rem]"
+        className="relative object-contain scale-[90%] lg:translate-y-0 translate-y-[2rem]"
         draggable={false}
         priority={true}
       ></Image>

@@ -24,13 +24,13 @@ const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?
   const Info = () =>{
     if(!item) return <></>
     const expire = item.expireTime;
-    const difference:string = dateDiffAsString(new Date(expire),new Date());
-    const impending:boolean = difference.length == 2 && difference[1] =='h';
+    const difference:string = dateDiffAsString(new Date(),new Date(expire));
+    const impending:boolean = difference.length == 2 && difference[1] =='h' || difference === '만료';
 
-    return <div className="(info) w-full aspect-[3/1] pb-2 lg:p-4 p-2 flex flex-col justify-between">
-      <div className="flex justify-between">
+    return <div className="(info) w-full aspect-[3/1] relative pb-2 lg:p-4 p-2 flex flex-col justify-between">
+      <div className="flex justify-between text-[3.5vw]">
         <div className="(creation) lg:text-[2vw]">{formatDateString(new Date(expire))}</div>
-        <div className={`(d-day) lg:text-[1.8vw] ${impending && 'text-red-500'}`}>D-{difference}</div>
+        <div className={`(d-day) lg:text-[1.8vw] ${impending && 'text-red-500'}`}>{difference}</div>
       </div>
       <ul className="overflow-hidden whitespace-nowrap">{item.tags.map((tag)=>
         <li className="(tags) inline-block list-none mr-3 text-[#aaaaaa] lg:text-[1.3vw]" key={tag}>#{tag}</li>)}

@@ -257,10 +257,22 @@ const Login = () => {
         <Image src={PiCologo} alt="logo" className="w-16 h-16 rotate-12"></Image>
         <form className="w-full h-max mt-10">
           <fieldset>
-            <input className={inputClassName} type='text' placeholder='이메일' ref={emailRef} onFocus={()=>{setMsg('')}}/>
+            <input className={inputClassName} type='text' placeholder='이메일' ref={emailRef} onFocus={()=>{setMsg('')}}
+                    onKeyDown={(e)=>{
+                      if((e.key == 'Enter' || e.keyCode == 13) && !isRegistering){
+                          e.preventDefault();
+                          login_Email();
+                          }
+                  }}/>
           </fieldset>
           <fieldset>
-            <input className={inputClassName} type='password' placeholder="비밀번호" ref={pwRef} onFocus={()=>{setMsg('')}}/>
+            <input className={inputClassName} type='password' placeholder="비밀번호" ref={pwRef} onFocus={()=>{setMsg('')}}
+                    onKeyDown={(e)=>{
+                      if((e.key == 'Enter' || e.keyCode == 13) && !isRegistering){
+                          e.preventDefault();
+                          login_Email();
+                          }
+                  }}/>
           </fieldset>
           <fieldset className={`${!isRegistering && 'invisible'}`}>
             <input className={inputClassName} type='password' placeholder="비밀번호 확인" ref={pwcRef} onFocus={()=>{setMsg('')}}/>
