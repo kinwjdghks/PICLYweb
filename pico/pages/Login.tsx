@@ -229,7 +229,8 @@ return (
         <div className="flex h-max w-full  mt-4 items-center">
           <FcGoogle className="w-12 h-12 mx-2"/>
           <button className={`${inputClassName} m-0 text-white hover:bg-white hover:text-black`} 
-            onClick={logInGoogle}>구글로 계속하기
+            onClick={()=>{}}
+            disabled>구글로 계속하기
           </button>
         </div>
       </div>    
