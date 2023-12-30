@@ -1,12 +1,10 @@
-"use client"
-
 import Image from "next/image";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import Button from "@/components/ui/Button";
 import { _user_ } from "@/templates/user";
 import { FcGoogle } from "react-icons/fc";
 import arrow from '@/public/assets/images/arrow_back.svg';
-import PiCologo from '@/public/assets/images/PiCo_Logo_white.svg';
+import PiCoLogo from '@/public/assets/images/PiCo_Logo_white.svg';
 import { useRouter } from "next/router";
 import { auth } from "@/lib/firebase/firebase";
 import {  useEffect, useRef, useState } from "react";
@@ -14,8 +12,7 @@ import { signInWithCredential, createUserWithEmailAndPassword, signInWithEmailAn
 import { db } from "@/lib/firebase/firebase";
 import { DocumentSnapshot, doc,getDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
-import { signInWithGoogle } from "@/lib/functions/accountManage";
-
+import { GoogleLogin } from '@react-oauth/google';
 
 
 export const logout = async () =>{
@@ -27,7 +24,7 @@ export const logout = async () =>{
   });
 }
 
-const Login = () => {
+const LoginPage = () => {
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement|null>(null);
   const pwRef = useRef<HTMLInputElement|null>(null);
@@ -41,47 +38,51 @@ const Login = () => {
     if(pwcRef.current) pwcRef.current.value = '';
   }
 
-  const logInGoogle = async () => {
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then( async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        console.log(result);
-        const credential_ = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential!.accessToken;
-        const id_token = credential_?.idToken;
-
-        const credential = GoogleAuthProvider.credential(id_token);
-        // The signed-in user info.
-        const user_ = result.user;
-        let user:_user_|undefined;
-        const userRef = doc(db, 'Users', user_.uid);
-        const userDoc = await getDoc(userRef);
-
-        if (!userDoc.exists()) {
-          // This is the first time the user is registering
-          user = {
-            // uid: user_.uid,
-            email: '',
-            authProvider: 'google',
-            creationTime: new Date(),
-          };
-          // Create a Firebase doc only if the user is registering for the first time
-          await setDoc(userRef, user);
-        }
+  // const logInGoogle = async () => {
+  //   const auth = getAuth();
     
-        await signInWithCredential(auth,credential);
-        router.push(`/Gallery/${user_.uid}`)
-      }).catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        console.log('errorCode: '+errorCode);
-        console.log(errorMessage);
-      });
-    return;
-  };
+  //   const provider = new GoogleAuthProvider();
+  //   signInWithPopup(auth, provider)
+  //     .then( async (result) => {
+  //       // This gives you a Google Access Token. You can use it to access the Google API.
+  //       console.log(result);
+  //       const credential_ = GoogleAuthProvider.credentialFromResult(result);
+  //       // const token = credential!.accessToken;
+  //       const id_token = credential_?.idToken;
+
+  //       const credential = GoogleAuthProvider.credential(id_token);
+  //       // The signed-in user info.
+  //       const user_ = result.user;
+  //       let user:_user_|undefined;
+  //       const userRef = doc(db, 'Users', user_.uid);
+  //       const userDoc = await getDoc(userRef);
+
+  //       if (!userDoc.exists()) {
+  //         // This is the first time the user is registering
+  //         user = {
+  //           // uid: user_.uid,
+  //           email: '',
+  //           authProvider: 'google',
+  //           creationTime: new Date(),
+  //         };
+  //         // Create a Firebase doc only if the user is registering for the first time
+  //         await setDoc(userRef, user);
+  //       }
+    
+  //       await signInWithCredential(auth,credential);
+  //       router.push(`/Gallery/${user_.uid}`)
+  //     }).catch((error) => {
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       // The email of the user's account used.
+  //       console.log('errorCode: '+errorCode);
+  //       console.log(errorMessage);
+  //     });
+  //   return;
+  // };
+
+
+  
 
   const login_Email = async () => {
     const id = emailRef?.current?.value.trim();
@@ -192,7 +193,7 @@ const inputClassName = 'w-full h-12 border-solid border-[1px] p-2 px-4 m-1 borde
 return (
   <div className={`w-screen h-screen relative bg-pico_darker flex justify-center items-end ${nanumgothic.className}`}>
     <div className="(container) w-5/6 sm:w-96 h-3/4 mb-16 relative flex flex-col items-center">
-      <Image src={PiCologo} alt="logo" className="w-16 h-16 rotate-12"/>
+      <Image src={PiCoLogo} alt="logo" className="w-16 h-16 rotate-12"/>
       <form className="w-full h-max mt-10">
         <fieldset>
           <input 
@@ -228,10 +229,17 @@ return (
         <p className="mt-4">또는</p>
         <div className="flex h-max w-full  mt-4 items-center">
           <FcGoogle className="w-12 h-12 mx-2"/>
-          <button className={`${inputClassName} m-0 text-white hover:bg-white hover:text-black`} 
-            onClick={()=>{}}
-            disabled>구글로 계속하기
-          </button>
+          {/* <button className={`${inputClassName} m-0 text-white hover:bg-white hover:text-black`} 
+            onClick={logInGoogle}>구글로 계속하기
+          </button> */}
+          <GoogleLogin
+            onSuccess={credentialResponse => {
+              console.log(credentialResponse)
+            }}
+            onError={() => {
+              console.log('Login Failed')
+            }}
+          />
         </div>
       </div>    
       <div className="flex flex-col mt-auto">
@@ -245,4 +253,4 @@ return (
   );
 };
 
-export default Login;
+export default LoginPage;

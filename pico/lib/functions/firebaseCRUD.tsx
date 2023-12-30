@@ -80,25 +80,25 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
   });
   let albumID:string;
   try{
-      const doc = await addDoc(getCollectionRef(CollectionName.albums), album);
-      albumID = doc.id;
+    const doc = await addDoc(getCollectionRef(CollectionName.albums), album);
+    albumID = doc.id;
   }catch(error){
-      console.log(error);
-      return;
+    console.log(error);
+    return;
   }
 
   //generate thumbnail
   const thumbnailRef = getStorageRef(`${albumID}/thumbnail.jpeg`);
   let thumbnailURL:string = '';
   const metadata = {
-      contentType: 'image/jpeg',
+    contentType: 'image/jpeg',
   };
   try{
     const thumbnail = await imageCompressGetFile(0.5,1920,imgfiles[0]);
     await uploadBytes(thumbnailRef,thumbnail!,metadata);
     thumbnailURL = await getDownloadURL(thumbnailRef);
   }catch(error){
-      console.log(error);
+    console.log(error);
   }
 
   //post imageURLs
