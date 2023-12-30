@@ -8,7 +8,7 @@
 // import LoadingPage from "@/components/Loading";
 // import dynamic from "next/dynamic";
 // import { getAlbumByID, getImagesByID } from "@/lib/functions/functions";
-// const PicoCarousel = dynamic(()=>import('@/components/ui/carousel'));
+// const PicoCarousel = dynamic(()=>import('@/components/ui/Carousel'));
 
 // const ImageView = ({ album }: { album: Album|null }) => {
 //   console.log(album);
