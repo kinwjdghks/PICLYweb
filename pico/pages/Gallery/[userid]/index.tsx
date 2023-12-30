@@ -12,10 +12,11 @@ const Gallery = () => {
   const [page,setPage] = useState<page>('gallery');
    
 
-  return (<div className="flex">
-   <Sidebar switchPage={(page:page)=>setPage(page)}/>
-   <AlbumDisplayPage userAlbumList={userAlbumList} setUserAlbumList={setUserAlbumList}/>
-   {page === 'gallery' ? '' : page === 'about' ? <AboutPage close={setPage}/> : <ProfilePage albumCount={userAlbumList?.length} close={setPage}/>}
+  return (
+  <div className="flex">
+    <Sidebar switchPage={(page:page)=>setPage(page)}/>
+    <AlbumDisplayPage userAlbumList={userAlbumList} setUserAlbumList={setUserAlbumList}/>
+    {page === 'gallery' ? '' : page === 'about' ? <AboutPage close={setPage}/> : <ProfilePage albumCount={userAlbumList?.length} close={setPage}/>}
    </div>
   );
 };

@@ -16,8 +16,8 @@ const MenuBar = ({isMenuOpen,deleteAlbum,menuClose}:{isMenuOpen:Boolean,deleteAl
     const listClassName = "w-full text-right text-center hover:underline underline-offset-8 items-center lg:text-2xl text-[1.3rem]";
     
     return isMenuOpen ? <ul className={`w-30 h-max absolute lg:top-28 top-16 lg:right-0 -right-8 p-10 pt-0 leading-[2.5rem] text-right  text-[#aaaaaa]} lg:bg-transparent
-                                        bg-gradient-to-bl from-black to-transparent vi a-40% via-b lack`}>
-      <li ><button className={listClassName} onClick={isLoading ? ()=>{} : ()=>{setIsLoading(true);deleteAlbum();} } >{isLoading ? '삭제 중...' :'앨범 삭제'}</button></li>
+                                        bg-gradient-to-bl from-black to-transparent lg:from-transparent`}>
+      <li ><button className={`${listClassName} ${isLoading && 'cursor-default'}`} onClick={isLoading ? ()=>{} : ()=>{setIsLoading(true);deleteAlbum();} } >{isLoading ? '삭제 중...' :'앨범 삭제'}</button></li>
       <li ><button className={listClassName} onClick={menuClose} >취소</button></li>
       <div className="bg-gradient-to-b via-80%"></div>
     </ul> : <></>

@@ -8,7 +8,8 @@ const AboutPage = ({close}:{close:(page:page)=>void}):React.ReactNode =>{
 
     return <div className={`lg:w-[calc(100%-16rem)] lg:right-0 w-screen lg:h-screen min-h-max absolute bg-pico_default flex flex-col ${nanumgothic.className}`}>
         <div className="w-full lg:p-12 p-8 flex items-center">
-            <MdArrowBackIos className="lg:w-0 w-8 h-8 mr-2" onClick={()=>close('gallery')}/>
+            <MdArrowBackIos className="lg:w-0 w-8 h-8 mr-2" 
+              onClick={()=>close('gallery')}/>
             <h1 className="lg:text-4xl text-3xl font-bold">서비스 정보</h1>
         </div>
         <div className="w-full h-full p-12 pt-0">
@@ -25,8 +26,6 @@ const AboutPage = ({close}:{close:(page:page)=>void}):React.ReactNode =>{
             <h2 className="text-2xl">앱 다운로드</h2>
             <div className=""></div>
         </div>
-
-
     </div>
 }
 

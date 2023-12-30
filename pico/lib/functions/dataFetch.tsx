@@ -2,10 +2,23 @@ import { Album } from "@/templates/Album";
 import { db } from "../firebase/firebase";
 import { DocumentSnapshot, collection, doc,getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 
+enum CollectionName {
+  albums = "Albums"
+}
 
+const getCollectionRef = (collectionName: CollectionName) => {
+  return doc(db, collectionName);
+}
+
+const getDocRef = (collectionName: CollectionName, docId: string) => {
+  return doc(db, collectionName, docId);
+}
+
+// Read functions
 export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undefined> =>{
     if(!albumID) return undefined;
-    const albumRef = doc(db,'Albums',albumID);
+    const albumRef = doc(db,'Albums', albumID);
+    // const albumRef = getDocRef(CollectionName.albums, albumID);
     //get Album
     let album:Album;
     let getAlbum:DocumentSnapshot;
@@ -26,7 +39,7 @@ export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undef
         imageURLs: getAlbum.get('imageURLs') as string[],
         imageCount: getAlbum.get('imageCount') as number,
         viewCount: getAlbum.get('viewCount') as number,
-        };
+      };
     }
     else{
       console.log("Album not found");
@@ -37,14 +50,15 @@ export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undef
 
   export const getAllAlbumsByID = async (uid:string) =>{
     console.log("getAllAlbumsByID executed");
-    const albumQuery = query(collection(db, 'Albums'), where('ownerID', '==', uid),orderBy('creationTime','desc'));
+    const albumQuery = query(collection(db, 'Albums'), where('ownerID', '==', uid), orderBy('creationTime','desc'));
     
     try {
       const querySnapshot = await getDocs(albumQuery);
   
       const fetchAlbum:Promise<Album>[] = querySnapshot.docs.map(async (doc) => {
         const albumData = doc.data();
-  
+
+        // const album = Album(doc.data());
         const album: Album = {
           albumID: doc.id || '',
           ownerID: albumData.ownerID || '',
@@ -66,3 +80,9 @@ export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undef
       return [];
     }
   }
+
+  // Create functions
+  // TODO
+
+  // Delete functions
+  // TODO

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import logo_big_bright from "@/public/assets/images/PiCo_Logo.svg";
-import Button from "@/components/ui/Button";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import { useRouter } from "next/router";
 import { poppins } from "@/public/assets/fonts/poppins";
@@ -37,7 +36,7 @@ export default function Home() {
             onClick={() => detailsRef?.current?.scrollIntoView({behavior:"smooth",})}>더 알아보기
           <IoIosArrowDropright className="mx-2"/></div>
        
-          <div className={`w-fit lg:my-4 flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
+          <div className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
             onClick={() =>router.push("/Login")}>로그인
           <IoIosArrowDropright className="mx-2"/></div>
           

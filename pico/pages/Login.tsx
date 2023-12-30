@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import Button from "@/components/ui/Button";
@@ -8,10 +10,13 @@ import PiCologo from '@/public/assets/images/PiCo_Logo_white.svg';
 import { useRouter } from "next/router";
 import { auth } from "@/lib/firebase/firebase";
 import {  useEffect, useRef, useState } from "react";
-import { OAuthProvider,signInWithCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
+import { signInWithCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
 import { db } from "@/lib/firebase/firebase";
 import { DocumentSnapshot, doc,getDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
+import { signInWithGoogle } from "@/lib/functions/accountManage";
+
+
 
 export const logout = async () =>{
   console.log('logged out');
@@ -36,157 +41,91 @@ const Login = () => {
     if(pwcRef.current) pwcRef.current.value = '';
   }
 
-  const login_Google = async () => {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ display: 'popup',prompt:'select_account' });
+  const logInGoogle = async () => {
     const auth = getAuth();
-    signInWithPopup(auth,provider)
-    .then( async (result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      console.log(result);
-      const credential_ = GoogleAuthProvider.credentialFromResult(result);
-      // const token = credential!.accessToken;
-      const id_token = credential_?.idToken;
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then( async (result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        console.log(result);
+        const credential_ = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential!.accessToken;
+        const id_token = credential_?.idToken;
 
-      const credential = GoogleAuthProvider.credential(id_token);
-      // The signed-in user info.
-      const user_ = result.user;
-      let user:_user_|undefined;
-      const userRef = doc(db, 'Users', user_.uid);
-      const userDoc = await getDoc(userRef);
+        const credential = GoogleAuthProvider.credential(id_token);
+        // The signed-in user info.
+        const user_ = result.user;
+        let user:_user_|undefined;
+        const userRef = doc(db, 'Users', user_.uid);
+        const userDoc = await getDoc(userRef);
 
-      if (!userDoc.exists()) {
-        // This is the first time the user is registering
-        user = {
-          // uid: user_.uid,
-          email: '',
-          authProvider: 'Google',
-          creationTime: new Date(),
-        };
-        // Create a Firebase doc only if the user is registering for the first time
-        await setDoc(userRef, user);
-      }
-  
-      await signInWithCredential(auth,credential);
-      router.push(`/Gallery/${user_.uid}`)
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      console.log('errorCode: '+errorCode);
-      console.log(errorMessage);
-    });
+        if (!userDoc.exists()) {
+          // This is the first time the user is registering
+          user = {
+            // uid: user_.uid,
+            email: '',
+            authProvider: 'google',
+            creationTime: new Date(),
+          };
+          // Create a Firebase doc only if the user is registering for the first time
+          await setDoc(userRef, user);
+        }
+    
+        await signInWithCredential(auth,credential);
+        router.push(`/Gallery/${user_.uid}`)
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        console.log('errorCode: '+errorCode);
+        console.log(errorMessage);
+      });
     return;
   };
 
-  // const login_Apple = async () => {
-  //   const provider = new OAuthProvider('apple.com');
-  //   provider.addScope('email');
-  //   provider.addScope('name');
-  //   provider.setCustomParameters({
-  //     locale: 'ko'
-  //   });
-  //   const auth = getAuth();
-  //   signInWithPopup(auth, provider)
-  //   .then(async (result) => {
-
-  //     // Apple credential
-  //     const credential_ = OAuthProvider.credentialFromResult(result);
-  //     const accessToken = credential_?.accessToken;
-  //     const idToken = credential_?.idToken;
-
-  //     const user_ = result.user;
-  //     let user:_user_|undefined;
-
-  //     const userRef = doc(db, 'Users', user_.uid);
-  //     const userDoc = await getDoc(userRef);
-
-  //     if (!userDoc.exists()) {
-  //       // This is the first time the user is registering
-  //       user = {
-  //         // uid: user_.uid,
-  //         email: '',
-  //         authProvider: 'Google',
-  //         creationTime: new Date(),
-  //       };
-
-  //       // Create a Firebase doc only if the user is registering for the first time
-  //       await setDoc(userRef, user);
-  //     }
-  //     // await signInWithCredential(auth,credential);
-  //     router.push(`/Gallery/${user_.uid}`)
-      
-  //   })
-  //   .catch((error) => {
-  //     // Handle Errors here.
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     console.log(errorCode);
-  //     console.log(errorMessage);
-  //     // The email of the user's account used.
-  //     const email = error.customData.email;
-  //     // The credential that was used.
-  //     const credential = OAuthProvider.credentialFromError(error);
-  //   });
-  // return;
-  // };
-    
-
   const login_Email = async () => {
-      const id = emailRef?.current?.value.trim();
-      const pw = pwRef?.current?.value.trim();
-      let userInfo:DocumentSnapshot;
-      let user;
+    const id = emailRef?.current?.value.trim();
+    const pw = pwRef?.current?.value.trim();
+    let userInfo:DocumentSnapshot;
+    let user;
 
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, id!, pw!);
-        user = userCredential.user;
-        const docRef = doc(db,'Users',user.uid);
-        console.log(user.uid)
-        userInfo = await getDoc(docRef);
+    const errorCodeMsg = {
+      "auth/invalid-credential": "이메일 혹은 비밀번호가 일치하지 않습니다.",
+      "auth/email-already-in-use":"이미 사용 중인 이메일입니다.",
+      "auth/weak-password":"비밀번호는 6글자 이상이어야 합니다.",
+      "auth/network-request-failed":"네트워크 연결에 실패 하였습니다.",
+      "auth/invalid-email":"잘못된 이메일 형식입니다.",
+      "auth/internal-error":"잘못된 요청입니다."
+    }
 
-      }catch (error) {
-        if(error instanceof FirebaseError){
-          console.log(error.code);
-          switch (error.code) {
-            case "auth/invalid-credential":
-              setMsg("이메일 혹은 비밀번호가 일치하지 않습니다.");
-              break;
-            case "auth/email-already-in-use":
-              setMsg("이미 사용 중인 이메일입니다.");
-              break;
-            case "auth/weak-password":
-              setMsg("비밀번호는 6글자 이상이어야 합니다.");
-              break;
-            case "auth/network-request-failed":
-              setMsg("네트워크 연결에 실패 하였습니다.");
-              break;
-            case "auth/invalid-email":
-              setMsg("잘못된 이메일 형식입니다.");
-              break;
-            case "auth/internal-error":
-              setMsg("잘못된 요청입니다.");
-              break;
-          }
-        }
-        return;
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, id!, pw!);
+      user = userCredential.user;
+      const docRef = doc(db,'Users',user.uid);
+      console.log(user.uid)
+      userInfo = await getDoc(docRef);
+    } catch (error) {
+      if(error instanceof FirebaseError){
+        console.log(error.code);
+        setMsg(errorCodeMsg[error.code as keyof typeof errorCodeMsg]);
       }
-    
-      if(userInfo.exists()){
-        const loggedInUser:_user_ = {
-          // uid:user.uid,
-          email:id!,
-          authProvider:"Email",
-          creationTime:userInfo.get('creationTime')
-        };
-        // console.log(loggedInUser);
-        sessionStorage.setItem('picoweb_loginState',JSON.stringify(loggedInUser));
-        router.push(`/Gallery/${user.uid}`)
-      }
-      else{
-        setMsg('유저정보가 존재하지 않습니다');
-      }
-    };
+      return;
+    }
+  
+    if(userInfo.exists()){
+      const loggedInUser:_user_ = {
+        // uid:user.uid,
+        email:id!,
+        authProvider:"Email",
+        creationTime:userInfo.get('creationTime')
+      };
+      // console.log(loggedInUser);
+      sessionStorage.setItem('picoweb_loginState',JSON.stringify(loggedInUser));
+      router.push(`/Gallery/${user.uid}`)
+    }else{
+      setMsg('유저정보가 존재하지 않습니다');
+    }
+  };
 
   const register_Email = async () =>{
     const email = emailRef?.current?.value.trim();
@@ -244,66 +183,64 @@ const Login = () => {
   }
 
   
-  useEffect(()=>{
-    logout();
-  },[]);
+useEffect(()=>{
+  logout();
+},[]);
 
 
-  const inputClassName = 'w-full h-12 border-solid border-[1px] p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black';
-  return (
-    <div className={`w-screen h-screen relative bg-pico_darker flex justify-center items-end ${nanumgothic.className}`}>
-      
-      <div className="(container) w-5/6 sm:w-96 h-3/4 mb-16 relative flex flex-col items-center">
-        <Image src={PiCologo} alt="logo" className="w-16 h-16 rotate-12"></Image>
-        <form className="w-full h-max mt-10">
-          <fieldset>
-            <input className={inputClassName} type='text' placeholder='이메일' ref={emailRef} onFocus={()=>{setMsg('')}}
-                    onKeyDown={(e)=>{
-                      if((e.key == 'Enter' || e.keyCode == 13) && !isRegistering){
-                          e.preventDefault();
-                          login_Email();
-                          }
-                  }}/>
-          </fieldset>
-          <fieldset>
-            <input className={inputClassName} type='password' placeholder="비밀번호" ref={pwRef} onFocus={()=>{setMsg('')}}
-                    onKeyDown={(e)=>{
-                      if((e.key == 'Enter' || e.keyCode == 13) && !isRegistering){
-                          e.preventDefault();
-                          login_Email();
-                          }
-                  }}/>
-          </fieldset>
-          <fieldset className={`${!isRegistering && 'invisible'}`}>
-            <input className={inputClassName} type='password' placeholder="비밀번호 확인" ref={pwcRef} onFocus={()=>{setMsg('')}}/>
-          </fieldset>
-        </form>
-        <p className="h-7 m-2 text-lg">{msg}</p>
-        
-        <div className="(options) w-full flex-grow flex flex-col items-center ">
-            <button className={`${inputClassName} text-white hover:bg-white hover:text-black`} 
-            onClick={isRegistering ? register_Email : login_Email}>{isRegistering ? '가입하기':'로그인'}</button>
-
-            <p className="mt-4">또는</p>
-            <div className="flex h-max w-full  mt-4 items-center">
-              <FcGoogle className="w-12 h-12 mx-2"/>
-              <button className={`${inputClassName} m-0 text-white hover:bg-white hover:text-black`} 
-              onClick={login_Google}>구글 로그인
-              </button>
-            </div>
+const inputClassName = 'w-full h-12 border-solid border-[1px] p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black';
+return (
+  <div className={`w-screen h-screen relative bg-pico_darker flex justify-center items-end ${nanumgothic.className}`}>
+    <div className="(container) w-5/6 sm:w-96 h-3/4 mb-16 relative flex flex-col items-center">
+      <Image src={PiCologo} alt="logo" className="w-16 h-16 rotate-12"/>
+      <form className="w-full h-max mt-10">
+        <fieldset>
+          <input 
+            className={inputClassName} 
+            type='text' 
+            placeholder='이메일' 
+            ref={emailRef} 
+            onFocus={()=>{setMsg('')}}
+            onKeyDown={(e)=>{
+              if((e.key == 'Enter' || e.keyCode == 13) && !isRegistering){
+                e.preventDefault();
+                login_Email();}}}/>
+        </fieldset>
+        <fieldset>
+          <input className={inputClassName}
+            type='password' 
+            placeholder="비밀번호" 
+            ref={pwRef} onFocus={()=>{setMsg('')}}
+            onKeyDown={(e)=>{
+              if((e.key == 'Enter' || e.keyCode == 13) && !isRegistering){
+                e.preventDefault();
+                login_Email();
+              }}}/>
+        </fieldset>
+        <fieldset className={`${!isRegistering && 'invisible'}`}>
+          <input className={inputClassName} type='password' placeholder="비밀번호 확인" ref={pwcRef} onFocus={()=>{setMsg('')}}/>
+        </fieldset>
+      </form>
+      <p className="h-7 m-2 text-lg">{msg}</p>
+      <div className="(options) w-full flex-grow flex flex-col items-center ">
+        <button className={`${inputClassName} text-white hover:bg-white hover:text-black`} 
+          onClick={isRegistering ? register_Email : login_Email}>{isRegistering ? '가입하기':'로그인'}</button>
+        <p className="mt-4">또는</p>
+        <div className="flex h-max w-full  mt-4 items-center">
+          <FcGoogle className="w-12 h-12 mx-2"/>
+          <button className={`${inputClassName} m-0 text-white hover:bg-white hover:text-black`} 
+            onClick={logInGoogle}>구글로 계속하기
+          </button>
         </div>
-        
-          <div className="flex flex-col mt-auto">
-          <Button onClick={()=>{}} className="text-1 leading-9 opacity-30 cursor-default">비밀번호 찾기</Button>
-          <Button onClick={()=>{setIsRegistering((prev)=>!prev)}} className="text-1 leading-9">{isRegistering  ? '취소' : '가입하기'}</Button>
-          </div>
-        </div>
-      
-      <Image src={arrow} alt="back" className="w-8 h-8 fixed top-0 left-0 m-8 cursor-pointer"
-      onClick={()=>router.push({pathname:'/'})}/>
-      
-
+      </div>    
+      <div className="flex flex-col mt-auto">
+        <Button onClick={()=>{}} className="text-1 leading-9 opacity-30 cursor-default">비밀번호 찾기</Button>
+        <Button onClick={()=>{setIsRegistering((prev)=>!prev)}} className="text-1 leading-9">{isRegistering  ? '취소' : '가입하기'}</Button>
+      </div>
     </div>
+    <Image src={arrow} alt="back" className="w-8 h-8 fixed top-0 left-0 m-8 cursor-pointer"
+      onClick={()=>router.push({pathname:'/'})}/>
+  </div>
   );
 };
 

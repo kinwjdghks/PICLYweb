@@ -1,15 +1,16 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { RecoilRoot } from "recoil";
-// import AuthProvider from "@/lib/firebase/firebaseAuth";
-export default function App({ Component, pageProps }: AppProps) {
+import { SessionProvider } from "next-auth/react";
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps } }:AppProps) {
   return (
-    <RecoilRoot>
+    <SessionProvider session={session}>
       <Head>
         <meta name="viewport" content="width=device-width, minimal-ui, viewport-fit=cover"/>
       </Head>
-        <Component {...pageProps} />
-    </RecoilRoot>
+      <Component {...pageProps} />
+    </SessionProvider>
   );
 }

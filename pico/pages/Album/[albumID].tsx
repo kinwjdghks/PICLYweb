@@ -65,7 +65,7 @@
 //CSR
 
 import Actionbar from "@/components/Gallery/ActionBar";
-import PicoCarousel from "@/components/carousel";
+import Carousel from "@/components/Carousel";
 import { useRouter } from "next/router";
 import FallbackPage from "@/components/Fallback";
 import { Album } from "@/templates/Album";
@@ -102,7 +102,7 @@ const ImageView = () => {
   
   else return (
     <div className="(background) w-screen h-screen absolute bg-black">
-      <PicoCarousel album={curAlbum!}/>
+      <Carousel album={curAlbum!}/>
       <Actionbar resetAlbum={() => {}} mode="guest" album={curAlbum!} deleteAlbum={()=>{}}/>
     </div>
   );

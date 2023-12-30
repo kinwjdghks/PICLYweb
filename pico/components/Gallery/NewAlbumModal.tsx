@@ -280,8 +280,8 @@ const NewAlbumModal = ({close, refresh}:{close:()=>void, refresh:(newAlbum:Album
         let albumID:string;
 
         try{
-        const doc = await addDoc(collection(db,"Albums"),album);
-        albumID = doc.id;
+            const doc = await addDoc(collection(db,"Albums"), album);
+            albumID = doc.id;
         }catch(error){
             console.log(error);
             return;
