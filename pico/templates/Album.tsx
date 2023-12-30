@@ -1,4 +1,4 @@
-import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
+import { DocumentData, Timestamp } from "firebase/firestore";
 
 export enum AlbumProps {
     albumID = 'albumID',
