@@ -69,7 +69,7 @@ import Carousel from "@/components/Carousel";
 import { useRouter } from "next/router";
 import FallbackPage from "@/components/Fallback";
 import { Album } from "@/templates/Album";
-import { getAlbumByID } from "@/lib/functions/dataFetch";
+import { getAlbumByID } from "@/lib/functions/firebaseCRUD";
 import { useEffect, useState } from "react";
 import LoadingPage from "@/components/Loading";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";

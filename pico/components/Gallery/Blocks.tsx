@@ -26,7 +26,7 @@ export const ImageBlock = ({file,ondelete}:{file:File,ondelete:(img:string)=>voi
 
 
 
-export const EmptyBlock = ({updatefiles}:{updatefiles:(fileList:FileList|null)=>void}) =>{
+export const EmptyBlock = ({updateImage}:{updateImage:(fileList:FileList|null)=>void}) =>{
     const inputImgRef = useRef<HTMLInputElement>(null);
 
     return <div className="h-full aspect-square relative border-solid border-2 border-pico-default rounded-lg flex justify-center items-center">
@@ -35,15 +35,15 @@ export const EmptyBlock = ({updatefiles}:{updatefiles:(fileList:FileList|null)=>
         ref={inputImgRef}
         
         onChange={(e)=>{
-            updatefiles(e.currentTarget.files);
+            updateImage(e.currentTarget.files);
         }}/>
     </div>
 }
 
-export const TagBlock = ({tag,ondelete}:{tag:string,ondelete:(tag:string)=>void}) =>{
+export const TagBlock = ({tag,deleteTag}:{tag:string,deleteTag:(tag:string)=>void}) =>{
     return <div className="w-max h-11 p-2 mr-2 text-xl flex rounded-md text-white bg-pico_darker">
         <h2 className="mx-1">{tag}</h2>
-        <IoIosClose className="w-8 h-8 cursor-pointer" onClick={()=>ondelete(tag)}/>
+        <IoIosClose className="w-8 h-8 cursor-pointer" onClick={()=>deleteTag(tag)}/>
         </div>
 }
 

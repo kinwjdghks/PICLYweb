@@ -13,9 +13,8 @@ import { auth, db, storage } from "@/lib/firebase/firebase";
 import { _user_ } from "@/templates/user";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 import AlbumContainer from "./AlbumContainer";
-import { getAllAlbumsByID } from "@/lib/functions/dataFetch";
-import { deleteDoc, doc } from "firebase/firestore";
-import { deleteObject, ref } from "firebase/storage";
+import { deleteAlbumDoc, deleteAlbumImages, getAllAlbumsByID } from "@/lib/functions/firebaseCRUD";
+
 
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'));
@@ -107,26 +106,14 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
     else setUserAlbumList((prev)=>[newAlbum, ...prev!]);
   }
 
-  const deleteAlbum = async () => {
+  const onDeleteAlbum = async () => {
     if (!userAlbumList || !displayingAlbum) return;
   
     const albumID = displayingAlbum.albumID;
-    const imageURLs:string[] = displayingAlbum.imageURLs.map((album,idx)=> `${albumID}/${idx}.jpeg`);
-    imageURLs.push(`${albumID}/thumbnail.jpeg`);
-
+    
     try {
-      // Delete each image from Cloud Storage
-      const deleteImagePromises = imageURLs.map(async (imageURL) => {
-        const imageRef = ref(storage, imageURL);
-        await deleteObject(imageRef);
-      });
-  
-      // Wait for all image deletions to complete
-      await Promise.all(deleteImagePromises);
-  
-      // Delete the album document from Firestore
-      const albumRef = doc(db, 'Albums', albumID);
-      await deleteDoc(albumRef);
+      await deleteAlbumImages(displayingAlbum);
+      await deleteAlbumDoc(displayingAlbum);
   
       // Update the userAlbumList and reset displayingAlbum
       const newUserAlbumList = userAlbumList.filter((album) => album.albumID !== albumID);
@@ -150,14 +137,14 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
       <Header 
         onChange={(input:string)=>setTagSearchInput(input)} 
         onModalOpen={()=>setNewAlbumModalopen(true)} />
-      {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)} refresh={addNewAlbum}/>}
+      {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)} refreshWithNewAlbum={addNewAlbum}/>}
       {displayingAlbum && <Modal><>
         <Carousel album={displayingAlbum}/>
         <Actionbar 
           resetAlbum={()=>setDisplayingAlbum(undefined)} 
           album={displayingAlbum} 
           mode="user" 
-          deleteAlbum={deleteAlbum}/>
+          deleteAlbum={onDeleteAlbum}/>
         </></Modal>}
     </div>
   );
