@@ -49,39 +49,31 @@ const MenuBar = ({
 };
 
 const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () => void, mode: "user" | "guest", album: Album, deleteAlbum: () => void }) => {
+  //useState
   const [isMenuOpen, setisMenuOpen] = useState<Boolean>(false);
-  const [showcopymsg, setShowcopymsg] = useState<Boolean>(true);
+  const [showcopymsg, setShowcopymsg] = useState<Boolean>(false);
+  //useRef
   const btnRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
   const user: Boolean = mode == "user";
-  //useEffect
-  useEffect(() => {
-    const handleClick = () => {
-      if (timerRef.current !== null) {
-        return;
-      }
-      setShowcopymsg(true);
-      copyURL(album.albumID); 
-      timerRef.current = setTimeout(() => {   
-        setShowcopymsg(false);
-        clearTimeout(timerRef.current!);
-        timerRef.current = null;
-      }, 1200);
-    };
-    
-    if (btnRef.current) {
-      btnRef.current.addEventListener("click", handleClick);
+  //functions
+  const onURLButtonClick = () => {
+    if (timerRef.current !== null) {
+      return;
     }
-    return () => {
-      if (btnRef.current) {
-        btnRef.current.removeEventListener("click", handleClick);
-      }
-    };
-  }, []); //throttling for clicking copy btn
-
-  const URLCopyButton = ():ReactNode =>{
+    setShowcopymsg(true);
+    copyURL(album.albumID); 
+    timerRef.current = setTimeout(() => {   
+      setShowcopymsg(false);
+      clearTimeout(timerRef.current!);
+      timerRef.current = null;
+    }, 1200);
+  };
+  //components
+  const URLCopyButton = ({onClick}:{onClick:()=>void}):ReactNode =>{
     return (
-    <div ref={btnRef} className="ml-auto relative">
+    <div onClick={onClick} className="ml-auto relative">
+      <CopiedMSG/>
       <BsLink45Deg className="w-11 h-11 cursor-pointer hover:scale-[115%] " />
     </div>)
   }
@@ -89,7 +81,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
     const CopiedMSG = ():ReactNode => {
       return (
         showcopymsg 
-        ? <p className={`absolute text-2xl lg:bott om-0 top-1/4 left-1/2 -translate-x-1/2 scale[0.95] ${styles.showmsg}`}>
+        ? <p className={`absolute text-2xl lg:top-0 lg:-left-[250%] scale[0.95] ${styles.showmsg}`}>
             Copied!
           </p>
         : <></>
@@ -112,8 +104,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
           className="w-14 h-14 top-0 left-0 cursor-pointer fill-white"
           onClick={resetAlbum}/>
 
-        <CopiedMSG/>
-        <URLCopyButton/>
+        <URLCopyButton onClick={onURLButtonClick}/>
         
         <IoMenu
           className="w-10 h-10 cursor-pointer hover:scale-[115%] relative"

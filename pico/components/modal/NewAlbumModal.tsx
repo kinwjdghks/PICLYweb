@@ -1,38 +1,21 @@
-import { useState, useRef, useEffect, RefObject, ReactNode } from "react";
-import { EmptyBlock, ImageBlock, TagBlock } from "../container/Blocks";
+import { useState, useRef, useEffect, ReactNode } from "react";
 import { IoIosClose } from "react-icons/io";
-import { FaHashtag } from "react-icons/fa";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsSendFill } from "react-icons/bs";
 import styles from "@/styles/animation.module.css";
 import { auth } from "@/lib/firebase/firebase";
 import { Album } from "@/templates/Album";
 import { createAlbum } from "@/lib/functions/firebaseCRUD";
-
-//types
-type ImgDisplayProps = {
-  imgfiles: File[];
-  scrollImgRef: RefObject<HTMLDivElement>;
-  deleteImage: (filename: string) => void;
-  updateImage: (fileList: FileList | null) => void;
-};
-
-type TagListProps = {
-  scrollTagRef: RefObject<HTMLDivElement>;
-  tagList: string[];
-  deleteTag: (filename: string) => void;
-  error: number;
-  inputTagRef: RefObject<HTMLInputElement>;
-  addTag: () => void;
-};
+import DateInput from "../inputs/DateInput";
+import ImageInput from "../inputs/ImageInput";
+import TagInput from "../inputs/TagInput";
 
 
-const InputLabel = ({children}:{children:ReactNode}):ReactNode =>{
+export const InputLabel = ({children}:{children:ReactNode}):ReactNode =>{
     return <p className="lg:text-black w-full font-bold p-1 mt-2">{children}</p>
 }
 
-const ErrorModal = ({ errorNo, maxTag, maxImg, reset }: { errorNo: number, maxTag: number, maxImg: number, reset: () => void }) => 
+const ErrorModal = ({ errorNo, maxTag, maxImg, reset }: { errorNo: number, maxTag: number, maxImg: number, reset: () => void }): ReactNode => 
 {
   useEffect(() => {
     return () => {
@@ -63,119 +46,9 @@ const ErrorModal = ({ errorNo, maxTag, maxImg, reset }: { errorNo: number, maxTa
   );
 };
 
-
-
-const ImgDisplay = ({
-  imgfiles,
-  scrollImgRef,
-  deleteImage,
-  updateImage,
-}: ImgDisplayProps): React.ReactNode => {
-  return (
-    <>
-    <InputLabel>사진</InputLabel>
-    <div className="(image list) w-full h-full flex-auto lg:mt-0 mt-[20px] bg-pico_darker rounded-2xl relative overflow-x-scroll scrollbar-hide basis-0"
-      ref={scrollImgRef}>
-      <div className="min-w-full w-max h-full flex items-center gap-4 p-4">
-        {imgfiles!.map((img: File) => (
-          <ImageBlock key={img.name} file={img} ondelete={deleteImage} />
-        ))}
-        <EmptyBlock updateImage={updateImage} />
-      </div>
-    </div>
-    </>
-  );
-};
-
-
-
-const TagList = ({ scrollTagRef, tagList, deleteTag, error, inputTagRef, addTag }: TagListProps): React.ReactNode => {
-  return (
-    <>
-    <InputLabel>태그</InputLabel>
-      <div className="(tag list) w-full h-[4.5rem] flex overflow-x-scroll scrollbar-hide"
-        ref={scrollTagRef}>
-        <div className="min-w-max w-min h-full flex items-center">
-          {tagList.map((tag) => (
-            <TagBlock key={tag} tag={tag} deleteTag={deleteTag} />
-          ))}
-        </div>
-      </div>
-      <div className="(tag input) w-full h-min flex items-center box-border place-self-end">
-        <span className="w-max mr-3 text-black text-3xl text-center">
-          <FaHashtag className="lg:fill-black fill-white" />
-        </span>
-        <input
-          className={`disabled:opacity-70 w-full p-2 border-solid border-2 border-black text-black text-xl`}
-          type="text"
-          disabled={error == 1 || error == 2}
-          ref={inputTagRef}
-          onKeyDown={(e) => {
-            if (
-              (e.key == "Enter" || e.keyCode == 13) &&
-              !e.nativeEvent.isComposing
-            ) {
-              e.preventDefault();
-              addTag();
-            }
-          }}
-          autoFocus
-          placeholder="태그를 입력하세요"
-        />
-      </div>
-    </>
-  );
-};
-type DateInputProps = {
-  handleDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleTimeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  dateDiff: number;
-};
-
-const DateInput = ({ handleDateChange, handleTimeChange, dateDiff }: DateInputProps): React.ReactNode => 
-{
-  const [infoOpen, setInfoOpen] = useState<boolean>(false);
-  const dueMsg = `${
-    Math.round(dateDiff / (24 * 60))
-      ? Math.round(dateDiff / (24 * 60)) + "일"
-      : ""
-  } 
-      ${
-        Math.round(dateDiff / 60)
-          ? (Math.round(dateDiff / 60) % 24) + "시 간"
-          : ""
-      }
-      ${Math.round(dateDiff % 60)}분 후 만료`;
-
-  return (
-    <>
-    <InputLabel>만료 기한</InputLabel>
-      <div className="flex flex-col lg:w-full">
-        <div className="w-full h-fit flex items-center">
-          <input className="text-black h-10 w-42 m-2 p-4 border-2"
-            type="date"
-            onChange={handleDateChange}/>
-          <input className="text-black h-10 w-42 m-2 p-4 border-2"
-            type="time"
-            step={60}
-            onChange={handleTimeChange}/>
-          <IoMdInformationCircleOutline
-            className="w-6 h-6"
-            onMouseOver={() => setInfoOpen(true)}
-            onMouseOut={() => setInfoOpen(false)}/>
-          {infoOpen && (
-            <p className="absolute translate-y-[130%] right-4 bg-pico_darker p-2 rounded-lg">
-              앨범 기본 마감기한은 7일입니다.
-            </p>
-          )}
-        </div>
-        <p className="h-12 text-center p-2  justify-center">
-          {dateDiff > 0 && dueMsg}
-        </p>
-      </div>
-    </>
-  );
-};
+  //data limits
+export const MAX_IMAGE_NUM = 5;
+export const MAX_TAG_NUM = 5;
 
 const NewAlbumModal = ({
   close,
@@ -188,7 +61,7 @@ const NewAlbumModal = ({
   const oneWeekLaterFromNow = new Date();
   oneWeekLaterFromNow.setDate(oneWeekLaterFromNow.getDate() + 7);
   //user inputs
-  const [imgfiles, setImgfiles] = useState<File[]>([]);
+  const [imgFiles, setImgFiles] = useState<File[]>([]);
   const [tagList, setTagList] = useState<string[]>([]);
   const [dueDate, setDueDate] = useState<Date>(oneWeekLaterFromNow);
   const [dateDiff, setDateDiff] = useState<number>(0); //분단위
@@ -197,151 +70,21 @@ const NewAlbumModal = ({
   const [error, setError] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   //refs
-  const scrollImgRef = useRef<HTMLDivElement>(null);
+  
   const inputTagRef = useRef<HTMLInputElement>(null);
   const scrollTagRef = useRef<HTMLDivElement>(null);
-  //data limits
-  const MAX_IMAGE_NUM = 5;
-  const MAX_TAG_NUM = 5;
+
 
   //useEffects
   useEffect(() => {
-    if (imgfiles.length > 0 && dateDiff > 0) setError(false);
+    if (imgFiles.length > 0 && dateDiff > 0) setError(false);
     else setError(true);
-  }, [imgfiles, dateDiff]);
+  }, [imgFiles, dateDiff]);
 
-  useEffect(() => {
-    imgAutoscroll();
-  }, [imgfiles.length]);
-
-  useEffect(() => {
-    tagAutoscroll();
-  }, [tagList.length]);
-
-  const deleteImage = (filename: string) => {
-    if (!imgfiles) return;
-    const updatedFileList = imgfiles.filter((img) => img.name != filename);
-    setImgfiles(updatedFileList);
-  };
-
-  const updateImage = (fileList: FileList | null) => {
-    if (imgfiles && fileList) {
-      //img overflow check
-      if (MAX_IMAGE_NUM < imgfiles.length + fileList.length) {
-        setErrorMsg(3);
-        return;
-      }
-      //dupliction check
-      const newFileList = Array.from(fileList) || null;
-      for (const file of newFileList) {
-        for (let i = 0; i < imgfiles.length; i++) {
-          console.log(file.name + "   " + imgfiles[i].name);
-          if (file.name == imgfiles[i].name) {
-            setErrorMsg(4); //duplicate imgs
-            return;
-          }
-        }
-      }
-      const updatedFileList = [...imgfiles, ...newFileList];
-      setImgfiles(updatedFileList);
-      console.log("file updated");
-    }
-  };
-
-  //autoscroll to very left when list updated.
-  const tagAutoscroll = () => {
-    const scrollContainer = scrollTagRef.current;
-    if (scrollContainer) {
-      const maxScrollLeft =
-        scrollContainer.scrollWidth + scrollContainer.clientWidth;
-      //console.log(maxScrollLeft)
-      scrollContainer.scrollTo(maxScrollLeft, 0);
-    }
-  };
-
-  const imgAutoscroll = () => {
-    const scrollContainer = scrollImgRef.current;
-    if (scrollContainer) {
-      const maxScrollLeft =
-        scrollContainer.scrollWidth + scrollContainer.clientWidth;
-      //   console.log(maxScrollLeft)
-      scrollContainer.scrollTo(maxScrollLeft, 0);
-    }
-  };
-
-  const addTag = () => {
-    if (!inputTagRef.current) return;
-    const newtag = inputTagRef.current.value.trim();
-    if (newtag == "") return;
-
-    if (tagList.length == MAX_TAG_NUM) {
-      setErrorMsg(1);
-      return;
-    }
-    const res = tagList.find((tag) => tag == newtag);
-    if (res) {
-      setErrorMsg(2);
-      return;
-    }
-    const newTagList = [...tagList, newtag];
-    setTagList(newTagList);
-    inputTagRef.current.value = "";
-    return;
-  };
-
-  const deleteTag = (target: string) => {
-    console.log("deleteTag");
-    const newTagList: string[] = tagList.filter((tag) => tag != target);
-    setTagList(newTagList);
-  };
-
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const dateString = event.target.value;
-
-    // Extract hour and minute components from the current dueDate
-    const currentHour = dueDate.getHours();
-    const currentMinute = dueDate.getMinutes();
-    // Create a new Date object with the selected date and the preserved time
-    const newDate = new Date(dateString);
-    newDate.setHours(currentHour);
-    newDate.setMinutes(currentMinute);
-
-    //calculate Time difference
-    const now = new Date();
-    const diff = (newDate.getTime() - now.getTime()) / (60 * 1000); //minute 단위
-    console.log(diff);
-    setDueDate(newDate);
-    setDateDiff(Math.floor(diff));
-    if (diff <= 0) {
-      setErrorMsg(5);
-      return;
-    }
-  };
-
-  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const timeString = event.target.value;
-    const [newHour, newMinute] = timeString.split(":");
-
-    let currentDate = dueDate || new Date();
-    currentDate.setHours(+newHour);
-    currentDate.setMinutes(+newMinute);
-    // Calculate Time difference in hours (with timezone offset)
-    const now = new Date();
-    const diff = (currentDate.getTime() - now.getTime()) / (60 * 1000);
-    console.log(diff);
-
-    if (diff < 0) {
-      setErrorMsg(5);
-      return;
-    }
-
-    setDueDate(currentDate);
-    setDateDiff(Math.floor(diff));
-  };
-
+  //functions
   const onAlbumCreate = async () => {
     setIsLoading(true);
-    const createdAlbum = await createAlbum(auth.currentUser!.uid,dueDate,tagList,imgfiles);
+    const createdAlbum = await createAlbum(auth.currentUser!.uid,dueDate,tagList,imgFiles);
     setIsLoading(false);
 
     if (!createdAlbum) {
@@ -383,24 +126,25 @@ const NewAlbumModal = ({
         )}
         <h1 className="lg:text-black text-3xl mb-6">새 앨범</h1>
         
-        <ImgDisplay
-          imgfiles={imgfiles}
-          scrollImgRef={scrollImgRef}
-          deleteImage={deleteImage}
-          updateImage={updateImage}/>
+        <ImageInput
+          imgFiles={imgFiles}
+          setImgFiles={setImgFiles}
+          setErrorMsg={setErrorMsg}
+          />
 
         <DateInput
-          handleDateChange={handleDateChange}
-          handleTimeChange={handleTimeChange}
+          setDueDate={setDueDate}
+          setDateDiff={setDateDiff}
+          setErrorMsg={setErrorMsg}
+          dueDate={dueDate}
           dateDiff={dateDiff}/>
 
-        <TagList
+        <TagInput
           scrollTagRef={scrollTagRef}
           tagList={tagList}
-          deleteTag={deleteTag}
-          error={errorMsg}
           inputTagRef={inputTagRef}
-          addTag={addTag}/>
+          setTagList={setTagList}
+          setErrorMsg={setErrorMsg}/>
 
         <p className="lg:text-black pt-12 text-sm text-center">
           선정적이거나 모욕적인 이미지, 비속어, 개인정보가 <br />
@@ -418,3 +162,4 @@ const NewAlbumModal = ({
 };
 
 export default NewAlbumModal;
+

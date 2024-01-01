@@ -88,11 +88,29 @@
 }
 
 .showmsg {
-  -webkit-animation: msgappear 0.6s ease-in-out;
-  animation: msgappear 0.6s ease-in-out;
+  -webkit-animation: msgappear 1.2s ease-in-out;
+  animation: msgappear 1.2s ease-in-out;
 }
 
 @-webkit-keyframes msgappear {
+  0% {
+    -webkit-transform: translateY(-30%) scaleY(0.95);
+    transform: translateY(-30%) scaleY(0.95);
+    opacity: 0;
+  }
+  20%,80% {
+    -webkit-transform: translateY(0) scaleY(1);
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(30%) scaleY(0.95);
+    transform: translateY(30%) scaleY(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes msgappear {
   0% {
     -webkit-transform: translateY(-30%) scaleY(0.95);
     transform: translateY(-30%) scaleY(0.95);
