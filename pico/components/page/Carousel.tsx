@@ -2,17 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import nextImg from '@/public/assets/images/arrow_forward.svg'
 import prevImg from '@/public/assets/images/arrow_back.svg'
-import LoadingPage from "./Loading";
+import LoadingPage from "./LoadingPage";
 import { Album } from "@/templates/Album";
 
 const Action = ({prev,next}:{prev:()=>void, next:()=>void}) =>{
 
   const arrowClassName = "fixed top-1/2 -translate-y-1/2 lg:w-12 lg:h-12 h-full w-24 lg:opacity-60 lg:visible invisible cursor-pointer";
-  return<>
+  return(
+  <>
     <Image className={`${arrowClassName} lg:left-4 left-0`} src={prevImg} alt='prev' width={0} height={0} sizes='100vw' onClick={prev}/>
     <Image className={`${arrowClassName} lg:right-4 right-0`} src={nextImg} alt='next' width={0} height={0} sizes='100vw' onClick={next}/>
-  </>
-
+  </>)
 }
 
 const Indicators = ({
@@ -34,21 +34,26 @@ const Indicators = ({
   }
 
   
-  return <div className="w-min h-min fixed left-1/2 -translate-x-1/2 bottom-5 flex gap-3 justify-center
-  ">
+  return (
+  <div className="w-min h-min fixed left-1/2 -translate-x-1/2 bottom-5 flex gap-3 justify-center">
     {...indicators}
-  </div>;
+  </div>);
 };
 
 const Carousel = ({album}:{album:Album})=> {
-  console.log('curAlbumState',album);
+  const steps = album.imageURLs.length;
+
+  //useState
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  //useRef
   const screenRef = useRef<HTMLDivElement>(null);
   const isScrollListenerAdded = useRef<boolean>(false);
   const activeImgRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
+  //bool
   const singlePic = album.imageURLs.length === 1;
-
+  
+  //useEffect
   useEffect(() => {
     const container = screenRef.current;
     if (container && !isScrollListenerAdded.current) {
@@ -71,10 +76,7 @@ const Carousel = ({album}:{album:Album})=> {
     }
   },[activeIndex]);
   
-  if(!album || !album.imageURLs) return <LoadingPage/>
-
-  const steps = album.imageURLs.length;
-
+  //functions
   const next = () => {
     const nextIndex = activeIndex === steps - 1 ? 0 : activeIndex + 1;
     setActiveIndex(nextIndex);
@@ -95,13 +97,13 @@ const Carousel = ({album}:{album:Album})=> {
       clearTimeout(timerRef.current);
     }
   
-    timerRef.current = setTimeout(() => {
-      if (screenRef.current) {
-        const screenWidth = screenRef.current.clientWidth;
-        // console.log(Math.round(screenRef.current.scrollLeft/screenWidth));
-        setActiveIndex(Math.round(screenRef.current.scrollLeft/screenWidth));
-        }      
-      }, 50); 
+  timerRef.current = setTimeout(() => {
+    if (screenRef.current) {
+      const screenWidth = screenRef.current.clientWidth;
+      // console.log(Math.round(screenRef.current.scrollLeft/screenWidth));
+      setActiveIndex(Math.round(screenRef.current.scrollLeft/screenWidth));
+      }      
+    }, 50); 
   };
 
   const imageList = album.imageURLs.map((url,idx) => (
@@ -121,7 +123,7 @@ const Carousel = ({album}:{album:Album})=> {
     </div>
   ));
   
-
+  if(!album || !album.imageURLs) return <LoadingPage/>
   return (<div className="(carousel background) w-full h-full absolute overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide " 
          ref={screenRef}>
       <div className="(screen) w-min h-screen flex relative" >{imageList}</div>

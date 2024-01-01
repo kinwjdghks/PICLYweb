@@ -15,7 +15,7 @@ const Loading = () =>{
    </div>
 }
 
-const AlbumContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Album[]|undefined,tagInput:string,selectAlbum:(album:Album)=>void}) =>{
+const AlbumsContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Album[]|undefined,tagInput:string,selectAlbum:(album:Album)=>void}) =>{
    // Varaibles
    const [filteredAlbumList, setFilteredAlbumList]= useState<Album[]|undefined>(userAlbumList);
    const timer = useRef<NodeJS.Timeout|null>(null);
@@ -71,4 +71,4 @@ const AlbumContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Albu
     );
 }
 
-export default AlbumContainer;
+export default AlbumsContainer;

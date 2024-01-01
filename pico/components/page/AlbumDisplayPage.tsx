@@ -1,24 +1,24 @@
 // import NewAlbumModal from "@/components/Gallery/newalbummodal";
-import Modal from "./ui/Modal";
+import Modal from "../modal/Modal";
 import { poppins } from "@/public/assets/fonts/poppins";
 import dynamic from "next/dynamic";
 import {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
-import Actionbar from "@/components/Gallery/ActionBar";
+import Actionbar from "@/components/actions/ActionBar";
 import { useRouter } from "next/router";
 import { Album } from "@/templates/Album";
 import { FaSearch } from "react-icons/fa";
 import { HiOutlineMenu } from "react-icons/hi";
 import { RiImageAddFill } from "react-icons/ri";
-import { auth, db, storage } from "@/lib/firebase/firebase";
+import { auth } from "@/lib/firebase/firebase";
 import { _user_ } from "@/templates/user";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
-import AlbumContainer from "./AlbumContainer";
+import AlbumsContainer from "../container/AlbumsContainer";
 import { deleteAlbumDoc, deleteAlbumImages, getAllAlbumsByID } from "@/lib/functions/firebaseCRUD";
 
 
 //dynamic import component
-const NewAlbumModal = dynamic(()=> import('@/components/Gallery/NewAlbumModal'));
-const Carousel = dynamic(()=>import('@/components/Carousel'));
+const NewAlbumModal = dynamic(()=> import('@/components/modal/NewAlbumModal'));
+const Carousel = dynamic(()=>import('@/components/page/Carousel'));
 
 const Header = ({onChange,onModalOpen}:{onChange:(input:string)=>void,onModalOpen:()=>void}) => {
 
@@ -130,7 +130,7 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
   },[displayingAlbum,newAlbumModalopen])
   return (
     <div className={"lg:w-[calc(100%-16rem)] w-screen h-screen relative bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
-      <AlbumContainer 
+      <AlbumsContainer 
         userAlbumList={userAlbumList} 
         tagInput={tagSearchInput} 
         selectAlbum={setDisplayingAlbum} />

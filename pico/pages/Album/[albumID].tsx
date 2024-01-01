@@ -64,14 +64,14 @@
 
 //CSR
 
-import Actionbar from "@/components/Gallery/ActionBar";
-import Carousel from "@/components/Carousel";
+import Actionbar from "@/components/actions/ActionBar";
+import Carousel from "@/components/page/Carousel";
 import { useRouter } from "next/router";
-import FallbackPage from "@/components/Fallback";
+import FallbackPage from "@/components/page/FallbackPage";
 import { Album } from "@/templates/Album";
 import { getAlbumByID } from "@/lib/functions/firebaseCRUD";
 import { useEffect, useState } from "react";
-import LoadingPage from "@/components/Loading";
+import LoadingPage from "@/components/page/LoadingPage";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 
 const ImageView = () => {
@@ -81,7 +81,6 @@ const ImageView = () => {
   
   const router = useRouter();
   const albumID:string|undefined = router.query.albumID as string;
-  console.log(albumID);
   const getAlbum = async (albumID:string) => { 
     let album: Album | undefined =  await getAlbumByID(albumID);
     console.log(album);
@@ -93,13 +92,12 @@ const ImageView = () => {
     getAlbum(albumID);
     lockScroll();
     return ()=>{
-      // console.log('open scroll');
       openScroll()};
   },[]);
   
+
   if(isLoading) return <LoadingPage/>
   else if(!isLoading && !curAlbum) return <FallbackPage/>
-  
   else return (
     <div className="(background) w-screen h-screen absolute bg-black">
       <Carousel album={curAlbum!}/>

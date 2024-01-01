@@ -3,7 +3,7 @@ import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import { deleteUser, updatePassword } from "@firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useRef, useState } from "react";
-import Modal from "./ui/Modal";
+import Modal from "../modal/Modal";
 import { useRouter } from "next/router";
 import { MdArrowBackIos } from "react-icons/md";
 import { page } from "@/pages/Gallery/[userid]";

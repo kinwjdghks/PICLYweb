@@ -1,7 +1,7 @@
-import AboutPage from "@/components/AboutPage";
-import AlbumDisplayPage from "@/components/AlbumDisplayPage";
-import Sidebar from "@/components/Gallery/Sidebar";
-import ProfilePage from "@/components/ProfilePage";
+import AboutPage from "@/components/page/AboutPage";
+import AlbumDisplayPage from "@/components/page/AlbumDisplayPage";
+import Sidebar from "@/components/actions/Sidebar";
+import ProfilePage from "@/components/page/ProfilePage";
 import { Album } from "@/templates/Album";
 import { useState } from "react";
 

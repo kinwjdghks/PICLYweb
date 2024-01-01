@@ -1,6 +1,5 @@
 import Image from "next/image";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
-import Button from "@/components/ui/Button";
 import { _user_ } from "@/templates/user";
 import { FcGoogle } from "react-icons/fc";
 import arrow from '@/public/assets/images/arrow_back.svg';
@@ -243,8 +242,8 @@ return (
         </div>
       </div>    
       <div className="flex flex-col mt-auto">
-        <Button onClick={()=>{}} className="text-1 leading-9 opacity-30 cursor-default">비밀번호 찾기</Button>
-        <Button onClick={()=>{setIsRegistering((prev)=>!prev)}} className="text-1 leading-9">{isRegistering  ? '취소' : '가입하기'}</Button>
+        <button onClick={()=>{}} className="text-center hover:underline underline-offset-8 items-center text-1 lead ing-9 opacity-30 cursor-default">비밀번호 찾기</button>
+        <button onClick={()=>{setIsRegistering((prev)=>!prev)}} className="text-center hover:underline underline-offset-8 items-center leading-9">{isRegistering  ? '취소' : '가입하기'}</button>
       </div>
     </div>
     <Image src={arrow} alt="back" className="w-8 h-8 fixed top-0 left-0 m-8 cursor-pointer"
