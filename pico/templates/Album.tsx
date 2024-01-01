@@ -1,4 +1,4 @@
-import { DocumentData, Timestamp } from "firebase/firestore";
+import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 
 export enum AlbumProps {
   albumID = "albumID",
@@ -24,6 +24,11 @@ export interface Album {
   viewCount: number;
 }
 
+export type AlbumData =
+  | DocumentSnapshot<DocumentData, DocumentData>
+  | DocumentData
+  | Album;
+
 export class Album {
   public albumID: string;
   public ownerID: string;
@@ -35,29 +40,39 @@ export class Album {
   public imageCount: number;
   public viewCount: number;
 
-  constructor(album1?: DocumentData, album2?: Album) {
-    this.albumID =
-      (album1?.[AlbumProps.albumID] as string) ?? album2?.albumID ?? "";
-    this.ownerID =
-      (album1?.[AlbumProps.ownerID] as string) ?? album2?.ownerID ?? "";
-    this.creationTime =
-      ((album1?.[AlbumProps.creationTime] as Timestamp)?.toDate() as Date) ??
-      album2?.creationTime ??
-      new Date();
-    this.expireTime =
-      ((album1?.[AlbumProps.expireTime] as Timestamp)?.toDate() as Date) ??
-      album2?.expireTime ??
-      new Date();
-    this.tags = (album1?.[AlbumProps.tags] as string[]) ?? album2?.tags ?? [];
-    this.thumbnailURL =
-      (album1?.[AlbumProps.thumbnailURL] as string) ??
-      album2?.thumbnailURL ??
-      "";
-    this.imageURLs =
-      (album1?.[AlbumProps.imageURLs] as string[]) ?? album2?.imageURLs ?? [];
-    this.imageCount =
-      (album1?.[AlbumProps.imageCount] as number) ?? album2?.imageCount ?? 0;
-    this.viewCount =
-      (album1?.[AlbumProps.viewCount] as number) ?? album2?.viewCount ?? 0;
+  constructor(album: AlbumData) {
+    if (album instanceof DocumentSnapshot) {
+      // Handle DocumentSnapshot
+      this.albumID = album.get(AlbumProps.albumID) ?? "";
+      this.ownerID = album.get(AlbumProps.ownerID) ?? "";
+      this.creationTime = (album.get(AlbumProps.creationTime) as Timestamp)?.toDate() ?? new Date();
+      this.expireTime = (album.get(AlbumProps.expireTime) as Timestamp)?.toDate() ?? new Date();
+      this.tags = album.get(AlbumProps.tags) ?? [];
+      this.thumbnailURL = album.get(AlbumProps.thumbnailURL) ?? "";
+      this.imageURLs = album.get(AlbumProps.imageURLs) ?? [];
+      this.imageCount = album.get(AlbumProps.imageCount) ?? 0;
+      this.viewCount = album.get(AlbumProps.viewCount) ?? 0;
+    } else if (album.creationTime instanceof Date) { // This is a simplistic check to determine if it's an Album type
+      // Handle Album
+      this.albumID = album.albumID;
+      this.ownerID = album.ownerID;
+      this.creationTime = album.creationTime;
+      this.expireTime = album.expireTime;
+      this.tags = album.tags;
+      this.thumbnailURL = album.thumbnailURL;
+      this.imageURLs = album.imageURLs;
+      this.imageCount = album.imageCount;
+      this.viewCount = album.viewCount;
+    } else {
+      this.albumID = album.albumID ?? '';
+      this.ownerID = album.ownerID ?? '';
+      this.creationTime = album.creationTime.toDate() ?? new Date();
+      this.expireTime = album.expireTime.toDate() ?? new Date();
+      this.tags = album.tags ?? [];
+      this.thumbnailURL = album.thumbnailURL ?? '';
+      this.imageURLs = album.imageURLs ?? [];
+      this.imageCount = album.imageCount ?? 0;
+      this.viewCount = album.viewCount ?? 0;
+    }
   }
 }

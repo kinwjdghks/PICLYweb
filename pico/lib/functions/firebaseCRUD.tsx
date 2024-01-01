@@ -67,7 +67,7 @@ export const getAllAlbumsByID = async (uid:string) =>{
   // Create functions
 export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],imgfiles:File[]): Promise<Album|undefined> =>{
   //create album and post
-  let album = new Album({
+  let album:Album = {
       albumID:'',
       ownerID: ownerID,
       creationTime: new Date(),
@@ -77,7 +77,7 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
       imageURLs:[],
       imageCount:imgfiles.length,
       viewCount: 0
-  });
+  };
   let albumID:string;
   try{
     const doc = await addDoc(getCollectionRef(CollectionName.albums), album);

@@ -60,20 +60,21 @@ const NewAlbumModal = ({
   //initialization
   const oneWeekLaterFromNow = new Date();
   oneWeekLaterFromNow.setDate(oneWeekLaterFromNow.getDate() + 7);
+  
   //user inputs
   const [imgFiles, setImgFiles] = useState<File[]>([]);
   const [tagList, setTagList] = useState<string[]>([]);
   const [dueDate, setDueDate] = useState<Date>(oneWeekLaterFromNow);
   const [dateDiff, setDateDiff] = useState<number>(0); //분단위
+
   //states
   const [errorMsg, setErrorMsg] = useState<number>(0);
   const [error, setError] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   //refs
-  
   const inputTagRef = useRef<HTMLInputElement>(null);
   const scrollTagRef = useRef<HTMLDivElement>(null);
-
 
   //useEffects
   useEffect(() => {
