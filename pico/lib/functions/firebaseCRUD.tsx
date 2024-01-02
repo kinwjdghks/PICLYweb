@@ -140,9 +140,8 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
   }
 }
 
-  // Delete functions
-
-export const deleteAlbumImages = async (album:Album) => {
+// Delete functions
+const deleteAlbumImages = async (album:Album) => {
   if (!album) return;
 
   const albumID = album.albumID;
@@ -162,7 +161,7 @@ export const deleteAlbumImages = async (album:Album) => {
   }
 };
 
-export const deleteAlbumDoc = async (album:Album) => {
+const deleteAlbumDoc = async (album:Album) => {
   if(!album) return;
 
   const albumID = album.albumID;
@@ -170,3 +169,7 @@ export const deleteAlbumDoc = async (album:Album) => {
   await deleteDoc(albumRef);
 }
   
+export const deleteAlbum = async (album:Album) =>{
+  await deleteAlbumImages(album);
+  await deleteAlbumDoc(album);
+}

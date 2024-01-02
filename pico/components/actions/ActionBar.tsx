@@ -6,8 +6,8 @@ import { IoMenu } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import { BsLink45Deg } from "react-icons/bs";
 import { Album } from "@/templates/Album";
-import { copyURL } from "@/lib/functions/copyurl";
 import PopupMessage from "../modal/PopupMessage";
+import { copyURL } from "@/lib/functions/copyURL";
 
 const MenuBar = ({
   isMenuOpen,
@@ -62,7 +62,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
     return (
     <div onClick={()=>setShowcopymsg(true)} className="ml-auto relative">
       <PopupMessage show={showcopymsg} setShow={setShowcopymsg} ellapseTime={1200} callback={()=>copyURL(album.albumID)}>
-        <p className={`absolute text-2xl lg:top-0 lg:-left-[250%] scale[0.95] ${styles.showmsg}`}>
+        <p className={`absolute text-2xl lg:top-0 -left-[250%] ${styles.showmsg}`}>
             Copied!
         </p>
       </PopupMessage>

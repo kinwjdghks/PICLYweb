@@ -9,18 +9,14 @@ const ThumbNail = ({ src, len, priority }: { src: string|StaticImport, len:numbe
   return (
     <div className={`(frame) w-full aspect-square rounded-t-md overflow-hidden relative`}>
       <div className="(gradient filter) absolute w-full h-full bg-gradient-to-b from-[rgba(0,0,0,0.5)] to-transparent to-40%"></div>
-    {priority ? <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false'  priority />
-      :<Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false'/>}
-    {len > 1 && <TbBoxMultiple className="lg:w-8 lg:h-8 w-6 h-6 absolute lg:bottom-4 lg:right-4 bottom-2 right-2"/>}
-  </div>
+      <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false' priority={priority}/>
+      {len > 1 && <TbBoxMultiple className="lg:w-8 lg:h-8 w-6 h-6 absolute lg:top-4 lg:left-4 top-2 left-2"/>}
+    </div>
   );
 };
 
-
 const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?:boolean, selectAlbum:(album:Album)=>void }) => {
-  // console.log('item:'+item);
 
-  
   const Info = () =>{
     if(!item) return <></>
     const expire = item.expireTime;

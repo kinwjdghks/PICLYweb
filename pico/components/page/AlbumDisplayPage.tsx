@@ -9,7 +9,7 @@ import { auth } from "@/lib/firebase/firebase";
 import { _user_ } from "@/templates/user";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 import AlbumsContainer from "../container/AlbumsContainer";
-import { deleteAlbumDoc, deleteAlbumImages, getAllAlbumsByID } from "@/lib/functions/firebaseCRUD";
+import { deleteAlbum, getAllAlbumsByID } from "@/lib/functions/firebaseCRUD";
 import GalleryHeader from "../container/GalleryHeader";
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/modal/NewAlbumModal'));
@@ -24,10 +24,9 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
   //useState
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
-  const [displayingAlbum,setDisplayingAlbum] = useState<Album|undefined>(undefined)
-  //
-  const { lockScroll, openScroll } = useBodyScrollLock();
+  const [displayingAlbum,setDisplayingAlbum] = useState<Album|undefined>(undefined);
 
+  //router
   const router = useRouter();
   useEffect(() => {
     const handleKeyDown = (e:KeyboardEvent) => {
@@ -36,13 +35,13 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
       }
     };
     document.addEventListener("keydown", handleKeyDown);
-  
+    
     return () => {
       // Clean up the event listener when the component unmounts
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [setDisplayingAlbum]);
-
+  
   useEffect(() => {
     console.log('useEffect authchange');
     auth.onAuthStateChanged((user) => {
@@ -55,6 +54,14 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
       }
     });
   },[]);
+
+  useEffect(()=>{
+    if(displayingAlbum || newAlbumModalopen) lockScroll();
+    else openScroll();
+  },[displayingAlbum,newAlbumModalopen]);
+
+  //functions
+  const { lockScroll, openScroll } = useBodyScrollLock();
 
   const getAllAlbumsByID_ = async (uid:string) =>{
     const albumList = await getAllAlbumsByID(uid);
@@ -72,8 +79,7 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
     const albumID = displayingAlbum.albumID;
     
     try {
-      await deleteAlbumImages(displayingAlbum);
-      await deleteAlbumDoc(displayingAlbum);
+      await deleteAlbum(displayingAlbum);
   
       // Update the userAlbumList and reset displayingAlbum
       const newUserAlbumList = userAlbumList.filter((album) => album.albumID !== albumID);
@@ -84,10 +90,6 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
     }
   };
   
-  useEffect(()=>{
-    if(displayingAlbum || newAlbumModalopen) lockScroll();
-    else openScroll();
-  },[displayingAlbum,newAlbumModalopen])
   return (
     <div className={"lg:w-[calc(100%-16rem)] w-screen h-screen relative bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
 

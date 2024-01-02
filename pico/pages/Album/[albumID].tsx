@@ -73,21 +73,21 @@ import { getAlbumByID } from "@/lib/functions/firebaseCRUD";
 import { useEffect, useState } from "react";
 import LoadingPage from "@/components/page/LoadingPage";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
+import ExpiredPage from "@/components/page/ExpiredPage";
 
 const ImageView = () => {
+  
+  //router
+  const router = useRouter();
+
+  //constants
+  const albumID:string|undefined = router.query.albumID as string;
+
+  //useState
   const [curAlbum,setCurAlbum] = useState<Album|undefined>(undefined);
   const [isLoading,setIsLoading] = useState<boolean>(true);
-  const { lockScroll, openScroll } = useBodyScrollLock();
-  
-  const router = useRouter();
-  const albumID:string|undefined = router.query.albumID as string;
-  const getAlbum = async (albumID:string) => { 
-    let album: Album | undefined =  await getAlbumByID(albumID);
-    console.log(album);
-    setCurAlbum(album);
-    setIsLoading(false);
-  };
-  
+
+  //useEffect
   useEffect(()=>{
     getAlbum(albumID);
     lockScroll();
@@ -95,9 +95,19 @@ const ImageView = () => {
       openScroll()};
   },[]);
   
+  //functions
+  const { lockScroll, openScroll } = useBodyScrollLock();
 
+  const getAlbum = async (albumID:string) => { 
+    let album: Album | undefined = await getAlbumByID(albumID);
+    console.log(album);
+    setCurAlbum(album);
+    setIsLoading(false);
+  };
+  
   if(isLoading) return <LoadingPage/>
   else if(!isLoading && !curAlbum) return <FallbackPage/>
+  else if(!isLoading && curAlbum!.expireTime.getTime() < new Date().getTime()) return <ExpiredPage/>
   else return (
     <div className="(background) w-screen h-screen absolute bg-black">
       <Carousel album={curAlbum!}/>
