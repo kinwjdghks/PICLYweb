@@ -1,14 +1,15 @@
 import { FaHashtag } from "react-icons/fa";
 import { TagBlock } from "../container/Blocks";
-import { InputLabel, MAX_TAG_NUM } from "../modal/NewAlbumModal";
+import { MAX_TAG_NUM } from "../modal/NewAlbumModal";
 import { Dispatch, ReactNode, RefObject, SetStateAction, useEffect } from "react";
+import { InputLabel } from "../container/InputLabel";
 
 type TagListProps = {
   scrollTagRef: RefObject<HTMLDivElement>;
   tagList: string[];
   inputTagRef: RefObject<HTMLInputElement>;
   setTagList:Dispatch<SetStateAction<string[]>>
-  setErrorMsg:Dispatch<SetStateAction<number>>
+  setErrorNo:Dispatch<SetStateAction<number>>
 };
 
 const TagInput = ({
@@ -16,7 +17,7 @@ const TagInput = ({
   tagList,
   inputTagRef,
   setTagList,
-  setErrorMsg
+  setErrorNo
 }: TagListProps): ReactNode => {
 
   useEffect(() => {
@@ -40,12 +41,12 @@ const TagInput = ({
     if (newtag == "") return;
 
     if (tagList.length == MAX_TAG_NUM) {
-      setErrorMsg(1);
+      setErrorNo(1);
       return;
     }
     const res = tagList.find((tag) => tag == newtag);
     if (res) {
-      setErrorMsg(2);
+      setErrorNo(2);
       return;
     }
     const newTagList = [...tagList, newtag];

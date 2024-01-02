@@ -1,17 +1,18 @@
 import { Dispatch, ReactNode, RefObject, SetStateAction, useEffect, useRef } from "react";
-import { InputLabel, MAX_IMAGE_NUM } from "../modal/NewAlbumModal";
+import { MAX_IMAGE_NUM } from "../modal/NewAlbumModal";
 import { EmptyBlock, ImageBlock } from "../container/Blocks";
+import { InputLabel } from "../container/InputLabel";
 
 type ImageInputProps = {
   imgFiles: File[];
   setImgFiles: Dispatch<SetStateAction<File[]>>;
-  setErrorMsg: Dispatch<SetStateAction<number>>;
+  setErrorNo: Dispatch<SetStateAction<number>>;
 };
 
 const ImageInput = ({
   imgFiles,
   setImgFiles,
-  setErrorMsg,
+  setErrorNo,
 }: ImageInputProps): ReactNode => {
   const scrollImgRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +34,7 @@ const ImageInput = ({
     if (imgFiles && fileList) {
       //img overflow check
       if (MAX_IMAGE_NUM < imgFiles.length + fileList.length) {
-        setErrorMsg(3);
+        setErrorNo(3);
         return;
       }
       //dupliction check
@@ -42,7 +43,7 @@ const ImageInput = ({
         for (let i = 0; i < imgFiles.length; i++) {
           console.log(file.name + "   " + imgFiles[i].name);
           if (file.name == imgFiles[i].name) {
-            setErrorMsg(4); //duplicate imgs
+            setErrorNo(4); //duplicate imgs
             return;
           }
         }

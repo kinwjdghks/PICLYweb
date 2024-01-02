@@ -1,12 +1,13 @@
 import Link from "next/link";
 import styles from "@/styles/animation.module.css";
 import { poppins } from "@/public/assets/fonts/poppins";
-import { useEffect, useState, useRef, ReactNode } from "react";
+import { useState,ReactNode } from "react";
 import { IoMenu } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import { BsLink45Deg } from "react-icons/bs";
 import { Album } from "@/templates/Album";
 import { copyURL } from "@/lib/functions/copyurl";
+import PopupMessage from "../modal/PopupMessage";
 
 const MenuBar = ({
   isMenuOpen,
@@ -50,43 +51,25 @@ const MenuBar = ({
 
 const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () => void, mode: "user" | "guest", album: Album, deleteAlbum: () => void }) => {
   //useState
-  const [isMenuOpen, setisMenuOpen] = useState<Boolean>(false);
-  const [showcopymsg, setShowcopymsg] = useState<Boolean>(false);
-  //useRef
-  const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
+  const [isMenuOpen, setisMenuOpen] = useState<boolean>(false);
+  const [showcopymsg, setShowcopymsg] = useState<boolean>(false);
+
+  //constants
   const user: Boolean = mode == "user";
-  //functions
-  const onURLButtonClick = () => {
-    if (timerRef.current !== null) {
-      return;
-    }
-    setShowcopymsg(true);
-    copyURL(album.albumID); 
-    timerRef.current = setTimeout(() => {   
-      setShowcopymsg(false);
-      clearTimeout(timerRef.current!);
-      timerRef.current = null;
-    }, 1200);
-  };
+
   //components
-  const URLCopyButton = ({onClick}:{onClick:()=>void}):ReactNode =>{
+  const URLCopyButton = ():ReactNode =>{
     return (
-    <div onClick={onClick} className="ml-auto relative">
-      <CopiedMSG/>
+    <div onClick={()=>setShowcopymsg(true)} className="ml-auto relative">
+      <PopupMessage show={showcopymsg} setShow={setShowcopymsg} ellapseTime={1200} callback={()=>copyURL(album.albumID)}>
+        <p className={`absolute text-2xl lg:top-0 lg:-left-[250%] scale[0.95] ${styles.showmsg}`}>
+            Copied!
+        </p>
+      </PopupMessage>
       <BsLink45Deg className="w-11 h-11 cursor-pointer hover:scale-[115%] " />
     </div>)
   }
   
-    const CopiedMSG = ():ReactNode => {
-      return (
-        showcopymsg 
-        ? <p className={`absolute text-2xl lg:top-0 lg:-left-[250%] scale[0.95] ${styles.showmsg}`}>
-            Copied!
-          </p>
-        : <></>
-      );
-    };
-
   return (
     <div className={`(actionbar) w-screen h-max fixed flex items-center gap-x-8 top-0 lg:p-12 p-4 pt-2 ${poppins.className} z=[102]`}>
       {!user && (
@@ -103,7 +86,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
           className="w-14 h-14 top-0 left-0 cursor-pointer fill-white"
           onClick={resetAlbum}/>
 
-        <URLCopyButton onClick={onURLButtonClick}/>
+        <URLCopyButton/>
         
         <IoMenu
           className="w-10 h-10 cursor-pointer hover:scale-[115%] relative"
@@ -111,6 +94,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
             e.preventDefault();
             setisMenuOpen((prev) => !prev);
           }}/>
+
         <MenuBar
           isMenuOpen={isMenuOpen}
           deleteAlbum={deleteAlbum}

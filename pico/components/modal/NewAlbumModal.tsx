@@ -1,52 +1,14 @@
-import { useState, useRef, useEffect, ReactNode } from "react";
+import { useState, useRef, useEffect, ReactNode, Dispatch, SetStateAction } from "react";
 import { IoIosClose } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsSendFill } from "react-icons/bs";
-import styles from "@/styles/animation.module.css";
 import { auth } from "@/lib/firebase/firebase";
 import { Album } from "@/templates/Album";
 import { createAlbum } from "@/lib/functions/firebaseCRUD";
 import DateInput from "../inputs/DateInput";
 import ImageInput from "../inputs/ImageInput";
 import TagInput from "../inputs/TagInput";
-
-
-export const InputLabel = ({children}:{children:ReactNode}):ReactNode =>{
-    return <p className="lg:text-black w-full font-bold p-1 mt-2">{children}</p>
-}
-
-const ErrorModal = ({ errorNo, maxTag, maxImg }: { errorNo: number, maxTag: number, maxImg: number }): ReactNode => 
-{
-  const [showError,setShowError] = useState<boolean>(false);
-  const timerRef = useRef<NodeJS.Timeout>(null)
-  useEffect(() => {
-    return () => {
-      const timer: NodeJS.Timeout = setTimeout(() => {
-        //연속으로 오는 에러 핸들링 필요
-
-      }, 1200);
-    };
-  }, [errorNo]);
-
-  const errorMessage = [
-    "", //0
-    `최대 ${maxTag}개의 태그를 남길 수 있습니다`, //1
-    "중복된 태그가 있습니다", //2
-    `최대 ${maxImg}개의 이미지를 저장할 수 있습니다`, //3
-    "중복된 이미지가 있습니다", //4
-    "과거로는 설정할 수 없습니다.", //5
-  ];
-
-  return (
-    <div className="absolute left-1/2 -translate-x-1/2">
-      <div className={`${errorNo && styles.showmsg} p-2 px-4 bg-pico_lighter rounded-xl`}>
-        <p className={`lg:text-xl text-md text-center`}>
-          {errorMessage[errorNo]}
-        </p>
-      </div>
-    </div>
-  );
-};
+import ErrorModal from "./ErrorModal";
 
   //data limits
 export const MAX_IMAGE_NUM = 5;
@@ -71,9 +33,9 @@ const NewAlbumModal = ({
 
   //states
   const [error, setError] = useState<boolean>(true);
-  const [errorMsg, setErrorMsg] = useState<number>(0);
+  const [errorNo,setErrorNo] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  
   //refs
   const inputTagRef = useRef<HTMLInputElement>(null);
   const scrollTagRef = useRef<HTMLDivElement>(null);
@@ -119,25 +81,24 @@ const NewAlbumModal = ({
         {isLoading && (
           <AiOutlineLoading3Quarters className="w-10 h-10 absolute right-0 top-0 m-6 lg:fill-black animate-spin" />
         )}
-        {errorMsg != 0 && (
-          <ErrorModal
-            errorNo={errorMsg}
-            maxTag={MAX_TAG_NUM}
-            maxImg={MAX_IMAGE_NUM}
-          />
-        )}
+        
+        <ErrorModal
+          errorNo={errorNo}
+          setErrorNo={setErrorNo}
+          maxTag={MAX_TAG_NUM}
+          maxImg={MAX_IMAGE_NUM}/>
+        
         <h1 className="lg:text-black text-3xl mb-6">새 앨범</h1>
         
         <ImageInput
           imgFiles={imgFiles}
           setImgFiles={setImgFiles}
-          setErrorMsg={setErrorMsg}
-          />
+          setErrorNo={setErrorNo}/>
 
         <DateInput
           setDueDate={setDueDate}
           setDateDiff={setDateDiff}
-          setErrorMsg={setErrorMsg}
+          setErrorNo={setErrorNo}
           dueDate={dueDate}
           dateDiff={dateDiff}/>
 
@@ -146,12 +107,13 @@ const NewAlbumModal = ({
           tagList={tagList}
           inputTagRef={inputTagRef}
           setTagList={setTagList}
-          setErrorMsg={setErrorMsg}/>
+          setErrorNo={setErrorNo}/>
 
         <p className="lg:text-black pt-12 text-sm text-center">
           선정적이거나 모욕적인 이미지, 비속어, 개인정보가 <br />
           포함된 내용은 제재의 대상이 될 수 있습니다.
         </p>
+        
       </div>
       {!isLoading && (
         <IoIosClose

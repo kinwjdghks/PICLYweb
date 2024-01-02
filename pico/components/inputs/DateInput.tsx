@@ -1,16 +1,16 @@
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import { InputLabel } from "../modal/NewAlbumModal";
+import { InputLabel } from "../container/InputLabel";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 type DateInputProps = {
     setDueDate:Dispatch<SetStateAction<Date>>;
     setDateDiff:Dispatch<SetStateAction<number>>;
-    setErrorMsg:Dispatch<SetStateAction<number>>;
+    setErrorNo:Dispatch<SetStateAction<number>>;
     dueDate: Date;
     dateDiff: number;
   };
 
-const DateInput = ({ setDueDate, setDateDiff, setErrorMsg, dueDate, dateDiff }: DateInputProps): ReactNode => 
+const DateInput = ({ setDueDate, setDateDiff, setErrorNo, dueDate, dateDiff }: DateInputProps): ReactNode => 
 {
 const [infoOpen, setInfoOpen] = useState<boolean>(false);
 const dueMsg = `${
@@ -44,7 +44,7 @@ Math.round(dateDiff / (24 * 60))
     setDueDate(newDate);
     setDateDiff(Math.floor(diff));
     if (diff <= 0) {
-      setErrorMsg(5);
+      setErrorNo(5);
       return;
     }
   };
@@ -62,7 +62,7 @@ Math.round(dateDiff / (24 * 60))
     console.log(diff);
 
     if (diff < 0) {
-      setErrorMsg(5);
+      setErrorNo(5);
       return;
     }
 
