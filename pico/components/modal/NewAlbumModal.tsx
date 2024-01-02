@@ -15,13 +15,15 @@ export const InputLabel = ({children}:{children:ReactNode}):ReactNode =>{
     return <p className="lg:text-black w-full font-bold p-1 mt-2">{children}</p>
 }
 
-const ErrorModal = ({ errorNo, maxTag, maxImg, reset }: { errorNo: number, maxTag: number, maxImg: number, reset: () => void }): ReactNode => 
+const ErrorModal = ({ errorNo, maxTag, maxImg }: { errorNo: number, maxTag: number, maxImg: number }): ReactNode => 
 {
+  const [showError,setShowError] = useState<boolean>(false);
+  const timerRef = useRef<NodeJS.Timeout>(null)
   useEffect(() => {
     return () => {
       const timer: NodeJS.Timeout = setTimeout(() => {
         //연속으로 오는 에러 핸들링 필요
-        reset();
+
       }, 1200);
     };
   }, [errorNo]);
@@ -60,7 +62,7 @@ const NewAlbumModal = ({
   //initialization
   const oneWeekLaterFromNow = new Date();
   oneWeekLaterFromNow.setDate(oneWeekLaterFromNow.getDate() + 7);
-  
+
   //user inputs
   const [imgFiles, setImgFiles] = useState<File[]>([]);
   const [tagList, setTagList] = useState<string[]>([]);
@@ -68,8 +70,8 @@ const NewAlbumModal = ({
   const [dateDiff, setDateDiff] = useState<number>(0); //분단위
 
   //states
-  const [errorMsg, setErrorMsg] = useState<number>(0);
   const [error, setError] = useState<boolean>(true);
+  const [errorMsg, setErrorMsg] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   //refs
@@ -122,7 +124,6 @@ const NewAlbumModal = ({
             errorNo={errorMsg}
             maxTag={MAX_TAG_NUM}
             maxImg={MAX_IMAGE_NUM}
-            reset={() => setErrorMsg(0)}
           />
         )}
         <h1 className="lg:text-black text-3xl mb-6">새 앨범</h1>

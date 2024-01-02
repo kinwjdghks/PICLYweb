@@ -53,7 +53,6 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
   const [isMenuOpen, setisMenuOpen] = useState<Boolean>(false);
   const [showcopymsg, setShowcopymsg] = useState<Boolean>(false);
   //useRef
-  const btnRef = useRef<HTMLDivElement>(null);
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
   const user: Boolean = mode == "user";
   //functions
