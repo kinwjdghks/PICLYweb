@@ -3,16 +3,14 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useEffect } from "react";
+import { setScreenSize } from "@/lib/functions/screenSize";
+
 export default function App({ Component, pageProps }: AppProps) {
 
-  const setScreenSize = () =>{
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }
   useEffect(()=>{
     setScreenSize();
   });
-
+  
    return (
     <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID!}>
        <Head>

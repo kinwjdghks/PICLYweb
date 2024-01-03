@@ -97,7 +97,7 @@ const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateI
     <>
       <InputLabel>만료 기한</InputLabel>
       <div className="flex flex-col lg:w-full">
-        <div className="w-full h-fit flex items-center">
+        <div className="w-full h-fit flex items-start">
           <input
             className={`text-white h-10 w-42 m-2 p-4 rounded-md bg-pico_darker`}
             type="date"

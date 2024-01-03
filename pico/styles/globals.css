@@ -33,6 +33,7 @@ body {
       transparent,
       rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb));
-    height: calc(var(--vh,1vh) * 100);
+  rgb(var(--background-start-rgb));
+  height: calc(var(--vh,1vh) * 100);
+  overscroll-behavior-y:none;
 }
