@@ -1,8 +1,8 @@
 import Image from "next/image";
+import noImage from "@/public/assets/images/icons8-default-image-64.png";
 import { TbBoxMultiple } from "react-icons/tb";
 import { Album } from "@/templates/Album";
 import { formatDateString,dateDiffAsString } from "@/lib/functions/dateFormating";
-import noImage from "@/public/assets/images/icons8-default-image-64.png";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { BsLink45Deg } from "react-icons/bs";
 import { copyURL } from "@/lib/functions/copyURL";

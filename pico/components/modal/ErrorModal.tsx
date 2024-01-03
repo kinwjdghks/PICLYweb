@@ -1,5 +1,6 @@
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import PopupMessage from "./PopupMessage";
+import AlertMessage from "./AlertMessage";
 
 const ErrorModal = ({ errorNo,setErrorNo, maxTag, maxImg }: { errorNo: number,setErrorNo:Dispatch<SetStateAction<number>>, maxTag: number, maxImg: number }): ReactNode => 
 {
@@ -20,12 +21,8 @@ const ErrorModal = ({ errorNo,setErrorNo, maxTag, maxImg }: { errorNo: number,se
   ];
 
   return (
-    <PopupMessage className="fixed" show={showError} setShow={setShowError} ellapseTime={1200} cleanup={()=>setErrorNo(0)}>
-      <div className={`bg-pico_lighter rounded-xl`}>
-        <p className={`lg:text-xl text-md text-center p-2 px-4`}>
-          {errorMessage[errorNo]}
-        </p>
-      </div>
+    <PopupMessage className="fixed top-16 left-1/2 -translate-x-1/2" show={showError} setShow={setShowError} ellapseTime={1200} cleanup={()=>setErrorNo(0)}>
+      <AlertMessage>{errorMessage[errorNo]}</AlertMessage>
     </PopupMessage>
   );
 };

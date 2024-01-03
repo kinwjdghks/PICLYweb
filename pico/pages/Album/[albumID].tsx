@@ -100,7 +100,7 @@ const ImageView = () => {
 
   const getAlbum = async (albumID:string) => { 
     let album: Album | undefined = await getAlbumByID(albumID);
-    console.log(album);
+    // console.log(album);
     setCurAlbum(album);
     setIsLoading(false);
   };

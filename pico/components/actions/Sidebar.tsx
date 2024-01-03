@@ -8,8 +8,7 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
 import { page } from "@/pages/Gallery/[userid]";
 import Image from "next/image";
-import { logout } from "@/pages/Login";
-
+import { logout } from "@/lib/functions/LoginPage";
 const Sidebar = ({switchPage}:{switchPage:(page:page)=>void}):React.ReactNode =>{
     
     return <div className="lg:visible invisible lg:h-screen min-h-max h-[calc(var(--vh, 1vh) * 100)] lg:w-64 w-0 left-0 top-0 flex flex-col lg:border-r-[1px] border-white bg-pico_default">

@@ -7,7 +7,7 @@ import { BsLink45Deg } from "react-icons/bs";
 import { Album } from "@/templates/Album";
 import PopupMessage from "../modal/PopupMessage";
 import { copyURL } from "@/lib/functions/copyURL";
-import LinkCopiedMessage from "../modal/LinkCopiedMessage";
+import AlertMessage from "../modal/AlertMessage";
 
 const MenuBar = ({
   isMenuOpen,
@@ -61,8 +61,12 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
   const URLCopyButton = ():ReactNode =>{
     return (
     <div onClick={()=>setShowcopymsg(true)} className="ml-auto relative">
-      <PopupMessage className="fixed w-max top-20 left-1/2 -translate-x-1/2" show={showcopymsg} setShow={setShowcopymsg} ellapseTime={1200} callback={()=>copyURL(album.albumID)}>
-       <LinkCopiedMessage/>
+      <PopupMessage className="fixed top-20 left-1/2 -translate-x-1/2"
+        show={showcopymsg} 
+        setShow={setShowcopymsg} 
+        ellapseTime={1200} 
+        callback={()=>copyURL(album.albumID)}>
+       <AlertMessage>링크가 복사되었습니다.</AlertMessage>
       </PopupMessage>
       <BsLink45Deg className="w-11 h-11 m-4 cursor-pointer hover:scale-[115%] " />
     </div>)

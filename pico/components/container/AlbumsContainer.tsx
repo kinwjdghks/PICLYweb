@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
 import { Album } from "@/templates/Album";
 import ReactDOM from "react-dom";
 import PopupMessage from "../modal/PopupMessage";
-import LinkCopiedMessage from "../modal/LinkCopiedMessage";
+import AlertMessage from "../modal/AlertMessage";
 
 const CopiedAlert = ({
   showCopyMsg,
@@ -15,11 +15,11 @@ const CopiedAlert = ({
   if (typeof window === "undefined") return null;
   const root = document.getElementById("alertroot");
   const portal = ReactDOM.createPortal(
-    <PopupMessage className="fixed w-max text-2xl top-16 left-1/2 -translate-x-1/2"
+    <PopupMessage className="fixed top-16 left-1/2 -translate-x-1/2"
       show={showCopyMsg}
       setShow={setShowCopyMsg}
       ellapseTime={1200} >
-      <LinkCopiedMessage />
+      <AlertMessage >링크가 복사되었습니다.</AlertMessage>
     </PopupMessage>,
     root!
   );
