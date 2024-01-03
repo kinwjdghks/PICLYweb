@@ -44,3 +44,20 @@ export const formatTimeString = (date:Date):string=> {
     
     return 'D-'+result;
   }
+
+  export const getDateDiffByMinute = (date1:Date,date2:Date) => (date1.getTime() - date2.getTime()) / (60 * 1000);
+
+  export const checkDateInputValid = (input:Date):boolean =>{
+    const now = new Date();
+    const diff:number = getDateDiffByMinute(input,now);
+    if (diff <= 0) return false;
+    else return true;
+  }
+
+  // export const getNDaysLater = (n:number):string => {
+  //   const integerN = Math.round(n);
+  //   const currentDate = new Date();
+  //   currentDate.setDate(currentDate.getDate() + integerN);
+  //   const formattedDate = currentDate.toISOString().split('T')[0];
+  //   return formattedDate;
+  // }

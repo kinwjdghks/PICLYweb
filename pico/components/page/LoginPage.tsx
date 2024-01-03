@@ -189,7 +189,7 @@ useEffect(()=>{
 },[]);
 
 
-const inputClassName = 'w-full h-12 border-solid border-[1px] p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black';
+const inputClassName = 'w-full h-12 p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black outline-none';
 return (
   <ViewPortAdapter className={`w-screen relative bg-pico_darker flex justify-center items-end ${nanumgothic.className}`}>
     <div className="(container) w-5/6 sm:w-96 h-3/4 mb-16 relative flex flex-col items-center">
@@ -224,22 +224,24 @@ return (
       </form>
       <p className="h-7 m-2 text-lg">{msg}</p>
       <div className="(options) w-full flex-grow flex flex-col items-center ">
-        <button className={`${inputClassName} text-white hover:bg-white hover:text-black`} 
+        <button className={`${inputClassName} border-[1px] text-white hover:bg-white hover:text-black`} 
           onClick={isRegistering ? register_Email : login_Email}>{isRegistering ? '가입하기':'로그인'}</button>
         <p className="mt-4">또는</p>
         <div className="flex h-max w-full  mt-4 items-center">
-          <FcGoogle className="w-12 h-12 mx-2"/>
+          {/* <FcGoogle className="w-12 h-12 mx-2"/> */}
           {/* <button className={`${inputClassName} m-0 text-white hover:bg-white hover:text-black`} 
             onClick={logInGoogle}>구글로 계속하기
           </button> */}
-          <GoogleLogin
-            onSuccess={credentialResponse => {
-              console.log(credentialResponse)
-            }}
-            onError={() => {
-              console.log('Login Failed')
-            }}
-          />
+          <span className="w-full text-center">
+            <GoogleLogin
+              onSuccess={credentialResponse => {
+                console.log(credentialResponse)
+              }}
+              onError={() => {
+                console.log('Login Failed')
+              }}
+            />
+          </span>
         </div>
       </div>    
       <div className="flex flex-col mt-auto">

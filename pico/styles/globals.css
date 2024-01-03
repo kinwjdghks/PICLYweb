@@ -18,6 +18,14 @@
   }
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

@@ -1,15 +1,16 @@
-import { FaHashtag } from "react-icons/fa";
+import { FaHashtag } from "react-icons/fa6";
 import { TagBlock } from "../container/Blocks";
 import { MAX_TAG_NUM } from "../modal/NewAlbumModal";
 import { Dispatch, ReactNode, RefObject, SetStateAction, useEffect } from "react";
 import { InputLabel } from "../container/InputLabel";
+import { Error } from "../modal/ErrorModal";
 
 type TagListProps = {
   scrollTagRef: RefObject<HTMLDivElement>;
   tagList: string[];
   inputTagRef: RefObject<HTMLInputElement>;
   setTagList:Dispatch<SetStateAction<string[]>>
-  setErrorNo:Dispatch<SetStateAction<number>>
+  setErrorNo:Dispatch<SetStateAction<Error>>
 };
 
 const TagInput = ({
@@ -41,12 +42,12 @@ const TagInput = ({
     if (newtag == "") return;
 
     if (tagList.length == MAX_TAG_NUM) {
-      setErrorNo(1);
+      setErrorNo('MAX_TAG');
       return;
     }
     const res = tagList.find((tag) => tag == newtag);
     if (res) {
-      setErrorNo(2);
+      setErrorNo('DUP_TAG');
       return;
     }
     const newTagList = [...tagList, newtag];
@@ -73,10 +74,10 @@ const TagInput = ({
         </div>
       </div>
       <div className="(tag input) w-full h-min flex items-center box-border place-self-end">
-        <span className="w-max mr-3 text-black text-3xl text-center">
-          <FaHashtag className="lg:fill-black fill-white" />
+        <span className="absolute w-max mr-3 text-black text-3xl text-center">
+          <FaHashtag className="w-6 h-6 mx-2 fill-black" />
         </span>
-        <input className={`disabled:opacity-70 w-full p-2 border-solid border-2 border-black text-black text-xl`}
+        <input className={`disabled:opacity-70 lg:border-2 w-full p-2 pl-9 rounded-md text-black text-xl outline-none`}
           type="text"
           ref={inputTagRef}
           onKeyDown={(e) => {
@@ -88,7 +89,6 @@ const TagInput = ({
               addTag();
             }
           }}
-          autoFocus
           placeholder="태그를 입력하세요"
         />
       </div>

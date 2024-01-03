@@ -1,21 +1,18 @@
-import { Dispatch, ReactNode, RefObject, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, ReactNode,SetStateAction, useEffect, useRef } from "react";
 import { MAX_IMAGE_NUM } from "../modal/NewAlbumModal";
 import { EmptyBlock, ImageBlock } from "../container/Blocks";
 import { InputLabel } from "../container/InputLabel";
+import { Error } from "../modal/ErrorModal";
 
 type ImageInputProps = {
   imgFiles: File[];
   setImgFiles: Dispatch<SetStateAction<File[]>>;
-  setErrorNo: Dispatch<SetStateAction<number>>;
+  setErrorNo: Dispatch<SetStateAction<Error>>;
 };
 
-const ImageInput = ({
-  imgFiles,
-  setImgFiles,
-  setErrorNo,
-}: ImageInputProps): ReactNode => {
+const ImageInput = ({imgFiles, setImgFiles, setErrorNo}: ImageInputProps): ReactNode => {
   const scrollImgRef = useRef<HTMLDivElement>(null);
-
+  //useEffect
   useEffect(() => {
     imgAutoscroll();
   }, [imgFiles.length]);
@@ -32,9 +29,8 @@ const ImageInput = ({
 
   const updateImage = (fileList: FileList | null) => {
     if (imgFiles && fileList) {
-      //img overflow check
       if (MAX_IMAGE_NUM < imgFiles.length + fileList.length) {
-        setErrorNo(3);
+        setErrorNo('MAX_IMG');
         return;
       }
       //dupliction check
@@ -43,7 +39,7 @@ const ImageInput = ({
         for (let i = 0; i < imgFiles.length; i++) {
           console.log(file.name + "   " + imgFiles[i].name);
           if (file.name == imgFiles[i].name) {
-            setErrorNo(4); //duplicate imgs
+            setErrorNo('DUP_IMG');
             return;
           }
         }
