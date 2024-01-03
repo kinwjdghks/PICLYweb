@@ -7,6 +7,7 @@ export default function Document() {
       <body>
         <Main />
         <div id='modalroot'></div>
+        <div id='alertroot'></div>
         <NextScript />
       </body>
     </Html>

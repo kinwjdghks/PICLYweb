@@ -38,8 +38,8 @@ const GalleryHeader = ({ onChange, onModalOpen }: {onChange: (input: string) => 
   };
 
   return (
-    <div className="w-[inherit] h-20 px-2 lg:px-[calc(15%-2rem)] fixed bg-pico_default flex items-center place-content-between">
-      <div className={`lg:invisible w-max h-max pl-4  ${poppins.className} text-[2.5rem] font-[600] `}>
+    <div className="w-[inherit] lg:h-20 h-16 px-2 lg:px-[calc(15%-2rem)] fixed bg-pico_default flex items-center place-content-between">
+      <div className={`lg:invisible w-max h-max pl-4  ${poppins.className} lg:text-[2.5rem] text-3xl font-[600] `}>
         PiCo
       </div>
       <div className=" flex justify-end items-center">

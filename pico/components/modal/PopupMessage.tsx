@@ -6,11 +6,12 @@ type PopupMessageProps = {
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
   ellapseTime: number;
+  className?: string;
   callback?: (param?: any) => void;
   cleanup?: (param?: any) => void;
 };
 
-const PopupMessage = ({ children, show, setShow, ellapseTime, callback = () => {},cleanup = () =>{},
+const PopupMessage = ({ children, show, setShow, ellapseTime,className, callback = () => {},cleanup = () =>{},
 }: PopupMessageProps): ReactNode => {
   const timerRef: { current: NodeJS.Timeout | null } = useRef(null);
 
@@ -33,7 +34,7 @@ const PopupMessage = ({ children, show, setShow, ellapseTime, callback = () => {
     }, ellapseTime);
   };
   return show ? (
-    <div className={`lg:-left-[250%] scale[0.95] ${styles.showmsg}`}>
+    <div className={`${className} ${styles.showmsg}`}>
       {children}
     </div>
   ) : (

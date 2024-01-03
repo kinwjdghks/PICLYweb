@@ -62,8 +62,8 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
     return (
     <div onClick={()=>setShowcopymsg(true)} className="ml-auto relative">
       <PopupMessage show={showcopymsg} setShow={setShowcopymsg} ellapseTime={1200} callback={()=>copyURL(album.albumID)}>
-        <p className={`absolute text-2xl lg:top-0 -left-[250%] ${styles.showmsg}`}>
-            Copied!
+        <p className={`absolute text-xl lg:top-0 -left-[250%] ${styles.showmsg}`}>
+            링크가 복사되었습니다.
         </p>
       </PopupMessage>
       <BsLink45Deg className="w-11 h-11 cursor-pointer hover:scale-[115%] " />

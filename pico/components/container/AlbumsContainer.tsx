@@ -1,7 +1,19 @@
 import AlbumComponent from "./AlbumComponent";
-import { useEffect, useState,useRef } from "react";
-
+import { useEffect, useState,useRef, Dispatch, SetStateAction } from "react";
 import { Album } from "@/templates/Album";
+import ReactDOM  from "react-dom";
+import PopupMessage from "../modal/PopupMessage";
+
+const CopiedAlert = ({showCopyMsg,setShowCopyMsg}:{showCopyMsg:boolean, setShowCopyMsg:Dispatch<SetStateAction<boolean>>}) =>{
+   if (typeof window === "undefined") return null;
+   const root = document.getElementById('alertroot');
+   const portal = ReactDOM.createPortal(
+     <PopupMessage className="fixed text-2xl lg:top-20 lg:left-1/2 lg:-translate-x-1/2" show={showCopyMsg} setShow={setShowCopyMsg} ellapseTime={1200}> 
+       <p className="bg-black p-2 rounded-md opacity-80">링크가 복사되었습니다.</p>
+      </PopupMessage> 
+     , root!);
+   return portal;
+ }
 
 const NoResult = () =>{
    return <div className="col-span-2">
@@ -16,9 +28,11 @@ const Loading = () =>{
 }
 
 const AlbumsContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Album[]|undefined,tagInput:string,selectAlbum:(album:Album)=>void}) =>{
-   // Varaibles
+   // Variables
    const [filteredAlbumList, setFilteredAlbumList]= useState<Album[]|undefined>(userAlbumList);
    const timer = useRef<NodeJS.Timeout|null>(null);
+   //useStates
+   const [showCopyMsg, setShowCopyMsg] = useState<boolean>(false);
 
    // useEffects
    useEffect(()=>{
@@ -53,8 +67,11 @@ const AlbumsContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Alb
       }
    }
 
-   return (
-      <div className={`lg:px-[15%] lg:pt-32 pb-10 lg:gap-4 w-full h-min pt-20 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
+   return ( 
+      <>
+      <CopiedAlert showCopyMsg={showCopyMsg} setShowCopyMsg={setShowCopyMsg}/>
+      
+      <div className={`lg:px-[15%] lg:pt-32 pb-10 lg:gap-4 w-full h-min pt-16 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
         {!filteredAlbumList ? <Loading /> : (
          <>
             {filteredAlbumList.length === 0 && <NoResult />}
@@ -63,11 +80,13 @@ const AlbumsContainer = ({userAlbumList,tagInput,selectAlbum}:{userAlbumList:Alb
                 <AlbumComponent 
                   key={idx} item={item} 
                   priority={idx < 4 && true} 
-                  selectAlbum={selectAlbum} />
+                  selectAlbum={selectAlbum} 
+                  alertCopyMsg={()=>{setShowCopyMsg(true)}}/>
               ))}
           </>
         )}
       </div>
+      </>
     );
 }
 

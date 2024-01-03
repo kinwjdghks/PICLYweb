@@ -4,18 +4,33 @@ import { Album } from "@/templates/Album";
 import { formatDateString,dateDiffAsString } from "@/lib/functions/dateFormating";
 import noImage from "@/public/assets/images/icons8-default-image-64.png";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { BsLink45Deg } from "react-icons/bs";
+import styles from "@/styles/animation.module.css";
+import { copyURL } from "@/lib/functions/copyURL";
+import { useRouter } from "next/router";
+import PopupMessage from "../modal/PopupMessage";
+import { Dispatch, SetStateAction, useState } from "react";
 
-const ThumbNail = ({ src, len, priority }: { src: string|StaticImport, len:number, priority?:boolean }) => {
+const ThumbNail = ({ src, len, alertCopyMsg, albumID, priority }: { src: string|StaticImport, len:number,alertCopyMsg:()=>void,albumID:string, priority?:boolean }) => {
+
+  const URLButtonClickHandler =(e:React.MouseEvent) =>{
+    e.stopPropagation();
+    alertCopyMsg();
+    copyURL(albumID);
+  }
+
   return (
     <div className={`(frame) w-full aspect-square rounded-t-md overflow-hidden relative`}>
       <div className="(gradient filter) absolute w-full h-full bg-gradient-to-b from-[rgba(0,0,0,0.5)] to-transparent to-40%"></div>
       <Image src={src} alt="pic" width={0} height={0} sizes="100vw" className="object-cover w-full h-full"  draggable='false' priority={priority}/>
-      {len > 1 && <TbBoxMultiple className="lg:w-8 lg:h-8 w-6 h-6 absolute lg:top-4 lg:left-4 top-2 left-2"/>}
+      <BsLink45Deg className='lg:w-10 lg:h-10 w-8 h-8 absolute lg:top-3 lg:right-3 top-1 right-1 opacity-70'
+        onClick={URLButtonClickHandler}/>
+      {len > 1 && <TbBoxMultiple className="lg:w-8 lg:h-8 w-6 h-6 absolute lg:top-4 lg:left-4 top-2 left-2 opacity-70"/>}
     </div>
   );
 };
 
-const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?:boolean, selectAlbum:(album:Album)=>void }) => {
+const AlbumComponent= ({ item, priority, selectAlbum,alertCopyMsg }: { item: Album, priority?:boolean, selectAlbum:(album:Album)=>void,alertCopyMsg:()=>void }) => {
 
   const Info = () =>{
     if(!item) return <></>
@@ -38,7 +53,7 @@ const AlbumComponent= ({ item, priority, selectAlbum }: { item: Album, priority?
   return (
     <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer" onClick = {()=>selectAlbum(item)}>
       <div className="w-full h-full relative rounded-md bg-pico_lighter">
-        <ThumbNail src={item.thumbnailURL ?? noImage} len={item.imageCount} priority={priority && true}/>
+        <ThumbNail src={item.thumbnailURL ?? noImage} len={item.imageCount} alertCopyMsg={alertCopyMsg} albumID={item.albumID} priority={priority && true}/>
         <Info/>
       </div>
     </div>
