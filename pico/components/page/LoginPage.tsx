@@ -12,6 +12,7 @@ import { db } from "@/lib/firebase/firebase";
 import { DocumentSnapshot, doc,getDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 import { GoogleLogin } from '@react-oauth/google';
+import ViewPortAdapter from "./ViewPortAdapter";
 
 
 export const logout = async () =>{
@@ -190,7 +191,7 @@ useEffect(()=>{
 
 const inputClassName = 'w-full h-12 border-solid border-[1px] p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black';
 return (
-  <div className={`w-screen h-screen relative bg-pico_darker flex justify-center items-end ${nanumgothic.className}`}>
+  <ViewPortAdapter className={`w-screen relative bg-pico_darker flex justify-center items-end ${nanumgothic.className}`}>
     <div className="(container) w-5/6 sm:w-96 h-3/4 mb-16 relative flex flex-col items-center">
       <Image src={PiCoLogo} alt="logo" className="w-16 h-16 rotate-12"/>
       <form className="w-full h-max mt-10">
@@ -248,7 +249,7 @@ return (
     </div>
     <Image src={arrow} alt="back" className="w-8 h-8 fixed top-0 left-0 m-8 cursor-pointer"
       onClick={()=>router.push({pathname:'/'})}/>
-  </div>
+  </ViewPortAdapter>
   );
 };
 

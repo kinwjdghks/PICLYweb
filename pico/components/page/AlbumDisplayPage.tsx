@@ -92,7 +92,7 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
   };
   
   return (
-    <ViewPortAdapter className={"(AlbumDisplayPage) lg:w-[calc(100%-16rem)] w-screen lg:h-screen relative bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
+    <ViewPortAdapter className={"(AlbumDisplayPage) lg:w-[calc(100%-16rem)] w-screen relative bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
       <AlbumsContainer 
         userAlbumList={userAlbumList} 
         tagInput={tagSearchInput} 

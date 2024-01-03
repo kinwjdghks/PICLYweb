@@ -68,7 +68,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
         callback={()=>copyURL(album.albumID)}>
        <AlertMessage>링크가 복사되었습니다.</AlertMessage>
       </PopupMessage>
-      <BsLink45Deg className="w-11 h-11 m-4 cursor-pointer hover:scale-[115%] " />
+      <BsLink45Deg className="lg:w-11 lg:h-11 w-9 h-9 m-2 cursor-pointer hover:scale-[115%] " />
     </div>)
   }
   
@@ -91,7 +91,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
         <URLCopyButton/>
         
         <HiOutlineMenu
-          className="w-10 h-10 m-4 cursor-pointer hover:scale-[115%] relative"
+          className="lg:w-10 lg:h-10 w-8 h-8 m-2 cursor-pointer hover:scale-[115%] relative"
           onClick={(e: Event) => {
             e.preventDefault();
             setisMenuOpen((prev) => !prev);

@@ -108,19 +108,19 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
     const uploadPromises = imgfiles.map(async (imgFile, i) => {
       //compress uploading image.
       const compressedFile = await imageCompressGetFile(0.5,1920,imgFile);
-      // console.log('compressed file:',compressedFile);
       if(!compressedFile){
         console.log('compression error');
-        return;
+        return null;
       }
       const fileName = `${albumID}/${i}.jpeg`; // Generate a unique file name
       const imageRef = getStorageRef(fileName);
       await uploadBytes(imageRef, compressedFile, metadata);
       const imageURL = await getDownloadURL(imageRef);
-      imageURLs.push(imageURL);
+      return imageURL;
     });
     // Wait for all uploads to complete
-    await Promise.all(uploadPromises);
+    const compressedFiles:(string | null)[] = await Promise.all(uploadPromises);
+    imageURLs.push(...compressedFiles.filter(url => url !== null) as string[]);
   } catch (error) {
     console.error('Error uploading images:', error);
   } finally {
