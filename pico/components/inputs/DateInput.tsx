@@ -20,7 +20,7 @@ Math.round(dateDiff / (24 * 60))
 } 
     ${
     Math.round(dateDiff / 60)
-        ? (Math.round(dateDiff / 60) % 24) + "시 간"
+        ? (Math.round(dateDiff / 60) % 24) + "시간"
         : ""
     }
     ${Math.round(dateDiff % 60)}분 후 만료`;

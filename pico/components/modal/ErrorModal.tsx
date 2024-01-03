@@ -20,7 +20,7 @@ const ErrorModal = ({ errorNo,setErrorNo, maxTag, maxImg }: { errorNo: number,se
   ];
 
   return (
-    <PopupMessage className="absolute" show={showError} setShow={setShowError} ellapseTime={1200} cleanup={()=>setErrorNo(0)}>
+    <PopupMessage className="fixed" show={showError} setShow={setShowError} ellapseTime={1200} cleanup={()=>setErrorNo(0)}>
       <div className={`bg-pico_lighter rounded-xl`}>
         <p className={`lg:text-xl text-md text-center p-2 px-4`}>
           {errorMessage[errorNo]}

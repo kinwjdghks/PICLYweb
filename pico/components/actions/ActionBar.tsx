@@ -1,13 +1,13 @@
 import Link from "next/link";
-import styles from "@/styles/animation.module.css";
 import { poppins } from "@/public/assets/fonts/poppins";
 import { useState,ReactNode } from "react";
-import { IoMenu } from "react-icons/io5";
+import { HiOutlineMenu } from "react-icons/hi";
 import { IoIosClose } from "react-icons/io";
 import { BsLink45Deg } from "react-icons/bs";
 import { Album } from "@/templates/Album";
 import PopupMessage from "../modal/PopupMessage";
 import { copyURL } from "@/lib/functions/copyURL";
+import LinkCopiedMessage from "../modal/LinkCopiedMessage";
 
 const MenuBar = ({
   isMenuOpen,
@@ -61,17 +61,15 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
   const URLCopyButton = ():ReactNode =>{
     return (
     <div onClick={()=>setShowcopymsg(true)} className="ml-auto relative">
-      <PopupMessage show={showcopymsg} setShow={setShowcopymsg} ellapseTime={1200} callback={()=>copyURL(album.albumID)}>
-        <p className={`absolute text-xl lg:top-0 -left-[250%] ${styles.showmsg}`}>
-            링크가 복사되었습니다.
-        </p>
+      <PopupMessage className="fixed w-max top-20 left-1/2 -translate-x-1/2" show={showcopymsg} setShow={setShowcopymsg} ellapseTime={1200} callback={()=>copyURL(album.albumID)}>
+       <LinkCopiedMessage/>
       </PopupMessage>
-      <BsLink45Deg className="w-11 h-11 cursor-pointer hover:scale-[115%] " />
+      <BsLink45Deg className="w-11 h-11 m-4 cursor-pointer hover:scale-[115%] " />
     </div>)
   }
   
   return (
-    <div className={`(actionbar) w-screen h-max fixed flex items-center gap-x-8 top-0 lg:p-12 p-4 pt-2 ${poppins.className} z=[102]`}>
+    <div className={`(actionbar) w-screen h-max fixed flex items-center top-0 lg:p-12 p-4 pt-2 ${poppins.className} z=[102]`}>
       {!user && (
         <Link
           href={"/"}
@@ -88,8 +86,8 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
 
         <URLCopyButton/>
         
-        <IoMenu
-          className="w-10 h-10 cursor-pointer hover:scale-[115%] relative"
+        <HiOutlineMenu
+          className="w-10 h-10 m-4 cursor-pointer hover:scale-[115%] relative"
           onClick={(e: Event) => {
             e.preventDefault();
             setisMenuOpen((prev) => !prev);

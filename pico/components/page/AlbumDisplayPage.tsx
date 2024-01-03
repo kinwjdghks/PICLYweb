@@ -11,6 +11,7 @@ import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 import AlbumsContainer from "../container/AlbumsContainer";
 import { deleteAlbum, getAllAlbumsByID } from "@/lib/functions/firebaseCRUD";
 import GalleryHeader from "../container/GalleryHeader";
+import ViewPortAdapter from "./ViewPortAdapter";
 //dynamic import component
 const NewAlbumModal = dynamic(()=> import('@/components/modal/NewAlbumModal'));
 const Carousel = dynamic(()=>import('@/components/page/Carousel'));
@@ -91,7 +92,7 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
   };
   
   return (
-    <div className={"(AlbumDisplayPage) lg:w-[calc(100%-16rem)] w-screen lg:h-screen h-[calc(var(--vh,1vh)*100)] relative bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
+    <ViewPortAdapter className={"(AlbumDisplayPage) lg:w-[calc(100%-16rem)] w-screen lg:h-screen relative bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
       <AlbumsContainer 
         userAlbumList={userAlbumList} 
         tagInput={tagSearchInput} 
@@ -113,7 +114,7 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
             deleteAlbum={onDeleteAlbum}/>
           </>
         </Modal>}
-    </div>
+    </ViewPortAdapter>
   );
 };
 

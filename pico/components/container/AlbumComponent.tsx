@@ -5,11 +5,8 @@ import { formatDateString,dateDiffAsString } from "@/lib/functions/dateFormating
 import noImage from "@/public/assets/images/icons8-default-image-64.png";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { BsLink45Deg } from "react-icons/bs";
-import styles from "@/styles/animation.module.css";
 import { copyURL } from "@/lib/functions/copyURL";
-import { useRouter } from "next/router";
-import PopupMessage from "../modal/PopupMessage";
-import { Dispatch, SetStateAction, useState } from "react";
+
 
 const ThumbNail = ({ src, len, alertCopyMsg, albumID, priority }: { src: string|StaticImport, len:number,alertCopyMsg:()=>void,albumID:string, priority?:boolean }) => {
 

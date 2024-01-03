@@ -34,7 +34,8 @@ const PopupMessage = ({ children, show, setShow, ellapseTime,className, callback
     }, ellapseTime);
   };
   return show ? (
-    <div className={`${className} ${styles.showmsg}`}>
+    <div className={`${className}`}>
+      <div className={`${styles.showmsg}`}></div>
       {children}
     </div>
   ) : (
