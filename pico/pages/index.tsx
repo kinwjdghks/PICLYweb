@@ -48,7 +48,7 @@ export default function Home() {
 
 
   return (
-    <div className="(mainpage) w-screen h-max relative bg-black flex flex-col align-middle overflow-hidden">
+    <div className="(mainpage) w-screen h-max relative bg-black flex flex-col align-middle overflow-hidden scrollbar-hide overscroll-y-contain">
       <div className="(content) w-full flex-grow flex flex-col  align-middle items-center
         lg:h-[70vh] lg:flex-row-reverse">
       <Logos />
