@@ -7,7 +7,7 @@ import Modal from "../modal/Modal";
 import { useRouter } from "next/router";
 import { MdArrowBackIos } from "react-icons/md";
 import { page } from "@/pages/Gallery/[userid]";
-import ViewPortAdapter from "./ViewPortAdapter";
+import PageFrame from "./PageFrame";
 
 const DeleteModal = ({deleteAccount,closeModal}:{deleteAccount:()=>void,closeModal:()=>void}):React.ReactNode =>{
 
@@ -87,7 +87,7 @@ const ProfilePage = ({albumCount,close}:{albumCount:number|undefined,close:(page
         }
     }
     
-    return <ViewPortAdapter className={`lg:w-[calc(100%-16rem)] lg:right-0 w-screen min-h-max absolute bg-pico_default flex flex-col ${nanumgothic.className}`}>
+    return <PageFrame className={`lg:w-[calc(100%-16rem)] lg:right-0 w-screen min-h-max absolute bg-pico_default flex flex-col ${nanumgothic.className}`}>
             <div className="w-full lg:p-12 p-8 flex items-center">
                 <MdArrowBackIos className="lg:w-0 w-8 h-8 mr-2" onClick={()=>close('gallery')}/>
                 <h1 className="lg:text-4xl text-3xl font-bold">계정관리</h1>
@@ -115,7 +115,7 @@ const ProfilePage = ({albumCount,close}:{albumCount:number|undefined,close:(page
                 </div>
             </div>
             {isDeleteModalOpen && <Modal><DeleteModal deleteAccount={onDeleteAccount} closeModal={()=>{setIsDeleteModalOpen(false)}}/></Modal>}
-        </ViewPortAdapter>
+        </PageFrame>
 
 }
 

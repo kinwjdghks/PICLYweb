@@ -7,10 +7,10 @@ import { setScreenSize } from "@/lib/functions/screenSize";
 
 export default function App({ Component, pageProps }: AppProps) {
 
-  useEffect(()=>{
-    setScreenSize();
-  });
-  
+  // useEffect(()=>{
+  //   setScreenSize();
+  // });
+
    return (
     <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID!}>
        <Head>
