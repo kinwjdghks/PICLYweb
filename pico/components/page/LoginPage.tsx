@@ -197,7 +197,7 @@ const LoginPage = () => {
 
   const inputClassName = 'w-full h-12 p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black outline-none';
   return (
-    <PageFrame className={`w-screen p-[4rem] pt-20 relative bg-pico_darker flex justify-center ${nanumgothic.className}`}>
+    <PageFrame className={`w-screen p-[4rem] pt-20 relative bg-pico_darker flex justify-center overflow-hidden ${nanumgothic.className}`}>
       <div className="(container) w-full relative flex flex-col items-center">
         <Image src={PiCoLogo} alt="logo" className="w-16 h-16 rotate-12"/>
         
