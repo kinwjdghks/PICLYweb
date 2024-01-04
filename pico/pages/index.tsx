@@ -51,7 +51,7 @@ export default function Home() {
 
 
   return (
-    <div className="(mainpage) w-screen h-max relative bg-black flex flex-col align-middle overflow-hidden scrollbar-hide overscroll-y-none">
+    <div className="(mainpage) w-[100svh] h-max relative bg-black flex flex-col align-middle overflow-hidden scrollbar-hide overscroll-y-none">
       <div className="(content) w-full flex-grow flex flex-col  align-middle items-center
         lg:h-[70vh] lg:flex-row-revers scrollbar-hide overscroll-y-none">
       <Logos />
@@ -65,10 +65,10 @@ export default function Home() {
       <div className="lg: flex flex-row-reverse">
       <ActionBar />
       </div>
-      <div className={`(gradientbox) w-screen h-[25vh] lg:h-[80vh] ${gradient}`}></div>
+      <div className={`(gradientbox) w-[100svh] h-[25vh] lg:h-[80vh] ${gradient}`}></div>
       <div className={`(details) w-full h-max bg-pico_default flex flex-col items-center overflow-auto`} ref={detailsRef}>
-        <div className={`(manual) w-11/12 lg:w-[40rem] h-[90vh] border-solid border-2 border-white box-border rounded-xl mt-16`}></div>
-        <div className={`(manual) w-11/12 lg:w-[40rem] h-[90vh] border-solid border-2 border-white box-border rounded-xl my-16`}></div>
+        <div className={`(manual) w-11/12 lg:w-[40rem] h-[90svh] border-solid border-2 border-white box-border rounded-xl mt-16`}></div>
+        <div className={`(manual) w-11/12 lg:w-[40rem] h-[90svh] border-solid border-2 border-white box-border rounded-xl my-16`}></div>
       </div>
     </div>
   );
