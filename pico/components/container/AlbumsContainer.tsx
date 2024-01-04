@@ -100,7 +100,7 @@ const AlbumsContainer = ({
     <>
       <CopiedAlert showCopyMsg={showCopyMsg} setShowCopyMsg={setShowCopyMsg} />
 
-      <div className={`lg:px-[15%] lg:pt-32 pb-10 lg:gap-4 w-full h-min pt-16 relative grid grid-cols-2 auto-rows-auto overflow-y-scroll `}>
+      <div className={`lg:px-[15%] lg:pt-32 pb-10 lg:gap-4 w-full h-min pt-16 relative grid grid-cols-2 auto-rows-auto overf low-y-scroll `}>
         {!filteredAlbumList ? (
           <Loading />
         ) : (

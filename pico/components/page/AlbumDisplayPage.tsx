@@ -92,7 +92,7 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
   };
   
   return (
-    <PageFrame className={"(AlbumDisplayPage) lg:w-[calc(100%-16rem)] w-screen relative bg-pico_default flex justify-center overfl ow-y-scroll scrol lbar-hide"}>
+    <PageFrame className={"(AlbumDisplayPage) lg:w-[calc(100%-16rem)] w-screen relative bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
       <AlbumsContainer 
         userAlbumList={userAlbumList} 
         tagInput={tagSearchInput} 
