@@ -4,6 +4,7 @@ import { Album } from "@/templates/Album";
 import ReactDOM from "react-dom";
 import PopupMessage from "../modal/PopupMessage";
 import AlertMessage from "../modal/AlertMessage";
+import styles from '@/styles/pullToRefresh.module.css';
 
 const CopiedAlert = ({
   showCopyMsg,
@@ -100,7 +101,7 @@ const AlbumsContainer = ({
     <>
       <CopiedAlert showCopyMsg={showCopyMsg} setShowCopyMsg={setShowCopyMsg} />
 
-      <div className={`lg:px-[15%] lg:pt-32 pb-10 lg:gap-4 w-full h-min pt-16 relative grid grid-cols-2 auto-rows-auto overf low-y-scroll `}>
+      <div className={`${styles.container} lg:px-[15%] lg:pt-32 pb-10 lg:gap-4 w-full h-min pt-16 relative grid grid-cols-2 auto-rows-auto overf low-y-scroll `}>
         {!filteredAlbumList ? (
           <Loading />
         ) : (

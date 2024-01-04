@@ -48,9 +48,9 @@ export default function Home() {
 
 
   return (
-    <div className="(mainpage) w-screen h-max relative bg-black flex flex-col align-middle overflow-hidden scrollbar-hide overscroll-y-contain">
+    <div className="(mainpage) w-screen h-max relative bg-black flex flex-col align-middle overflow-hidden scrollbar-hide overscroll-y-none">
       <div className="(content) w-full flex-grow flex flex-col  align-middle items-center
-        lg:h-[70vh] lg:flex-row-reverse">
+        lg:h-[70vh] lg:flex-row-revers scrollbar-hide overscroll-y-none">
       <Logos />
        
       <div className={`(container) lg:w-1/2 w-full h-full p-12 pt-20 text-left ${nanumgothic.className}`}>
