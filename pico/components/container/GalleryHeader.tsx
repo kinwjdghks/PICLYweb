@@ -4,7 +4,10 @@ import { FaSearch } from "react-icons/fa";
 import { HiOutlineMenu } from "react-icons/hi";
 import { RiImageAddFill } from "react-icons/ri";
 
+export const HEADER_HEIGHT = `lg:h-[5rem] h-[4rem]`;
 const GalleryHeader = ({ onChange, onModalOpen }: {onChange: (input: string) => void, onModalOpen: () => void }) => {
+  
+
   const SearchButton = (): ReactNode => {
     //useState
     const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
@@ -38,7 +41,7 @@ const GalleryHeader = ({ onChange, onModalOpen }: {onChange: (input: string) => 
   };
 
   return (
-    <div className="w-[inherit] lg:h-20 h-16 px-2 lg:px-[calc(15%-2rem)] fixed bg-pico_default flex items-center place-content-between">
+    <div className={`w-[inherit] ${HEADER_HEIGHT} px-2 lg:px-[calc(15%-2rem)] fixed bg-pico_default flex items-center place-content-between`}>
       <div className={`lg:invisible w-max h-max pl-4  ${poppins.className} lg:text-[2.5rem] text-3xl font-[600] `}>
         PiCo
       </div>

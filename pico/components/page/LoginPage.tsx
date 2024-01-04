@@ -14,7 +14,7 @@ import { FirebaseError } from "firebase/app";
 import { GoogleLogin } from '@react-oauth/google';
 import PageFrame from "./PageFrame";
 import EmailLoginForm from "../form/EmailLoginForm";
-
+import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 
 export const logout = async () =>{
   console.log('logged out');
@@ -53,7 +53,14 @@ const LoginPage = () => {
     logout();
   },[]);
 
+  useEffect(()=>{
+    lockScroll();
+    return () => openScroll();
+  },[]);
+
   //functions
+  const { lockScroll, openScroll } = useBodyScrollLock();
+
   const clearInput = () =>{
     if(emailRef.current) emailRef.current.value = '';
     if(pwRef.current) pwRef.current.value = '';
