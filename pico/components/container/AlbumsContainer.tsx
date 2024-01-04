@@ -115,8 +115,7 @@ const AlbumsContainer = ({
                   selectAlbum={selectAlbum}
                   alertCopyMsg={() => {
                     setShowCopyMsg(true);
-                  }}
-                />
+                  }}/>
               ))}
           </>
         )}
