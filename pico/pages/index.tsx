@@ -4,8 +4,7 @@ import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import { useRouter } from "next/router";
 import { poppins } from "@/public/assets/fonts/poppins";
 import { IoIosArrowDropright } from "react-icons/io";
-import { useEffect, useRef } from "react";
-import { useBodyScrollLock } from "@/lib/functions/scrollLock";
+import { useRef } from "react";
 
 const Logos = () => {
   return (
@@ -28,14 +27,8 @@ const Logos = () => {
 export default function Home() {
   //useRef
   const detailsRef = useRef<HTMLDivElement|null>(null);
-  
-  //useEffects
-  useEffect(()=>{
-    lockScroll();
-    return () => openScroll();
-  },[]);
+
   //functions
-  const { lockScroll, openScroll } = useBodyScrollLock();
   
   const ActionBar = () => {
     const router = useRouter();
