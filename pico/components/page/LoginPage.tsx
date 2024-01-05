@@ -15,6 +15,8 @@ import { GoogleLogin } from '@react-oauth/google';
 import PageFrame from "./PageFrame";
 import EmailLoginForm from "../form/EmailLoginForm";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { signIn } from 'next-auth/react';
 
 export const logout = async () =>{
   console.log('logged out');
@@ -116,8 +118,6 @@ const LoginPage = () => {
     let userInfo:DocumentSnapshot;
     let user;
 
-    
-
   try {
     const userCredential = await signInWithEmailAndPassword(auth, id!, pw!);
     user = userCredential.user;
@@ -204,7 +204,7 @@ const LoginPage = () => {
 
   const inputClassName = 'w-full h-12 p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black outline-none';
   return (
-    <PageFrame className={`w-screen p-[4rem] pt-20 relative bg-pico_darker flex justify-center overflow-hidden ${nanumgothic.className}`}>
+    <PageFrame className={`w-screen lg:px-[36rem] p-[4rem] pt-20 relative bg-pico_darker flex justify-center overflow-hidden ${nanumgothic.className}`}>
       <div className="(container) w-full relative flex flex-col items-center">
         <Image src={PiCoLogo} alt="logo" className="w-16 h-16 rotate-12"/>
         
@@ -216,27 +216,33 @@ const LoginPage = () => {
           logInEmail={logInEmail}
           isRegistering={isRegistering}/>
         
-        <p className="h-7 m-2 text-lg">{msg}</p>
+        <p className="h-7 m-2 text-md">{msg}</p>
+
         <div className="(options) w-full flex-grow flex flex-col items-center ">
+
           <button className={`${inputClassName} border-[1px] text-white hover:bg-white hover:text-black`} 
-            onClick={isRegistering ? register_Email : logInEmail}>{isRegistering ? '가입하기':'로그인'}</button>
+            onClick={isRegistering ? register_Email : logInEmail}>{isRegistering ? '가입하기':'로그인'}
+          </button>
           <p className="mt-4">또는</p>
-          <div className="flex h-max w-full  mt-4 items-center">
-            {/* <FcGoogle className="w-12 h-12 mx-2"/> */}
-            {/* <button className={`${inputClassName} m-0 text-white hover:bg-white hover:text-black`} 
-              onClick={logInGoogle}>구글로 계속하기
-            </button> */}
-            <span className="w-full text-center">
+          
+          <div className="flex h-max w-full mt-4 items-center">
+            <FcGoogle className="w-12 h-12 mx-2"/>
+            <button className={`${inputClassName} border-[1px] m-0 text-white hover:bg-white hover:text-black`}
+              onClick={()=>signIn('google')}>구글로 계속하기
+            </button>
+            {/* <span className="w-full text-center">
+            <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID!}>
               <GoogleLogin
                 onSuccess={credentialResponse => {
                   console.log(credentialResponse)
                 }}
                 onError={() => {
                   console.log('Login Failed')
-                }}
-              />
-            </span>
+                }}/>
+              </GoogleOAuthProvider>
+            </span> */}
           </div>
+
         </div>    
         <div className="flex flex-col mt-auto">
           <button onClick={()=>{}} className="text-center hover:underline underline-offset-8 items-center text-1 lead ing-9 opacity-30 cursor-default">비밀번호 찾기</button>
