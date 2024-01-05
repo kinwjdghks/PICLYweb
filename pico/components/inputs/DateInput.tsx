@@ -15,9 +15,6 @@ type DateInputProps = {
 
 const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateInputProps): ReactNode => {
   
-  //useState
-  const [infoOpen, setInfoOpen] = useState<boolean>(false);
-  
   //useRef
   const dateInputRef = useRef<HTMLInputElement>(null);
   const timeInputRef = useRef<HTMLInputElement>(null);
@@ -109,17 +106,6 @@ const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateI
             step={60}
             onChange={handleTimeChange}
             ref={timeInputRef}/>
-          <div className="relative">
-            <IoMdInformationCircleOutline
-              className="w-6 h-6"
-              onMouseOver={() => setInfoOpen(true)}
-              onMouseOut={() => setInfoOpen(false)}/>
-            {infoOpen && (
-              <p className="absolute lg:-translate-y-2 w-max lg:left-12 lg:top-0 right-0 translate-y-1/2 bg-pico_darker p-2 rounded-lg">
-                앨범 기본 마감기한은 7일입니다.
-              </p>
-          )}
-          </div>
         </div>
         <p className="h-12 text-center p-2  justify-center">
           {dateDiff > 0 && dueMsg}

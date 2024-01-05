@@ -30,7 +30,7 @@ const NewAlbumModal = ({
   const [imgFiles, setImgFiles] = useState<File[]>([]);
   const [tagList, setTagList] = useState<string[]>([]);
   const [dueDate, setDueDate] = useState<Date>(oneWeekLaterFromNow);
-  const [dateDiff, setDateDiff] = useState<number>(0); //분단위
+  const [dateDiff, setDateDiff] = useState<number>(60*24*7); //분단위
 
   //states
   const [errorNo,setErrorNo] = useState<Error>('');
