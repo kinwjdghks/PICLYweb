@@ -26,6 +26,10 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
   const [displayingAlbum,setDisplayingAlbum] = useState<Album|undefined>(undefined);
+  const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
+
+  //useRef
+  const inputRef = useRef<HTMLInputElement>(null);
 
   //router
   const router = useRouter();
@@ -61,6 +65,16 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
     else openScroll();
   },[displayingAlbum,newAlbumModalopen]);
 
+  useEffect(() => {
+    if (isInputOpen === false) {
+      if (inputRef.current) {
+        inputRef.current.blur();
+        inputRef.current.value = "";
+        setTagSearchInput("");
+      }
+    }
+  }, [isInputOpen]);
+
   //functions
   const { lockScroll, openScroll } = useBodyScrollLock();
 
@@ -92,17 +106,26 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
   };
   
   return (
-    <PageFrame className={"(AlbumDisplayPage) lg:w-[calc(100%-16rem)] w-screen relative bg-pico_default flex justify-center overflow-y-scroll scrollbar-hide"}>
+    <PageFrame className={"(AlbumDisplayPage) lg:w-[calc(100%-16rem)] w-screen relative bg-pico_default flex overflow-y-scroll scrollbar-hide"}>
       <AlbumsContainer 
         userAlbumList={userAlbumList} 
         tagInput={tagSearchInput} 
         selectAlbum={setDisplayingAlbum} />
         
       <GalleryHeader
-        onChange={(input:string)=>setTagSearchInput(input)} 
+        setIsInputOpen={setIsInputOpen} 
         onModalOpen={()=>setNewAlbumModalopen(true)} />
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)} refreshWithNewAlbum={addNewAlbum}/>}
       
+      <input
+          type="text"
+          className={`fixed lg:h-12 h-10 lg:top-4 top-3 lg:right-[calc(15%+8rem)] right-14 rounded-lg text-black lg:text-xl text-md outline-none transition-all duration-300 z-[100] ${
+            isInputOpen ? "lg:w-80 w-[calc(100%-10rem)] pl-2 border-2" : "w-0 pl-0 border-0"
+          } `}
+          onChange={(e) => setTagSearchInput(e.target.value)}
+          ref={inputRef}
+          placeholder={isInputOpen ? "#태그 검색" : ""}/>
+
       {displayingAlbum 
         && <Modal>
           <>
