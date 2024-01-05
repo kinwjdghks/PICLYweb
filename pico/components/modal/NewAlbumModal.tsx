@@ -1,15 +1,17 @@
-import { useState, useRef, useEffect, ReactNode, Dispatch, SetStateAction } from "react";
+import { useState, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsSendFill } from "react-icons/bs";
 import { auth } from "@/lib/firebase/firebase";
-import { Album } from "@/templates/Album";
+import { Album, imageSize } from "@/templates/Album";
 import { createAlbum } from "@/lib/functions/firebaseCRUD";
 import DateInput from "../inputs/DateInput";
 import ImageInput from "../inputs/ImageInput";
 import TagInput from "../inputs/TagInput";
 import ErrorModal, { Error } from "./ErrorModal";
 import { checkDateInputValid } from "@/lib/functions/dateFunctions";
+import { imageCompressGetFile } from "@/lib/functions/imageCompress";
+import { getImagetWidthandHeight } from "@/lib/functions/imageWidthHeight";
 
 //data limits
 export const MAX_IMAGE_NUM = 5;
@@ -60,7 +62,33 @@ const NewAlbumModal = ({
   
   const createAlbumHandler = async () => {
     setIsLoading(true);
-    const createdAlbum = await createAlbum(auth.currentUser!.uid,dueDate,tagList,imgFiles);
+    //compress images here.
+    let compressedFiles:File[] = [];
+    try {
+      // Create an array of promises for uploading image files
+      const uploadPromises = imgFiles.map(async (imgFile, i) => {
+        //compress uploading image.
+        const compressedFile = await imageCompressGetFile(0.5,1920,imgFile);
+        if(!compressedFile){
+          console.log('compression error');
+          return null;
+        }
+        return compressedFile;
+      });
+      // Wait for all uploads to complete
+      const DangerouslycompressedFiles:(File | null)[] = await Promise.all(uploadPromises);
+      compressedFiles.push(...DangerouslycompressedFiles.filter(url => url !== null) as File[]);
+    } catch (error) {
+      console.error('Error uploading images:', error);
+    }
+    //get sizes of images here.
+    let imageSizes:imageSize[] = compressedFiles.map((image)=> getImagetWidthandHeight(image));
+    imageSizes = imageSizes.map((size) => {
+      if(size) return size;
+      else return {width:0, height:0}
+    });
+    
+    const createdAlbum = await createAlbum(auth.currentUser!.uid,dueDate,tagList,compressedFiles,imageSizes);
     setIsLoading(false);
 
     if (!createdAlbum) {

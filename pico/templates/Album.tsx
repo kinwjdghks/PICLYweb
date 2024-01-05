@@ -1,5 +1,8 @@
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 
+export type imageSize  = {width:number, height:number};
+export type imageDetail = {file:File}&imageSize;
+
 export enum AlbumProps {
   albumID = "albumID",
   ownerID = "ownerID",
@@ -10,6 +13,7 @@ export enum AlbumProps {
   imageURLs = "imageURLs",
   imageCount = "imageCount",
   viewCount = "viewCount",
+  imageSizes = "imageSizes",
 }
 
 export interface Album {
@@ -22,6 +26,7 @@ export interface Album {
   imageURLs: string[];
   imageCount: number;
   viewCount: number;
+  imageSizes: imageSize[];
 }
 
 export type AlbumData =
@@ -39,6 +44,7 @@ export class Album {
   public imageURLs: string[];
   public imageCount: number;
   public viewCount: number;
+  public imageSizes: imageSize[];
 
   constructor(album: AlbumData) {
     if (album instanceof DocumentSnapshot) {
@@ -52,6 +58,7 @@ export class Album {
       this.imageURLs = album.get(AlbumProps.imageURLs) ?? [];
       this.imageCount = album.get(AlbumProps.imageCount) ?? 0;
       this.viewCount = album.get(AlbumProps.viewCount) ?? 0;
+      this.imageSizes = album.get(AlbumProps.imageSizes) ?? [];
     } else if (album.creationTime instanceof Date) { // This is a simplistic check to determine if it's an Album type
       // Handle Album
       this.albumID = album.albumID;
@@ -63,6 +70,7 @@ export class Album {
       this.imageURLs = album.imageURLs;
       this.imageCount = album.imageCount;
       this.viewCount = album.viewCount;
+      this.imageSizes = album.imageSizes;
     } else {
       this.albumID = album.albumID ?? '';
       this.ownerID = album.ownerID ?? '';
@@ -73,6 +81,7 @@ export class Album {
       this.imageURLs = album.imageURLs ?? [];
       this.imageCount = album.imageCount ?? 0;
       this.viewCount = album.viewCount ?? 0;
+      this.imageSizes = album.imageSizes ?? [];
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Album, AlbumProps } from "@/templates/Album";
+import { Album, AlbumProps, imageSize } from "@/templates/Album";
 import { db, storage } from "../firebase/firebase";
 import { DocumentData, DocumentSnapshot, addDoc, collection, deleteDoc, doc,getDoc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -65,7 +65,7 @@ export const getAllAlbumsByID = async (uid:string) =>{
 }
 
   // Create functions
-export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],imgfiles:File[]): Promise<Album|undefined> =>{
+export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],imgFiles:File[],imageSizes:imageSize[]): Promise<Album|undefined> =>{
   //create album and post
   let album:Album = {
       albumID:'',
@@ -75,8 +75,9 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
       tags: tags,
       thumbnailURL:'',
       imageURLs:[],
-      imageCount:imgfiles.length,
-      viewCount: 0
+      imageCount:imgFiles.length,
+      viewCount: 0,
+      imageSizes: imageSizes,
   };
   let albumID:string;
   try{
@@ -94,7 +95,7 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
     contentType: 'image/jpeg',
   };
   try{
-    const thumbnail = await imageCompressGetFile(0.5,1920,imgfiles[0]);
+    const thumbnail = await imageCompressGetFile(0.3,1920,imgFiles[0]);
     await uploadBytes(thumbnailRef,thumbnail!,metadata);
     thumbnailURL = await getDownloadURL(thumbnailRef);
   }catch(error){
@@ -105,26 +106,21 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
   const imageURLs:string[] = [];
   try {
     // Create an array of promises for uploading image files
-    const uploadPromises = imgfiles.map(async (imgFile, i) => {
-      //compress uploading image.
-      const compressedFile = await imageCompressGetFile(0.5,1920,imgFile);
-      if(!compressedFile){
-        console.log('compression error');
-        return null;
-      }
+    const uploadPromises = imgFiles.map(async (imgFile, i) => {
+      if(imgFile == null) return null;
       const fileName = `${albumID}/${i}.jpeg`; // Generate a unique file name
       const imageRef = getStorageRef(fileName);
-      await uploadBytes(imageRef, compressedFile, metadata);
+      await uploadBytes(imageRef, imgFile, metadata);
       const imageURL = await getDownloadURL(imageRef);
       return imageURL;
     });
     // Wait for all uploads to complete
-    const compressedFiles:(string | null)[] = await Promise.all(uploadPromises);
-    imageURLs.push(...compressedFiles.filter(url => url !== null) as string[]);
+    const imgURLs:(string | null)[] = await Promise.all(uploadPromises);
+    imageURLs.push(...imgURLs.filter(url => url !== null) as string[]);
   } catch (error) {
     console.error('Error uploading images:', error);
-  } finally {
-    const tempImagesURL = imgfiles.map((image)=>URL.createObjectURL(image));
+  }
+    const tempImagesURL = imgFiles.map((image)=>URL.createObjectURL(image));
     // console.log(imageURLs);
     await updateDoc(getDocRef(CollectionName.albums,albumID),{
       albumID:albumID,
@@ -137,7 +133,6 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
       imageURLs: tempImagesURL
     };
     return album;
-  }
 }
 
 // Delete functions

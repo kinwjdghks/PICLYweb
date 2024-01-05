@@ -10,6 +10,11 @@ type ImageInputProps = {
   setErrorNo: Dispatch<SetStateAction<Error>>;
 };
 
+export const checkImageInputValid = (imgFiles:File[]):boolean =>{
+  if(imgFiles.length>0) return true;
+  else return false;
+}
+
 const ImageInput = ({imgFiles, setImgFiles, setErrorNo}: ImageInputProps): ReactNode => {
   const scrollImgRef = useRef<HTMLDivElement>(null);
   //useEffect

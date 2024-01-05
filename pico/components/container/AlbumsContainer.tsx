@@ -5,7 +5,6 @@ import ReactDOM from "react-dom";
 import PopupMessage from "../modal/PopupMessage";
 import AlertMessage from "../modal/AlertMessage";
 import styles from '@/styles/pullToRefresh.module.css';
-import { HEADER_HEIGHT } from "./GalleryHeader";
 
 const CopiedAlert = ({
   showCopyMsg,
