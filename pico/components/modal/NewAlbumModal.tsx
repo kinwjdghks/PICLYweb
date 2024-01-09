@@ -11,11 +11,11 @@ import TagInput from "../inputs/TagInput";
 import ErrorModal, { Error } from "./ErrorModal";
 import { checkDateInputValid } from "@/lib/functions/dateFunctions";
 import { imageCompressGetFile } from "@/lib/functions/imageCompress";
-import { getImagetWidthandHeight } from "@/lib/functions/imageWidthHeight";
+import { getImageWidthandHeight } from "@/lib/functions/imageWidthHeight";
 
 //data limits
-export const MAX_IMAGE_NUM = 5;
-export const MAX_TAG_NUM = 5;
+export const MAX_IMAGE_NUM = 10;
+export const MAX_TAG_NUM = 10 ;
 
 const NewAlbumModal = ({
   close,
@@ -82,11 +82,9 @@ const NewAlbumModal = ({
       console.error('Error uploading images:', error);
     }
     //get sizes of images here.
-    let imageSizes:imageSize[] = compressedFiles.map((image)=> getImagetWidthandHeight(image));
-    imageSizes = imageSizes.map((size) => {
-      if(size) return size;
-      else return {width:0, height:0}
-    });
+    const  imageSizesPromises = compressedFiles.map((image) => getImageWidthandHeight(image));
+    const imageSizes = await Promise.all(imageSizesPromises);
+    // const imageSizes:imageSize[] = [];
     
     const createdAlbum = await createAlbum(auth.currentUser!.uid,dueDate,tagList,compressedFiles,imageSizes);
     setIsLoading(false);
@@ -118,7 +116,7 @@ const NewAlbumModal = ({
           </button>
         )}
         {isLoading && (
-          <AiOutlineLoading3Quarters className="w-10 h-10 absolute right-0 top-0 m-6 lg:fill-black animate-spin" />
+          <AiOutlineLoading3Quarters className="w-10 h-10 absolute right-0 top-0 m-6 animate-spin" />
         )}
         
         <ErrorModal

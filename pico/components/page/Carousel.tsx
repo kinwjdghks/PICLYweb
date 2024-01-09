@@ -35,8 +35,12 @@ const Indicators = ({
 
   
   return (
-  <div className="w-min h-min fixed left-1/2 -translate-x-1/2 bottom-5 flex gap-3 justify-center">
-    {...indicators}
+  <div className="(mask) fixed bottom-5 lg:w-min w-[224px] h-min left-1/2 -translate-x-1/2 overflow-hidden">
+    <div className="w-min h-min flex gap-3 justify-center transition-all duration-[250ms]"
+    style={{transform: steps<6 ? `translate(${118 - 22 * steps}px,0)` : `translate(${activeIndex <= 1 ? 8 : activeIndex >= steps-2 ? -44 * (steps -3) + 96 :  -44 * activeIndex + 96 }px, 0px)` }}
+    >
+      {...indicators}
+    </div>
   </div>);
 };
 

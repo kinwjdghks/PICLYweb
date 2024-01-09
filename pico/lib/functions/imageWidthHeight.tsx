@@ -1,26 +1,20 @@
 import { imageSize } from "@/templates/Album";
 
-// export const getImagetWidthandHeight = (file: File):imageSize => {
-//     console.log(file);
-//     const reader = new FileReader();
-//     reader.readAsDataURL(file); 
-    
-//     reader.onload = function(e) {
-//         const img = new Image();
-//         img.src = (e.target as FileReader).result as string;
-
-//         img.onload = function() {
-//             // Directly use img.width and img.height
-//             const width = img.width;
-//             const height = img.height;
-//             return {width:width, height:height};
-//         };
-//     };
-//     return {width:0,height:0};
-// };
-
-export const getImagetWidthandHeight = (file:File):imageSize =>{
+export const getImageWidthandHeight = (file: File): Promise<imageSize> => {
+  return new Promise((resolve, reject) => {
     const img = new Image();
+
+    // Set up an onload handler to resolve the promise once the image loads
+    img.onload = () => {
+      resolve({ width: img.width, height: img.height });
+    };
+
+    // Set up an onerror handler to reject the promise if there's an error loading the image
+    img.onerror = () => {
+      reject(new Error('Failed to load image'));
+    };
+
+    // Start loading the image
     img.src = URL.createObjectURL(file);
-    return {width:img.width,height:img.height}
-}
+  });
+};
