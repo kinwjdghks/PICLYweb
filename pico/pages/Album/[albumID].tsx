@@ -5,7 +5,10 @@ import { Album } from "@/templates/Album";
 import LoadingPage from "@/components/page/LoadingPage";
 import dynamic from "next/dynamic";
 import { getAlbumByID } from "@/lib/functions/firebaseCRUD";
+import type { Metadata, ResolvingMetadata } from 'next'
 const PicoCarousel = dynamic(()=>import('@/components/page/Carousel'));
+
+
 
 const ImageView = ({ album }: { album: Album|null }) => {
   console.log(album);
@@ -50,6 +53,27 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
 }
 
 export default ImageView;
+
+export async function generateMetadata({ params }: {params: {albumID: string}}){
+ 
+  let album:Album | undefined;
+  try {
+    album = await getAlbumByID(params.albumID);
+  }catch(error){
+    console.log(error);
+  }
+
+  if(album) return {
+    title: "PiCo Photo Sharing",
+    openGraph: {
+      images: album?.thumbnailURL
+    }
+  };
+
+  else return {
+    title: "PiCo Photo Sharing"
+  }
+}
 
 
 //CSR

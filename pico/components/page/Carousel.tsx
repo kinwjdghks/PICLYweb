@@ -24,6 +24,13 @@ const Indicators = ({
   activeIndex: number;
   onClickHandler: (newIndex: number) => void;
 }) => {
+
+  const [clientSide,setClientSide] = useState<boolean>(false);
+
+  useEffect(()=>{
+    if(window != null) setClientSide(true);
+  })
+
   const indicators = [];
   for(let i=0;i<steps;i++){
     indicators.push(
@@ -32,12 +39,11 @@ const Indicators = ({
       onClick={() => onClickHandler(i)}></span>
     );
   }
-
   
   return (
   <div className="(mask) fixed bottom-5 lg:w-min w-[224px] h-min left-1/2 -translate-x-1/2 overflow-hidden">
-    <div className="w-min h-min flex gap-3 justify-center transition-all duration-[250ms]"
-    style={{transform: steps<6 ? `translate(${118 - 22 * steps}px,0)` : `translate(${activeIndex <= 1 ? 8 : activeIndex >= steps-2 ? -44 * (steps -3) + 96 :  -44 * activeIndex + 96 }px, 0px)` }}
+    <div className={`w-min h-min flex gap-3 justify-center transition-all duration-[250ms]`}
+    style={{transform: clientSide && window.matchMedia("screen and (min-width: 1024px)").matches ? 'translate(0,0)' : steps<6 ? `translate(${118 - 22 * steps}px,0)` : `translate(${activeIndex <= 1 ? 8 : activeIndex >= steps-2 ? -44 * (steps -3) + 96 :  -44 * activeIndex + 96 }px, 0px)` }}
     >
       {...indicators}
     </div>
