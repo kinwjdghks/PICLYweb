@@ -6,12 +6,20 @@ import dynamic from "next/dynamic";
 import { getAlbumByID } from "@/lib/functions/firebaseCRUD";
 import FallbackPage from "@/components/page/FallbackPage";
 import ExpiredPage from "@/components/page/ExpiredPage";
+import { useBodyScrollLock } from "@/lib/functions/scrollLock";
+import { useEffect } from "react";
 const PicoCarousel = dynamic(()=>import('@/components/page/Carousel'));
 
 
 
 const ImageView = ({ album, valid }: { album: Album|null, valid:boolean }) => {
   
+  const { lockScroll, openScroll } = useBodyScrollLock();
+
+  useEffect(()=>{
+    lockScroll();
+  },[]);
+
   if(!valid) return  <FallbackPage/>
   else if(!album) return <ExpiredPage/>
 
@@ -71,7 +79,7 @@ export async function generateMetadata({ params }: {params: {albumID: string}}){
     console.log(error);
   }
 
-  if(album) return {
+  if(album && new Date(album.expireTime).getTime() > new Date().getTime()) return {
     title: "PiCo Photo Sharing",
     openGraph: {
       images: album?.thumbnailURL
