@@ -10,12 +10,10 @@ const PicoCarousel = dynamic(()=>import('@/components/page/Carousel'));
 
 
 
-const ImageView = ({ album }: { album: Album|null }) => {
-  console.log(album);
-  console.log(album?.expireTime);
-  console.log(new Date());
-  if(!album) return  <FallbackPage/>
-    else if(new Date(album!.expireTime).getTime() < new Date().getTime()) return <ExpiredPage/>
+const ImageView = ({ album, valid }: { album: Album|null, valid:boolean }) => {
+  
+  if(!valid) return  <FallbackPage/>
+  else if(!album) return <ExpiredPage/>
 
   return (
     <div className="(background) w-screen h-screen absolute bg-black">
@@ -31,7 +29,7 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
   try {
     const album_: Album | undefined = await getAlbumByID(albumID);
     
-    if (album_) {
+    if (album_){
       const album:Album = {
         albumID : album_.albumID,
         ownerID : album_.ownerID,
@@ -44,11 +42,18 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
         viewCount : album_.viewCount || 0,
         imageSizes: album_.imageSizes || [],
       }
-      return {
-        props: { album } ,
-      };
+      // console.log(new Date(album_.expireTime).getTime());
+      // console.log(new Date().getTime());
+      if(new Date(album_.expireTime).getTime() > new Date().getTime()){
+        return {
+          props: { album:album, valid:true } ,
+        };
+      }
+      else return {
+        props: { album:null, valid:true } ,
+      }
     }
-    else return { props: { album: null } }
+    else return { props: { album: null, valid: false } }
   } catch (error) {
     console.error("Error fetching album:", error);
     return { props: { album: null } };
