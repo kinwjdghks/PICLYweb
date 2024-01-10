@@ -42,7 +42,7 @@ const Indicators = ({
   
   return (
   <div className="(mask) fixed bottom-5 lg:w-min w-[224px] h-min left-1/2 -translate-x-1/2 overflow-hidden">
-    <div className={`w-min h-min flex gap-3 justify-center transition-all duration-[250ms]`}
+    <div className={`w-min h-min flex gap-3 justify-center lg:transition-none transition-all duration-[250ms]`}
     style={{transform: clientSide && window.matchMedia("screen and (min-width: 1024px)").matches ? 'translate(0,0)' : steps<6 ? `translate(${118 - 22 * steps}px,0)` : `translate(${activeIndex <= 1 ? 8 : activeIndex >= steps-2 ? -44 * (steps -3) + 96 :  -44 * activeIndex + 96 }px, 0px)` }}
     >
       {...indicators}
@@ -110,7 +110,6 @@ const Carousel = ({album}:{album:Album})=> {
   timerRef.current = setTimeout(() => {
     if (screenRef.current) {
       const screenWidth = screenRef.current.clientWidth;
-      // console.log(Math.round(screenRef.current.scrollLeft/screenWidth));
       setActiveIndex(Math.round(screenRef.current.scrollLeft/screenWidth));
       }      
     }, 50); 

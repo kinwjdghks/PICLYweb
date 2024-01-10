@@ -77,7 +77,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
       {!user && (
         <Link
           href={"/"}
-          className="w-max h-max font-bold text-2xl"
+          className="w-max h-max font-bold lg:text-4xl text-2xl"
           onClick={resetAlbum}>
           PiCo
         </Link>)}

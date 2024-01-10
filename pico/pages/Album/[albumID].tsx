@@ -2,17 +2,20 @@
 
 import Actionbar from "@/components/actions/ActionBar";
 import { Album } from "@/templates/Album";
-import LoadingPage from "@/components/page/LoadingPage";
 import dynamic from "next/dynamic";
 import { getAlbumByID } from "@/lib/functions/firebaseCRUD";
-import type { Metadata, ResolvingMetadata } from 'next'
+import FallbackPage from "@/components/page/FallbackPage";
+import ExpiredPage from "@/components/page/ExpiredPage";
 const PicoCarousel = dynamic(()=>import('@/components/page/Carousel'));
 
 
 
 const ImageView = ({ album }: { album: Album|null }) => {
   console.log(album);
-  if(!album) return <LoadingPage/>
+  console.log(album?.expireTime);
+  console.log(new Date());
+  if(!album) return  <FallbackPage/>
+    else if(new Date(album!.expireTime).getTime() < new Date().getTime()) return <ExpiredPage/>
 
   return (
     <div className="(background) w-screen h-screen absolute bg-black">
