@@ -11,7 +11,7 @@ type EmailLoginFormProps = {
 
 const EmailLoginForm = ({emailRef,pwRef,pwcRef,setMsg,logInEmail,isRegistering}:EmailLoginFormProps): ReactNode => {
   const inputClassName =
-    "w-full h-12 p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black outline-none";
+    "w-full h-12 p-2 px-4 my-1 border-pico_lighter box-border rounded-md text-black outline-none";
 
   return (
     <form className="w-full h-max mt-10">
