@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ["firebasestorage.googleapis.com"],
+    minimumCacheTTL: 31536000,
   },
   eslint: {
     ignoreDuringBuilds: true,

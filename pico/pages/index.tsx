@@ -67,7 +67,8 @@ export default function Home() {
         <Image
         className={`w-28 h-28 mt-16 lg:hidden rotate-12`}
         alt="logo"
-        src={logo_big_bright}/>
+        src={logo_big_bright}
+        priority={true}/>
         
         <div className={`(container) lg:w-1/2 w-full lg:px-12 flex flex-col text-left`}>
         <div className="lg:h-[400px] flex flex-col justify-between">
@@ -93,14 +94,14 @@ export default function Home() {
           <div className="relative overflow-hidden w-full left-1/4">
             <div className={`absolute ${poppins.className} font-bold text-3xl top-[70px] left-[50px]`}>Pico</div>
 
-            <Image src={flatIphone} alt="Iphone" width={0} height={0} className="w-[439px] h-[451px]"/>
+            <Image src={flatIphone} alt="Iphone" width={0} height={0} className="w-[439px] h-[451px]" priority={true}/>
             <Image src={catAlbum} alt="catAlbum" width={0} height={0} className="absolute top-[120px] left-[35px] w-[170px]"
-              style={{top:scrollpos < firstPageEnd ? 230 : Math.max(230 - (scrollpos -firstPageEnd)/30,120) }}/>
+              style={{top:scrollpos < firstPageEnd ? 230 : Math.max(230 - (scrollpos -firstPageEnd)/30,120) }} priority={true}/>
             <Image src={emptyAlbum} alt="emptyAlbum" width={0} height={0} className={`absolute top-[350px] left-[35px] w-[170px]`}
-              style={{top:scrollpos < firstPageEnd ? 230 + 230 : Math.max(230 + 230 - (scrollpos -firstPageEnd)/30,350)}}/>
-            <Image src={emptyAlbum} alt="emptyAlbum" width={0} height={0} className={`absolute top-[350px] left-[220px] w-[170px]`}/>
+              style={{top:scrollpos < firstPageEnd ? 230 + 230 : Math.max(230 + 230 - (scrollpos -firstPageEnd)/30,350)}} priority={true}/>
+            <Image src={emptyAlbum} alt="emptyAlbum" width={0} height={0} className={`absolute top-[350px] left-[220px] w-[170px]`} priority={true}/>
             <Image src={racoonAlbum} alt="racoonAlbum" width={0} height={0} className="absolute top-[120px] left-[220px] w-[170px]"
-              style={{width: scrollpos < firstPageEnd ? 170 :  Math.min(170 + (scrollpos -firstPageEnd)/30,250)}}/>
+              style={{width: scrollpos < firstPageEnd ? 170 :  Math.min(170 + (scrollpos -firstPageEnd)/30,250)}} priority={true}/>
           </div>
         </div>}
         {(firstPageEnd < scrollpos && scrollpos < secondPageEnd) &&  <div className={`lg:w-1/2 lg:h-full flex items-center opacity-0 ${styles.__onBoarding__appear} `}>
@@ -124,7 +125,7 @@ export default function Home() {
           <div className="relative items-center">
           <Image className="w-[500px] h-[500px]" src={onBoarding2Image} alt="onBoarding2" width={0} height={0} priority={true}/>
           {(secondPageEnd + startOffset < scrollpos && scrollpos < thirdPageEnd - startOffset) &&
-          <Image className={`absolute top-[250px] left-[155px] w-[190px]  ${styles.__onBoarding__msg_toast}`} src={copyToast} alt="copyToast"/>}
+          <Image className={`absolute top-[250px] left-[155px] w-[190px]  ${styles.__onBoarding__msg_toast}`} src={copyToast} alt="copyToast" />}
           </div>
         </div>
         
