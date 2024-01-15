@@ -69,19 +69,21 @@ export default function Home() {
         alt="logo"
         src={logo_big_bright}/>
         
-        <div className={`(container) lg:w-1/2 w-full h-full p-12 lg:pt-44 lg:pb-36 flex flex-col text-left`}>
+        <div className={`(container) lg:w-1/2 w-full lg:px-12 flex flex-col text-left`}>
+        <div className="lg:h-[400px] flex flex-col justify-between">
           <h1 className={`text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>PiCo</h1>
           <h2 className="text-xl lg:text-3xl">손쉬운 익명 사진 공유</h2>
           
-          <div className="(action) w-full h-max flex flex-col mb-12 lg:p-0 pt-12 gap-2 mt-auto lg:items-start scrollbar-hide">
+          <div className="(action) w-full h-max flex flex-col lg:p-0 gap-2 mt-auto lg:items-start scrollbar-hide">
         
           <div className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
             onClick={() =>router.push("/Login")}>로그인
           <IoIosArrowDropright className="mx-2"/></div>
 
-          <div className={`w-fit lg:my-4 mb-2 flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`} 
+          <div className={`w-fit lg:mt-4 flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`} 
             onClick={() => window.scrollTo(0,firstPageEnd+1)}>더 알아보기
           <IoIosArrowDropdown className="mx-2"/></div>
+        </div>
       </div>
         </div>
       </div>}
@@ -101,18 +103,22 @@ export default function Home() {
               style={{width: scrollpos < firstPageEnd ? 170 :  Math.min(170 + (scrollpos -firstPageEnd)/30,250)}}/>
           </div>
         </div>}
-        {(firstPageEnd < scrollpos && scrollpos < secondPageEnd) &&  <div className={`lg:w-1/2 lg:h-[350px] lg:px-12 lg:mt-[calc(50vh-180px)] flex flex-col justify-between opacity-0 ${styles.__onBoarding__appear} `}>
+        {(firstPageEnd < scrollpos && scrollpos < secondPageEnd) &&  <div className={`lg:w-1/2 lg:h-full flex items-center opacity-0 ${styles.__onBoarding__appear} `}>
+        <div className="lg:h-[350px] flex flex-col justify-between">
           <h1 className="text-4xl font-bold">{content.onBoarding1Title}</h1>
           <h2 className="text-2xl whitespace-pre-line">{content.onBoarding1Content}</h2>
+        </div>
         </div>}
         
       </div>
 
       {(secondPageEnd < scrollpos && scrollpos < thirdPageEnd ) 
         && <div className={`(onboarding 2) lg:fixed w-full h-[100svh] flex`}>
-        <div className={`lg:w-1/2 lg:h-[350px] lg:px-12 lg:mt-[calc(50vh-180px)] flex flex-col justify-between ${styles.__onBoarding__appear} `}>
-          <h1 className="text-4xl text-right font-bold">{content.onBoarding2Title}</h1>
-          <h2 className="text-2xl text-right whitespace-pre-line">{content.onBoarding2Content}</h2>
+        <div className={`lg:w-1/2 lg:h-full flex items-center justify-end lg:px-12 ${styles.__onBoarding__appear} `}>
+          <div className="lg:h-[350px] flex flex-col justify-between">
+            <h1 className="text-4xl text-right font-bold">{content.onBoarding2Title}</h1>
+            <h2 className="text-2xl text-right whitespace-pre-line">{content.onBoarding2Content}</h2>
+          </div>
         </div>
         <div className="lg:w-1/2 lg:h-full flex justify-center items-center">
           <div className="relative items-center">
@@ -128,13 +134,14 @@ export default function Home() {
         <div className="lg:w-1/2 lg:h-full flex justify-center items-center">
           <Image className="" src={outDatedAlbum} alt="outDatedAlbum" width={0} height={0} priority={true}/>
         </div>
-        <div className={`lg:w-1/2 lg:h-[350px] lg:px-12 lg:mt-[calc(50vh-180px)] flex flex-col justify-between ${styles.__onBoarding__appear}`}>
-          <h1 className="text-4xl font-bold">{content.onBoarding3Title}</h1>
-          <h2 className="text-2xl whitespace-pre-line">{content.onBoarding3Content}</h2>
-
-          <div className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
-            onClick={() =>router.push("/Login")}>시작하기
-            <IoIosArrowDropright className="mx-2"/>
+        <div className={`lg:w-1/2 lg:h-full flex items-center lg:px-12 ${styles.__onBoarding__appear} `}>
+          <div className="lg:h-[350px] flex flex-col justify-between">
+            <h1 className="text-4xl font-bold">{content.onBoarding3Title}</h1>
+            <h2 className="text-2xl whitespace-pre-line">{content.onBoarding3Content}</h2>
+            <div className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
+              onClick={() =>router.push("/Login")}>시작하기
+              <IoIosArrowDropright className="mx-2"/>
+            </div>
           </div>
         </div>
          
