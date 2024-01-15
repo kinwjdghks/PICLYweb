@@ -18,6 +18,7 @@ const ImageView = ({ album, valid }: { album: Album|null, valid:boolean }) => {
 
   useEffect(()=>{
     lockScroll();
+    return ()=>openScroll();
   },[]);
 
   if(!valid) return  <FallbackPage/>

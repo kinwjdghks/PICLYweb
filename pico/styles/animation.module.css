@@ -128,3 +128,110 @@
   }
 }
 
+
+/* onBoarding animation */
+
+@-webkit-keyframes onBoarding_appear {
+  0% {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+    visibility: hidden;
+    opacity: 0;
+  }
+  1% {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+    visibility: visible;
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0) scaleY(1);
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@keyframes onBoarding_appear {
+  0% {
+    transform: translateY(-10px);
+    visibility: hidden;
+    opacity: 0;
+  }
+  1% {
+    transform: translateY(-10px);
+    visibility: visible;
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes onBoarding_disappear {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+  99% {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(10px);
+    visibility: visible;
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+@keyframes onBoarding_disappear {
+  0% {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+  99% {
+    transform: translateY(-10px);
+    visibility: visible;
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-10px);
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+
+
+.__onBoarding__appear{
+  -webkit-animation: onBoarding_appear 1.2s ease-in-out forwards;
+  animation: onBoarding_appear 1.2s ease-in-out forwards;
+}
+
+
+/* .__onBoarding__msg_toast{
+  -webkit-animation: onBoarding_appear 0.5s ease-in-out, onBoarding_disappear 0.5s ease-in-out 0.5s;
+  animation: onBoarding_appear 0.5s ease-in-out, onBoarding_disappear 0.5s ease-in-out 0.5s;
+} */
+
+.__onBoarding__msg_toast{
+  -webkit-animation-name: onBoarding_appear, onBoarding_disappear;
+  -webkit-animation-duration: 0.3s,0.3s;
+  -webkit-animation-timing-function: ease-in-out, ease-in-out;
+  -webkit-animation-delay: 0s,1.7s;
+  -webkit-animation-fill-mode: forwards, forwards;
+  animation-name: onBoarding_appear, onBoarding_disappear;
+  animation-duration: 0.3s,0.3s;
+  animation-timing-function: ease-in-out, ease-in-out;
+  animation-delay: 0s,1.7s;
+  animation-fill-mode: forwards, forwards;
+}
+

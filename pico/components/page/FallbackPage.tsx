@@ -12,7 +12,7 @@ const FallbackPage = (): ReactNode => {
           PiCo
         </Link>
       </div>
-      <p className="w-full mt-[50%] text-center text-2xl">
+      <p className="w-full  lg:mt-[20%] mt-[50%] text-center text-2xl">
         데이터를 찾을 수 없습니다
       </p>
     </div>

@@ -11,7 +11,7 @@ const ExpiredPage = () =>{
           PiCo
         </Link>
       </div>
-        <p className="w-full mt-[50%] text-center text-2xl">기한이 만료된 데이터입니다</p>
+        <p className="w-full lg:mt-[20%] mt-[50%] text-center text-2xl">기한이 만료된 데이터입니다</p>
     </div>
 }
 
