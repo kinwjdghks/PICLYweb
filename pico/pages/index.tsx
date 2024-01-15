@@ -101,7 +101,7 @@ export default function Home() {
               style={{width: scrollpos < firstPageEnd ? 170 :  Math.min(170 + (scrollpos -firstPageEnd)/30,250)}}/>
           </div>
         </div>}
-        {(firstPageEnd < scrollpos && scrollpos < secondPageEnd) &&  <div className={`lg:w-1/2 lg:h-full lg:p-12 lg:pt-64 lg:pb-72 flex flex-col justify-between opacity-0 ${styles.__onBoarding__appear} `}>
+        {(firstPageEnd < scrollpos && scrollpos < secondPageEnd) &&  <div className={`lg:w-1/2 lg:h-[350px] lg:px-12 lg:mt-[calc(50vh-180px)] flex flex-col justify-between opacity-0 ${styles.__onBoarding__appear} `}>
           <h1 className="text-4xl font-bold">{content.onBoarding1Title}</h1>
           <h2 className="text-2xl whitespace-pre-line">{content.onBoarding1Content}</h2>
         </div>}
@@ -110,14 +110,16 @@ export default function Home() {
 
       {(secondPageEnd < scrollpos && scrollpos < thirdPageEnd ) 
         && <div className={`(onboarding 2) lg:fixed w-full h-[100svh] flex`}>
-        <div className={`lg:w-1/2 lg:h-full lg:p-12 lg:pt-64 lg:pb-72 flex flex-col justify-between ${styles.__onBoarding__appear} `}>
+        <div className={`lg:w-1/2 lg:h-[350px] lg:px-12 lg:mt-[calc(50vh-180px)] flex flex-col justify-between ${styles.__onBoarding__appear} `}>
           <h1 className="text-4xl text-right font-bold">{content.onBoarding2Title}</h1>
           <h2 className="text-2xl text-right whitespace-pre-line">{content.onBoarding2Content}</h2>
         </div>
-        <div className="lg:w-1/2 lg:h-full flex justify-center items-center relative">
+        <div className="lg:w-1/2 lg:h-full flex justify-center items-center">
+          <div className="relative items-center">
           <Image className="w-[500px] h-[500px]" src={onBoarding2Image} alt="onBoarding2" width={0} height={0} priority={true}/>
           {(secondPageEnd + startOffset < scrollpos && scrollpos < thirdPageEnd - startOffset) &&
-          <Image className={`absolute top-[410px] w-[190px]  ${styles.__onBoarding__msg_toast}`} src={copyToast} alt="copyToast"/>}
+          <Image className={`absolute top-[250px] left-[155px] w-[190px]  ${styles.__onBoarding__msg_toast}`} src={copyToast} alt="copyToast"/>}
+          </div>
         </div>
         
       </div>}
@@ -126,7 +128,7 @@ export default function Home() {
         <div className="lg:w-1/2 lg:h-full flex justify-center items-center">
           <Image className="" src={outDatedAlbum} alt="outDatedAlbum" width={0} height={0} priority={true}/>
         </div>
-        <div className={`lg:w-1/2 lg:h-full lg:p-12 lg:pt-64 lg:pb-64 flex flex-col justify-between ${styles.__onBoarding__appear}`}>
+        <div className={`lg:w-1/2 lg:h-[350px] lg:px-12 lg:mt-[calc(50vh-180px)] flex flex-col justify-between ${styles.__onBoarding__appear}`}>
           <h1 className="text-4xl font-bold">{content.onBoarding3Title}</h1>
           <h2 className="text-2xl whitespace-pre-line">{content.onBoarding3Content}</h2>
 
