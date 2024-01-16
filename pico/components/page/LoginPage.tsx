@@ -204,7 +204,7 @@ const LoginPage = () => {
 
   const inputClassName = 'w-full h-12 p-2 px-4 m-1 border-pico_lighter box-border rounded-md text-black outline-none';
   return (
-    <PageFrame className={`w-screen lg:px-[40%] lg:py-[5%] relative bg-pico_darker flex justify-center overflow-hidden ${nanumgothic.className}`}>
+    <PageFrame className={`w-screen p-12 lg:px-[40%] lg:py-[5%] relative bg-pico_darker flex justify-center overflow-hidden ${nanumgothic.className}`}>
       <div className="(container) w-full relative flex flex-col items-center">
         <Image src={PiCoLogo} alt="logo" className="w-16 h-16 rotate-12"/>
         
@@ -250,7 +250,7 @@ const LoginPage = () => {
           <button onClick={()=>{setIsRegistering((prev)=>!prev)}} className="text-center hover:underline underline-offset-8 items-center leading-9">{isRegistering  ? '취소' : '가입하기'}</button>
         </div>
       </div>
-      <Image src={arrow} alt="back" className="w-8 h-8 fixed top-0 left-0 m-8 cursor-pointer"
+      <Image src={arrow} alt="back" className="w-8 h-8 fixed top-0 left-0 m-4 lg:m-8 cursor-pointer"
         onClick={()=>router.push({pathname:'/'})}/>
     </PageFrame>
     );
