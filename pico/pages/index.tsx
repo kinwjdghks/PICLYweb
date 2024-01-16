@@ -46,22 +46,22 @@ export default function Home() {
     return document?.removeEventListener("scroll", (e) => handlescroll());
   }, []);
 
-  useEffect(() => {
-    //temporaily remove scrollbar
-    const style = document.createElement("style");
-    style.innerHTML = `
-    body {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    body::-webkit-scrollbar {
-      display: none;
-    }`;
-    document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
+  // useEffect(() => {
+  //   //temporaily remove scrollbar
+  //   const style = document.createElement("style");
+  //   style.innerHTML = `
+  //   body {
+  //     -ms-overflow-style: none;
+  //     scrollbar-width: none;
+  //   }
+  //   body::-webkit-scrollbar {
+  //     display: none;
+  //   }`;
+  //   document.head.appendChild(style);
+  //   return () => {
+  //     document.head.removeChild(style);
+  //   };
+  // }, []);
 
   return (
     <div className={`(mainpage) w-screen ${documentHeight} relative bg-[#1e1e1e] flex flex-col align-middle overflow-hidden ${notosans.className} text-white`}>
