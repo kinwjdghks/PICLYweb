@@ -1,6 +1,5 @@
 import Image from "next/image";
 import styles from "@/styles/animation.module.css";
-import logo_big_bright from "@/public/assets/images/PiCo_Logo.svg";
 import { useRouter } from "next/router";
 import { poppins } from "@/public/assets/fonts/poppins";
 import { IoIosArrowDropright } from "react-icons/io";
@@ -14,14 +13,17 @@ import onBoarding2Image from "@/public/assets/images/onBoarding2Image.svg";
 import copyToast from "@/public/assets/images/copyToast.svg";
 import outDatedAlbum from "@/public/assets/images/outDatedAlbum.svg";
 import { notosans } from "@/public/assets/fonts/notosans";
+import MainPageHeader from "@/components/container/MainPageHeader";
 
 export default function Home() {
+  const [clientSide,setClientSide] = useState<boolean>(false);
+
   const router = useRouter();
   //constants
   const firstPageEnd = 1000;
   const secondPageEnd = 4000;
   const thirdPageEnd = 8000;
-  const documentHeight = "h-[10000px]";
+  const documentHeight = "lg:h-[10000px]";
   const startOffset = 1000;
   const content = {
     onBoarding1Title: "손쉽게 사진을 공유하세요",
@@ -37,6 +39,10 @@ export default function Home() {
 
   const detailsRef = useRef<HTMLDivElement | null>(null);
   const [scrollpos, setScrollPos] = useState<number>(0);
+
+  useEffect(()=>{
+    setClientSide(true);
+  },[]);
   useEffect(() => {
     const handlescroll = () => {
       console.log(document.documentElement.scrollTop);
@@ -64,21 +70,20 @@ export default function Home() {
   }, []);
 
   return (
-    <div className={`(mainpage) w-screen ${documentHeight} relative bg-[#1e1e1e] flex flex-col align-middle overflow-hidden ${notosans.className} text-white`}>
-      
-
-      {scrollpos < firstPageEnd && (
+    <div className={`(mainpage) w-screen ${documentHeight} relative bg-[#1c1c1e] flex flex-col align-middle overflow-y-scroll lg:overflow-hidden ${notosans.className} text-white`}>
+      <MainPageHeader/>
+      {clientSide && (window.matchMedia("screen and (min-width: 1024px)").matches ? scrollpos < firstPageEnd : true) && (
         <div className="(title) lg:fixed w-full h-[100svh] flex-grow flex flex-col align-middle items-center lg:flex-row-reverse z-10">
-          <Image className={`w-28 h-28 mt-16 lg:hidden rotate-12`}
+          {/* <Image className={`w-28 h-28 my-16 lg:hidden rotate-12`}
             alt="logo"
             src={logo_big_bright}
-            priority={true}/>
-          <div className={`(container) lg:w-1/2 w-full lg:px-12 flex flex-col text-left`}>
-            <div className="lg:h-[400px] flex flex-col justify-between ">
-              <h1 className={`text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>
+            priority={true}/> */}
+          <div className={`(container) lg:w-1/2 w-full pt-32 lg:pt-0 px-12 flex flex-col text-left`}>
+            <div className="h-[300px] lg:h-[400px] flex flex-col justify-between ">
+              <h1 className={`hidden lg:block text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>
                 PiCo
               </h1>
-              <h2 className="text-xl lg:text-3xl">손쉬운 익명 사진 공유</h2>
+              <h2 className="text-xl font-bold lg:font-normal lg:text-3xl">존나 새로운 공유의 시작</h2>
 
               <div className="(action) w-full h-max flex flex-col lg:p-0 gap-2 mt-auto lg:items-start scrollbar-hide">
                 <div  className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
@@ -98,16 +103,15 @@ export default function Home() {
         </div>
       )}
 
-      <div className={`(onboarding 1) lg:fixed w-full h-[100svh] flex`}
+      <div className={`(onboarding 1) hidden lg:block lg:fixed w-full h-[100svh] lg:flex`}
         ref={detailsRef} >
-        {scrollpos < secondPageEnd && (
-          <div className={`lg:w-1/2 lg:h-full flex justify-end items-center relative`}>
+        {clientSide && window.matchMedia("screen and (min-width: 1024px)").matches && scrollpos < secondPageEnd && (
+          <div className={`lg:w-1/2 lg:h-full lg:flex justify-end items-center relative`}>
             <div className="relative overflow-hidden w-full -right-[calc(100%-520px)]">
               <div className={`absolute ${poppins.className} font-bold text-3xl top-[70px] left-[50px]`}>
                 Pico
               </div>
-
-              <Image className="w-[439px] h-[451px]"
+              <Image className="w-[439px]"
                 src={flatIphone}
                 alt="Iphone"
                 width={0}
@@ -143,7 +147,7 @@ export default function Home() {
             </div>
           </div>
         )}
-        {firstPageEnd < scrollpos && scrollpos < secondPageEnd && (
+        {clientSide && window.matchMedia("screen and (min-width: 1024px)").matches && firstPageEnd < scrollpos && scrollpos < secondPageEnd && (
           <div className={`lg:w-1/2 lg:h-full flex items-center opacity-0 ${styles.__onBoarding__appear} z-[-1]`}>
             <div className="lg:h-[350px] lg:px-12 flex flex-col justify-between">
               <h1 className="text-4xl font-bold">{content.onBoarding1Title}</h1>
@@ -155,9 +159,8 @@ export default function Home() {
         )}
       </div>
 
-
-      {secondPageEnd < scrollpos && scrollpos < thirdPageEnd && (
-        <div className={`(onboarding 2) lg:fixed w-full h-[100svh] flex`}>
+      {clientSide && window.matchMedia("screen and (min-width: 1024px)").matches && secondPageEnd < scrollpos && scrollpos < thirdPageEnd && (
+        <div className={`(onboarding 2) hidden lg:block lg:fixed w-full h-[100svh] lg:flex`}>
           <div className={`lg:w-1/2 lg:h-full flex items-center justify-end lg:px-12 ${styles.__onBoarding__appear} `}>
             <div className="lg:h-[350px] flex flex-col justify-between">
               <h1 className="text-4xl text-right font-bold">
@@ -187,8 +190,8 @@ export default function Home() {
         </div>
       )}
 
-      {thirdPageEnd < scrollpos && (
-        <div className={`(onboarding 3) lg:fixed w-full h-[100svh] flex`}>
+      {clientSide && window.matchMedia("screen and (min-width: 1024px)").matches && thirdPageEnd < scrollpos && (
+        <div className={`(onboarding 3) hidden lg:block lg:fixed w-full h-[100svh] lg:flex`}>
           <div className="lg:w-1/2 lg:h-full flex justify-end items-center">
             <div className="relative right-[10%]">
               <Image
@@ -214,6 +217,76 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      <div className={`(mobile onboarding1) lg:hidden w-full h-[100svh] p-8 pt-24 flex flex-col justify-between ${notosans.className}`}>
+        <h1 className="text-2xl font-bold text-center">{content.onBoarding1Title}</h1>
+        <div className="relative overflow-hidden">
+          <div className={`absolute ${poppins.className} font-bold text-2xl top-[50px] left-[35px]`}>
+            Pico
+          </div>
+          <Image className="w-[300px]"
+            src={flatIphone}
+            alt="Iphone"
+            width={0}
+            height={0}
+            priority={true}/>
+          <Image className="absolute top-[90px] left-[25px] w-[120px]"
+            src={catAlbum}
+            alt="catAlbum"
+            width={0}
+            height={0}
+            priority={true} />
+          <Image className={`absolute top-[260px] left-[25px] w-[120px]`}
+            src={emptyAlbum}
+            alt="emptyAlbum"
+            width={0}
+            height={0}
+            priority={true} />
+          <Image className={`absolute top-[260px] left-[155px] w-[120px]`}
+            src={emptyAlbum}
+            alt="emptyAlbum"
+            width={0}
+            height={0}
+            priority={true}/>
+          <Image className="absolute top-[90px] left-[155px] w-[120px]"
+            src={racoonAlbum}
+            alt="racoonAlbum"
+            width={0}
+            height={0}
+            priority={true}/>
+        </div>
+        <h2 className="whitespace-pre-wrap">{content.onBoarding1Content}</h2>
+
+      </div>
+      <div className={`(mobile onboarding2) lg:hidden w-full h-[100svh] p-8 pt-24 flex flex-col justify-between ${notosans.className}`}>
+        <h1 className="text-2xl font-bold text-center">{content.onBoarding2Title}</h1>
+        <div className="relative items-center">
+          <Image className="w-[300px]"
+            src={onBoarding2Image}
+            alt="onBoarding2"
+            width={0}
+            height={0}
+            priority={true}/>
+            <Image className={`absolute top-[150px] left-[75px] w-[150px] {styles.__onBoarding__msg_toast}`}
+              src={copyToast}
+              alt="copyToast"/>
+          </div>
+        <h2 className="whitespace-pre-wrap">{content.onBoarding2Content}</h2>
+      </div>
+      <div className={`(mobile onboarding3) lg:hidden w-full h-[100svh] p-8 pt-24 flex flex-col justify-between ${notosans.className}`}>
+        <h1 className="text-2xl font-bold text-center">{content.onBoarding3Title}</h1>
+        <div className="relative">
+          <Image
+            className="w-[300px]"
+            src={outDatedAlbum}
+            alt="outDatedAlbum"
+            width={0}
+            height={0}
+            priority={true}/>
+          </div>
+        <h2 className="whitespace-pre-wrap">{content.onBoarding3Content}</h2>
+
+      </div>
     </div>
   );
 }
