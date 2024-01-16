@@ -74,18 +74,14 @@ export default function Home() {
       <MainPageHeader/>
       {clientSide && (window.matchMedia("screen and (min-width: 1024px)").matches ? scrollpos < firstPageEnd : true) && (
         <div className="(title) lg:fixed w-full h-[100svh] flex-grow flex flex-col align-middle items-center lg:flex-row-reverse z-10">
-          {/* <Image className={`w-28 h-28 my-16 lg:hidden rotate-12`}
-            alt="logo"
-            src={logo_big_bright}
-            priority={true}/> */}
-          <div className={`(container) lg:w-1/2 w-full pt-32 lg:pt-0 px-12 flex flex-col text-left`}>
-            <div className="h-[300px] lg:h-[400px] flex flex-col justify-between ">
-              <h1 className={`hidden lg:block text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>
+          <div className={`(container) h-full lg:h-min lg:w-1/2 w-full p-32 lg:p-0 px-12 flex flex-col text-left`}>
+            <div className="h-full lg:h-[400px] flex flex-col items-center lg:items-start">
+              <h1 className={`text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>
                 PiCo
               </h1>
-              <h2 className="text-xl font-bold lg:font-normal lg:text-3xl">존나 새로운 공유의 시작</h2>
+              <h2 className="text-2xl font-bold lg:font-normal lg:text-3xl">꽤나 새로운 공유의 시작</h2>
 
-              <div className="(action) w-full h-max flex flex-col lg:p-0 gap-2 mt-auto lg:items-start scrollbar-hide">
+              <div className="(action) w-full h-max flex flex-col lg:p-0 gap-2 mt-auto items-center lg:items-start scrollbar-hide">
                 <div  className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
                   onClick={() => router.push("/Login")}>
                   로그인
@@ -103,7 +99,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className={`(onboarding 1) hidden lg:block lg:fixed w-full h-[100svh] lg:flex`}
+      <div className={`(onboarding 1) hidden  lg:fixed w-full h-[100svh] lg:flex`}
         ref={detailsRef} >
         {clientSide && window.matchMedia("screen and (min-width: 1024px)").matches && scrollpos < secondPageEnd && (
           <div className={`lg:w-1/2 lg:h-full lg:flex justify-end items-center relative`}>
@@ -160,7 +156,7 @@ export default function Home() {
       </div>
 
       {clientSide && window.matchMedia("screen and (min-width: 1024px)").matches && secondPageEnd < scrollpos && scrollpos < thirdPageEnd && (
-        <div className={`(onboarding 2) hidden lg:block lg:fixed w-full h-[100svh] lg:flex`}>
+        <div className={`(onboarding 2) hidden  lg:fixed w-full h-[100svh] lg:flex`}>
           <div className={`lg:w-1/2 lg:h-full flex items-center justify-end lg:px-12 ${styles.__onBoarding__appear} `}>
             <div className="lg:h-[350px] flex flex-col justify-between">
               <h1 className="text-4xl text-right font-bold">
@@ -191,7 +187,7 @@ export default function Home() {
       )}
 
       {clientSide && window.matchMedia("screen and (min-width: 1024px)").matches && thirdPageEnd < scrollpos && (
-        <div className={`(onboarding 3) hidden lg:block lg:fixed w-full h-[100svh] lg:flex`}>
+        <div className={`(onboarding 3) hidden  lg:fixed w-full h-[100svh] lg:flex`}>
           <div className="lg:w-1/2 lg:h-full flex justify-end items-center">
             <div className="relative right-[10%]">
               <Image
