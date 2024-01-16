@@ -99,8 +99,8 @@ export default function Home() {
       <div className={`(onboarding 1) lg:fixed w-full h-[100svh] flex`}
         ref={detailsRef} >
         {scrollpos < secondPageEnd && (
-          <div className={`lg:w-1/2 lg:h-full flex items-center relative`}>
-            <div className="relative overflow-hidden w-full right-[calc(10%-250px)]">
+          <div className={`lg:w-1/2 lg:h-full flex justify-end items-center relative`}>
+            <div className="relative overflow-hidden w-full -right-[calc(100%-520px)]">
               <div className={`absolute ${poppins.className} font-bold text-3xl top-[70px] left-[50px]`}>
                 Pico
               </div>
@@ -143,7 +143,7 @@ export default function Home() {
         )}
         {firstPageEnd < scrollpos && scrollpos < secondPageEnd && (
           <div className={`lg:w-1/2 lg:h-full flex items-center opacity-0 ${styles.__onBoarding__appear} `}>
-            <div className="lg:h-[350px] flex flex-col justify-between">
+            <div className="lg:h-[350px] lg:px-12 flex flex-col justify-between">
               <h1 className="text-4xl font-bold">{content.onBoarding1Title}</h1>
               <h2 className="text-2xl whitespace-pre-line">
                 {content.onBoarding1Content}
@@ -175,7 +175,7 @@ export default function Home() {
                 priority={true}/>
               {secondPageEnd + startOffset < scrollpos &&
                 scrollpos < thirdPageEnd - startOffset && (
-                  <Image className={`absolute top-[250px] left-[155px] w-[190px]  ${styles.__onBoarding__msg_toast}`}
+                  <Image className={`absolute top-[250px] left-[155px] w-[190px] ${styles.__onBoarding__msg_toast}`}
                     src={copyToast}
                     alt="copyToast"/>
                 )}
