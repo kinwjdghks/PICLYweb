@@ -19,9 +19,9 @@ export default function Home() {
   const router = useRouter();
   //constants
   const firstPageEnd = 1000;
-  const secondPageEnd = 6000;
-  const thirdPageEnd = 11000;
-  const documentHeight = "h-[16000px]";
+  const secondPageEnd = 4000;
+  const thirdPageEnd = 8000;
+  const documentHeight = "h-[9000px]";
   const startOffset = 1000;
   const content = {
     onBoarding1Title: "손쉽게 사진을 공유하세요",
@@ -65,6 +65,64 @@ export default function Home() {
 
   return (
     <div className={`(mainpage) w-screen ${documentHeight} relative bg-[#1e1e1e] flex flex-col align-middle overflow-hidden ${notosans.className} text-white`}>
+      
+      <div className={`(onboarding 1) lg:fixed w-full h-[100svh] flex`}
+        ref={detailsRef} >
+        {scrollpos < secondPageEnd && (
+          <div className={`lg:w-1/2 lg:h-full flex justify-end items-center relative`}>
+            <div className="relative overflow-hidden w-full -right-[calc(100%-520px)]">
+              <div className={`absolute ${poppins.className} font-bold text-3xl top-[70px] left-[50px]`}>
+                Pico
+              </div>
+
+              <Image className="w-[439px] h-[451px]"
+                src={flatIphone}
+                alt="Iphone"
+                width={0}
+                height={0}
+                priority={true}/>
+              <Image className="absolute top-[120px] left-[35px] w-[170px]"
+                src={catAlbum}
+                alt="catAlbum"
+                width={0}
+                height={0}
+                style={{ top:scrollpos < firstPageEnd ? 230 : Math.max(230 - (scrollpos - firstPageEnd) / 15, 120)}}
+                priority={true} />
+              <Image className={`absolute top-[350px] left-[35px] w-[170px]`}
+                src={emptyAlbum}
+                alt="emptyAlbum"
+                width={0}
+                height={0}
+                style={{top: scrollpos < firstPageEnd ? 230 + 230 : Math.max( 230 + 230 - (scrollpos - firstPageEnd) / 15, 350)}}
+                priority={true} />
+              <Image className={`absolute top-[350px] left-[220px] w-[170px]`}
+                src={emptyAlbum}
+                alt="emptyAlbum"
+                width={0}
+                height={0}
+                priority={true}/>
+              <Image className="absolute top-[120px] left-[220px] w-[170px]"
+                src={racoonAlbum}
+                alt="racoonAlbum"
+                width={0}
+                height={0}
+                style={{  width: scrollpos < firstPageEnd ? 170 : Math.min(170 + (scrollpos - firstPageEnd) / 15, 250)}}
+                priority={true}/>
+            </div>
+          </div>
+        )}
+        {firstPageEnd < scrollpos && scrollpos < secondPageEnd && (
+          <div className={`lg:w-1/2 lg:h-full flex items-center opacity-0 ${styles.__onBoarding__appear} z-[-1]`}>
+            <div className="lg:h-[350px] lg:px-12 flex flex-col justify-between">
+              <h1 className="text-4xl font-bold">{content.onBoarding1Title}</h1>
+              <h2 className="text-2xl whitespace-pre-line">
+                {content.onBoarding1Content}
+              </h2>
+            </div>
+          </div>
+        )}
+      </div>
+
       {scrollpos < firstPageEnd && (
         <div className="(title) lg:fixed w-full h-[100svh] flex-grow flex flex-col align-middle items-center lg:flex-row-reverse">
           <Image className={`w-28 h-28 mt-16 lg:hidden rotate-12`}
@@ -72,7 +130,7 @@ export default function Home() {
             src={logo_big_bright}
             priority={true}/>
           <div className={`(container) lg:w-1/2 w-full lg:px-12 flex flex-col text-left`}>
-            <div className="lg:h-[400px] flex flex-col justify-between">
+            <div className="lg:h-[400px] flex flex-col justify-between ">
               <h1 className={`text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>
                 PiCo
               </h1>
@@ -95,63 +153,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
-      <div className={`(onboarding 1) lg:fixed w-full h-[100svh] flex`}
-        ref={detailsRef} >
-        {scrollpos < secondPageEnd && (
-          <div className={`lg:w-1/2 lg:h-full flex justify-end items-center relative`}>
-            <div className="relative overflow-hidden w-full -right-[calc(100%-520px)]">
-              <div className={`absolute ${poppins.className} font-bold text-3xl top-[70px] left-[50px]`}>
-                Pico
-              </div>
-
-              <Image className="w-[439px] h-[451px]"
-                src={flatIphone}
-                alt="Iphone"
-                width={0}
-                height={0}
-                priority={true}/>
-              <Image className="absolute top-[120px] left-[35px] w-[170px]"
-                src={catAlbum}
-                alt="catAlbum"
-                width={0}
-                height={0}
-                style={{ top:scrollpos < firstPageEnd ? 230 : Math.max(230 - (scrollpos - firstPageEnd) / 30, 120)}}
-                priority={true} />
-              <Image className={`absolute top-[350px] left-[35px] w-[170px]`}
-                src={emptyAlbum}
-                alt="emptyAlbum"
-                width={0}
-                height={0}
-                style={{top: scrollpos < firstPageEnd ? 230 + 230 : Math.max( 230 + 230 - (scrollpos - firstPageEnd) / 30, 350)}}
-                priority={true} />
-              <Image className={`absolute top-[350px] left-[220px] w-[170px]`}
-                src={emptyAlbum}
-                alt="emptyAlbum"
-                width={0}
-                height={0}
-                priority={true}/>
-              <Image className="absolute top-[120px] left-[220px] w-[170px]"
-                src={racoonAlbum}
-                alt="racoonAlbum"
-                width={0}
-                height={0}
-                style={{  width: scrollpos < firstPageEnd ? 170 : Math.min(170 + (scrollpos - firstPageEnd) / 30, 250)}}
-                priority={true}/>
-            </div>
-          </div>
-        )}
-        {firstPageEnd < scrollpos && scrollpos < secondPageEnd && (
-          <div className={`lg:w-1/2 lg:h-full flex items-center opacity-0 ${styles.__onBoarding__appear} `}>
-            <div className="lg:h-[350px] lg:px-12 flex flex-col justify-between">
-              <h1 className="text-4xl font-bold">{content.onBoarding1Title}</h1>
-              <h2 className="text-2xl whitespace-pre-line">
-                {content.onBoarding1Content}
-              </h2>
-            </div>
-          </div>
-        )}
-      </div>
 
       {secondPageEnd < scrollpos && scrollpos < thirdPageEnd && (
         <div className={`(onboarding 2) lg:fixed w-full h-[100svh] flex`}>
@@ -202,7 +203,7 @@ export default function Home() {
               <h2 className="text-2xl whitespace-pre-line">
                 {content.onBoarding3Content}
               </h2>
-              <div className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
+              <div className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer opacity-0 ${styles.__onBoarding__appear_delay}`}
                 onClick={() => router.push("/Login")} >
                 시작하기
                 <IoIosArrowDropright className="mx-2" />

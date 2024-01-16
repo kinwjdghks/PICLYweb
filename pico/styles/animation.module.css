@@ -216,11 +216,11 @@
   animation: onBoarding_appear 1.2s ease-in-out forwards;
 }
 
+.__onBoarding__appear_delay{
+  -webkit-animation: onBoarding_appear 1.2s ease-in-out 1s forwards;
+  animation: onBoarding_appear 1.2s ease-in-out 1s forwards;
+}
 
-/* .__onBoarding__msg_toast{
-  -webkit-animation: onBoarding_appear 0.5s ease-in-out, onBoarding_disappear 0.5s ease-in-out 0.5s;
-  animation: onBoarding_appear 0.5s ease-in-out, onBoarding_disappear 0.5s ease-in-out 0.5s;
-} */
 
 .__onBoarding__msg_toast{
   -webkit-animation-name: onBoarding_appear, onBoarding_disappear;
