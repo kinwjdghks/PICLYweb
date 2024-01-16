@@ -21,7 +21,7 @@ export default function Home() {
   const firstPageEnd = 1000;
   const secondPageEnd = 4000;
   const thirdPageEnd = 8000;
-  const documentHeight = "h-[9000px]";
+  const documentHeight = "h-[10000px]";
   const startOffset = 1000;
   const content = {
     onBoarding1Title: "손쉽게 사진을 공유하세요",
@@ -46,26 +46,58 @@ export default function Home() {
     return document?.removeEventListener("scroll", (e) => handlescroll());
   }, []);
 
-  // useEffect(() => {
-  //   //temporaily remove scrollbar
-  //   const style = document.createElement("style");
-  //   style.innerHTML = `
-  //   body {
-  //     -ms-overflow-style: none;
-  //     scrollbar-width: none;
-  //   }
-  //   body::-webkit-scrollbar {
-  //     display: none;
-  //   }`;
-  //   document.head.appendChild(style);
-  //   return () => {
-  //     document.head.removeChild(style);
-  //   };
-  // }, []);
+  useEffect(() => {
+    //temporaily remove scrollbar
+    const style = document.createElement("style");
+    style.innerHTML = `
+    body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    body::-webkit-scrollbar {
+      display: none;
+    }`;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   return (
     <div className={`(mainpage) w-screen ${documentHeight} relative bg-[#1e1e1e] flex flex-col align-middle overflow-hidden ${notosans.className} text-white`}>
       
+
+      {scrollpos < firstPageEnd && (
+        <div className="(title) lg:fixed w-full h-[100svh] flex-grow flex flex-col align-middle items-center lg:flex-row-reverse z-10">
+          <Image className={`w-28 h-28 mt-16 lg:hidden rotate-12`}
+            alt="logo"
+            src={logo_big_bright}
+            priority={true}/>
+          <div className={`(container) lg:w-1/2 w-full lg:px-12 flex flex-col text-left`}>
+            <div className="lg:h-[400px] flex flex-col justify-between ">
+              <h1 className={`text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>
+                PiCo
+              </h1>
+              <h2 className="text-xl lg:text-3xl">손쉬운 익명 사진 공유</h2>
+
+              <div className="(action) w-full h-max flex flex-col lg:p-0 gap-2 mt-auto lg:items-start scrollbar-hide">
+                <div  className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
+                  onClick={() => router.push("/Login")}>
+                  로그인
+                  <IoIosArrowDropright className="mx-2"/>
+                </div>
+
+                <div className={`w-fit lg:mt-4 flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
+                  onClick={() => window.scrollTo(0, firstPageEnd + 1)}>
+                  더 알아보기
+                  <IoIosArrowDropdown className="mx-2" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={`(onboarding 1) lg:fixed w-full h-[100svh] flex`}
         ref={detailsRef} >
         {scrollpos < secondPageEnd && (
@@ -123,36 +155,6 @@ export default function Home() {
         )}
       </div>
 
-      {scrollpos < firstPageEnd && (
-        <div className="(title) lg:fixed w-full h-[100svh] flex-grow flex flex-col align-middle items-center lg:flex-row-reverse">
-          <Image className={`w-28 h-28 mt-16 lg:hidden rotate-12`}
-            alt="logo"
-            src={logo_big_bright}
-            priority={true}/>
-          <div className={`(container) lg:w-1/2 w-full lg:px-12 flex flex-col text-left`}>
-            <div className="lg:h-[400px] flex flex-col justify-between ">
-              <h1 className={`text-[2.5rem] ${poppins.className} lg:text-[5rem] font-bold`}>
-                PiCo
-              </h1>
-              <h2 className="text-xl lg:text-3xl">손쉬운 익명 사진 공유</h2>
-
-              <div className="(action) w-full h-max flex flex-col lg:p-0 gap-2 mt-auto lg:items-start scrollbar-hide">
-                <div  className={`w-fit flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
-                  onClick={() => router.push("/Login")}>
-                  로그인
-                  <IoIosArrowDropright className="mx-2"/>
-                </div>
-
-                <div className={`w-fit lg:mt-4 flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
-                  onClick={() => window.scrollTo(0, firstPageEnd + 1)}>
-                  더 알아보기
-                  <IoIosArrowDropdown className="mx-2" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {secondPageEnd < scrollpos && scrollpos < thirdPageEnd && (
         <div className={`(onboarding 2) lg:fixed w-full h-[100svh] flex`}>
