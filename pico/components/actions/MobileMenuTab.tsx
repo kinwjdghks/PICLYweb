@@ -4,6 +4,7 @@ import { notosans } from "@/public/assets/fonts/notosans";
 import ReactDOM  from "react-dom"; 
 import { page } from "@/pages/Gallery/[userid]";
 import { logout } from "../page/LoginPage";
+import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 
 const BackDrop = ({onClick}:{onClick:()=>void})=>{
     return <div className="(backdrop) w-screen h-screen left-0 top-0 fixed bg-black/80"
@@ -16,17 +17,23 @@ const MobileMenuTab = ({
   switchPage
 }: {
   mobileMenuOpen: boolean|undefined;
-  setMobileMenuOpen: Dispatch<SetStateAction<boolean|undefined>>;
+  setMobileMenuOpen: Dispatch<SetStateAction<boolean>>;
   switchPage:(page:page)=>void;
 }): ReactNode => {
+  const { lockScroll, openScroll} = useBodyScrollLock();
   const [clientSide,setClientSide] = useState<boolean>(false);
   useEffect(()=>setClientSide(true),[]);
+  useEffect(()=>{
+    if(mobileMenuOpen) lockScroll();
+    else openScroll();
+  },[mobileMenuOpen]);
   if(!clientSide) return <></>
+
   const root = document.getElementById('modalroot');
   const portal = ReactDOM.createPortal(
     <>
     {mobileMenuOpen && <BackDrop onClick={()=>setMobileMenuOpen(false)}/>}
-    <div className={`fixed w-1/2 h-screen right-0 top-0 bg-pico_default flex justify-center ${mobileMenuOpen ? 'right-0' : '-right-1/2'} transition-all duration-300`}>
+    <div className={`fixed w-1/2 h-screen right-0 top-0 bg-pico_default flex justify-center ${mobileMenuOpen ? 'right-0' : '-right-[50%]'} transition-all duration-300`}>
       <ul className={`${notosans.className} mt-8 text-xl flex flex-col gap-5`}>
         <li 
           onClick={()=>{switchPage('gallery');setMobileMenuOpen(false)}}>갤러리</li>
@@ -41,7 +48,7 @@ const MobileMenuTab = ({
     </div>
   </>, root!);
   
-  return portal
+  return portal;
 };
 
 export default MobileMenuTab;

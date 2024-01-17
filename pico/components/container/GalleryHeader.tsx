@@ -5,7 +5,7 @@ import { HiOutlineMenu } from "react-icons/hi";
 import { RiImageAddFill } from "react-icons/ri";
 
 export const HEADER_HEIGHT = `lg:h-[5rem] h-[4rem]`;
-const GalleryHeader = ({ setIsInputOpen, onModalOpen, setMobileMenuOpen }: {setIsInputOpen: Dispatch<SetStateAction<boolean>>, onModalOpen: () => void, setMobileMenuOpen: Dispatch<SetStateAction<boolean|undefined>> }) => {
+const GalleryHeader = ({ setIsInputOpen, onModalOpen, setMobileMenuOpen }: {setIsInputOpen: Dispatch<SetStateAction<boolean>>, onModalOpen: () => void, setMobileMenuOpen: Dispatch<SetStateAction<boolean>> }) => {
   
 
   const SearchButton = (): ReactNode => {

@@ -19,7 +19,7 @@ const Carousel = dynamic(()=>import('@/components/page/Carousel'));
 type AlbumDisplayPageProps={
   userAlbumList:Album[]|undefined;
   setUserAlbumList:Dispatch<SetStateAction<Album[] | undefined>>
-  setMobileMenuOpen: Dispatch<SetStateAction<boolean|undefined>>
+  setMobileMenuOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const AlbumDisplayPage = ({userAlbumList,setUserAlbumList,setMobileMenuOpen}:AlbumDisplayPageProps) => {

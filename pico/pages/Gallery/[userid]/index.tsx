@@ -9,7 +9,7 @@ export type page = 'gallery' | 'profile' | 'about'
 const Gallery = () => {
 
   const [userAlbumList,setUserAlbumList] = useState<Album[]|undefined>(undefined);
-  const [mobileMenuOpen,setMobileMenuOpen] = useState<boolean|undefined>(undefined);
+  const [mobileMenuOpen,setMobileMenuOpen] = useState<boolean>(false);
   const [page,setPage] = useState<page>('gallery');
    
 
