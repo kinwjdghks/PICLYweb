@@ -169,7 +169,7 @@ export default function Home() {
           </div>
           <div className="lg:w-1/2 lg:h-full flex items-center">
             <div className="relative items-center left-[10%]">
-              <Image className="w-[500px] h-[500px]"
+              <Image className="w-[500px]"
                 src={onBoarding2Image}
                 alt="onBoarding2"
                 width={0}
@@ -223,32 +223,27 @@ export default function Home() {
           <Image className="w-[300px]"
             src={flatIphone}
             alt="Iphone"
-            width={0}
-            height={0}
+            width={300}
             priority={true}/>
           <Image className="absolute top-[90px] left-[25px] w-[120px]"
             src={catAlbum}
             alt="catAlbum"
-            width={0}
-            height={0}
+            width={120}
             priority={true} />
           <Image className={`absolute top-[260px] left-[25px] w-[120px]`}
             src={emptyAlbum}
             alt="emptyAlbum"
-            width={0}
-            height={0}
+            width={120}
             priority={true} />
           <Image className={`absolute top-[260px] left-[155px] w-[120px]`}
             src={emptyAlbum}
             alt="emptyAlbum"
             width={0}
-            height={0}
             priority={true}/>
           <Image className="absolute top-[90px] left-[155px] w-[120px]"
             src={racoonAlbum}
             alt="racoonAlbum"
-            width={0}
-            height={0}
+            width={120}
             priority={true}/>
         </div>
         <h2 className="whitespace-pre-wrap">{content.onBoarding1Content}</h2>
@@ -256,12 +251,11 @@ export default function Home() {
       </div>
       <div className={`(mobile onboarding2) lg:hidden w-full h-[100svh] p-8 pt-24 flex flex-col justify-between ${notosans.className}`}>
         <h1 className="text-2xl font-bold text-center">{content.onBoarding2Title}</h1>
-        <div className="relative items-center">
+        <div className="relative justify-center flex">
           <Image className="w-[300px]"
             src={onBoarding2Image}
             alt="onBoarding2"
-            width={0}
-            height={0}
+            width={300}
             priority={true}/>
             <Image className={`absolute top-[150px] left-[75px] w-[150px] {styles.__onBoarding__msg_toast}`}
               src={copyToast}
@@ -271,13 +265,12 @@ export default function Home() {
       </div>
       <div className={`(mobile onboarding3) lg:hidden w-full h-[100svh] p-8 pt-24 flex flex-col justify-between ${notosans.className}`}>
         <h1 className="text-2xl font-bold text-center">{content.onBoarding3Title}</h1>
-        <div className="relative">
+        <div className="relative flex justify-center">
           <Image
             className="w-[300px]"
             src={outDatedAlbum}
             alt="outDatedAlbum"
-            width={0}
-            height={0}
+            width={300}
             priority={true}/>
           </div>
         <h2 className="whitespace-pre-wrap">{content.onBoarding3Content}</h2>

@@ -10,11 +10,11 @@ const BackDrop = ({children}:ModalProps)=>{
 }
 
 const Modal = (props: PropsWithChildren<ModalProps>) =>{
-    const [isCSR, setIsCSR] = useState<boolean>(false);
+    const [clientSide, setClientSide] = useState<boolean>(false);
     useEffect(()=>{
-        setIsCSR(true);
+        setClientSide(true);
     },[]);
-    if (!isCSR) return <></>;
+    if (!clientSide) return <></>;
     if (typeof window === 'undefined') return <></>;
     
     const root = document.getElementById('modalroot');

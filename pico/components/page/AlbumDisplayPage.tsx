@@ -19,9 +19,10 @@ const Carousel = dynamic(()=>import('@/components/page/Carousel'));
 type AlbumDisplayPageProps={
   userAlbumList:Album[]|undefined;
   setUserAlbumList:Dispatch<SetStateAction<Album[] | undefined>>
+  setMobileMenuOpen: Dispatch<SetStateAction<boolean|undefined>>
 }
 
-const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps) => {
+const AlbumDisplayPage = ({userAlbumList,setUserAlbumList,setMobileMenuOpen}:AlbumDisplayPageProps) => {
   //useState
   const [newAlbumModalopen,setNewAlbumModalopen] = useState<boolean>(false);
   const [tagSearchInput,setTagSearchInput] = useState<string>('');
@@ -114,7 +115,9 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList}:AlbumDisplayPageProps
         
       <GalleryHeader
         setIsInputOpen={setIsInputOpen} 
-        onModalOpen={()=>setNewAlbumModalopen(true)} />
+        onModalOpen={()=>setNewAlbumModalopen(true)}
+        setMobileMenuOpen={setMobileMenuOpen} />
+
       {newAlbumModalopen && <NewAlbumModal close={()=>setNewAlbumModalopen(false)} refreshWithNewAlbum={addNewAlbum}/>}
       
       <input

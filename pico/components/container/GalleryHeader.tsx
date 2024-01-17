@@ -5,7 +5,7 @@ import { HiOutlineMenu } from "react-icons/hi";
 import { RiImageAddFill } from "react-icons/ri";
 
 export const HEADER_HEIGHT = `lg:h-[5rem] h-[4rem]`;
-const GalleryHeader = ({ setIsInputOpen, onModalOpen }: {setIsInputOpen: Dispatch<SetStateAction<boolean>>, onModalOpen: () => void }) => {
+const GalleryHeader = ({ setIsInputOpen, onModalOpen, setMobileMenuOpen }: {setIsInputOpen: Dispatch<SetStateAction<boolean>>, onModalOpen: () => void, setMobileMenuOpen: Dispatch<SetStateAction<boolean|undefined>> }) => {
   
 
   const SearchButton = (): ReactNode => {
@@ -20,10 +20,10 @@ const GalleryHeader = ({ setIsInputOpen, onModalOpen }: {setIsInputOpen: Dispatc
         PiCo
       </div>
       <div className=" flex justify-end items-center">
-        <RiImageAddFill
-          className="lg:m-4 lg:w-10 lg:h-10 m-2 w-8 h-8 cursor-pointer fill-white"
+        <RiImageAddFill className="lg:m-4 lg:w-10 lg:h-10 m-2 w-8 h-8 cursor-pointer fill-white"
           onClick={onModalOpen}/>
-        <HiOutlineMenu className="lg:w-0 lg:m-0 m-2 w-8 h-8" />
+        <HiOutlineMenu className="lg:w-0 lg:m-0 m-2 w-8 h-8"
+          onClick={()=>setMobileMenuOpen(true)} />
         <SearchButton />
       </div>
     </div>
