@@ -21,7 +21,7 @@ const MobileMenuTab = ({
 }): ReactNode => {
   const [clientSide,setClientSide] = useState<boolean>(false);
   useEffect(()=>setClientSide(true),[]);
-  if(!document) return <></>
+  if(!clientSide) return <></>
   const root = document.getElementById('modalroot');
   const portal = ReactDOM.createPortal(
     <>
