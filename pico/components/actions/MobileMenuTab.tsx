@@ -27,13 +27,13 @@ const MobileMenuTab = ({
     if(mobileMenuOpen) lockScroll();
     else openScroll();
   },[mobileMenuOpen]);
-  if(!clientSide) return <></>
+  if(!clientSide) return <div className="w-screen h-screen bg-pico_default"></div>
 
   const root = document.getElementById('modalroot');
   const portal = ReactDOM.createPortal(
     <>
     {mobileMenuOpen && <BackDrop onClick={()=>setMobileMenuOpen(false)}/>}
-    <div className={`fixed w-1/2 h-screen right-0 top-0 bg-pico_default flex justify-center ${mobileMenuOpen ? 'right-0' : '-right-[50%]'} transition-all duration-300`}>
+    <div className={`fixed w-1/2 h-screen right-0 top-0 bg-pico_default flex justify-center ${mobileMenuOpen ? 'right-0' : '-right-1/2'} transition-all duration-300`}>
       <ul className={`${notosans.className} mt-8 text-xl flex flex-col gap-5`}>
         <li 
           onClick={()=>{switchPage('gallery');setMobileMenuOpen(false)}}>갤러리</li>
