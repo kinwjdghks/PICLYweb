@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import Modal from "../modal/Modal";
 import { notosans } from "@/public/assets/fonts/notosans";
 import ReactDOM  from "react-dom"; 
@@ -19,6 +19,9 @@ const MobileMenuTab = ({
   setMobileMenuOpen: Dispatch<SetStateAction<boolean|undefined>>;
   switchPage:(page:page)=>void;
 }): ReactNode => {
+  const [clientSide,setClientSide] = useState<boolean>(false);
+  useEffect(()=>setClientSide(true),[]);
+  if(!document) return <></>
   const root = document.getElementById('modalroot');
   const portal = ReactDOM.createPortal(
     <>
