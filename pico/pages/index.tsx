@@ -5,13 +5,13 @@ import { poppins } from "@/public/assets/fonts/poppins";
 import { IoIosArrowDropright } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
-import flatIphone from "@/public/assets/images/flatIphone.svg";
+import flatIphone from "@/public/assets/images/flatIphone.png";
 import catAlbum from "@/public/assets/images/catAlbum.svg";
 import racoonAlbum from "@/public/assets/images/racoonAlbum.svg";
 import emptyAlbum from "@/public/assets/images/emptyAlbum.svg";
-import onBoarding2Image from "@/public/assets/images/onBoarding2Image.svg";
+import onBoarding2Image from "@/public/assets/images/onBoarding2Image.png";
 import copyToast from "@/public/assets/images/copyToast.svg";
-import outDatedAlbum from "@/public/assets/images/outDatedAlbum.svg";
+import outDatedAlbum from "@/public/assets/images/outDatedAlbum.png";
 import { notosans } from "@/public/assets/fonts/notosans";
 import MainPageHeader from "@/components/container/MainPageHeader";
 
@@ -216,6 +216,7 @@ export default function Home() {
 
       <div className={`(mobile onboarding1) lg:hidden w-full h-[100svh] p-8 pt-24 flex flex-col justify-between ${notosans.className}`}>
         <h1 className="text-2xl font-bold text-center">{content.onBoarding1Title}</h1>
+        <div className="w-full flex justify-center">
         <div className="relative overflow-hidden">
           <div className={`absolute ${poppins.className} font-bold text-2xl top-[50px] left-[35px]`}>
             Pico
@@ -246,6 +247,7 @@ export default function Home() {
             width={120}
             priority={true}/>
         </div>
+        </div>
         <h2 className="whitespace-pre-wrap">{content.onBoarding1Content}</h2>
 
       </div>
@@ -255,9 +257,8 @@ export default function Home() {
           <Image className="w-[300px]"
             src={onBoarding2Image}
             alt="onBoarding2"
-            width={300}
             priority={true}/>
-            <Image className={`absolute top-[150px] left-[75px] w-[150px] {styles.__onBoarding__msg_toast}`}
+            <Image className={`absolute top-[150px] left-1/2 -translate-x-1/2 w-[150px] {styles.__onBoarding__msg_toast}`}
               src={copyToast}
               alt="copyToast"/>
           </div>
@@ -270,7 +271,6 @@ export default function Home() {
             className="w-[300px]"
             src={outDatedAlbum}
             alt="outDatedAlbum"
-            width={300}
             priority={true}/>
           </div>
         <h2 className="whitespace-pre-wrap">{content.onBoarding3Content}</h2>
