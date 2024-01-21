@@ -1,9 +1,7 @@
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { InputLabel } from "../container/InputLabel";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from "react";
 import { Error } from "../modal/ErrorModal";
 import { getDateDiffByMinute } from "@/lib/functions/dateFunctions";
-import styles from '@/styles/icons.module.css';
 
 type DateInputProps = {
   setDueDate: Dispatch<SetStateAction<Date>>;
@@ -35,7 +33,7 @@ const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateI
     // Set the value of the time input field to the current time next week
     timeInputRef.current.value = formattedTime;
     }
-  })
+  },[])
   
   const dueMsg = `${
     Math.round(dateDiff / (24 * 60))
@@ -49,7 +47,6 @@ const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateI
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const dateString = event.target.value;
-
     // Extract hour and minute components from the current dueDate
     const currentHour = dueDate.getHours();
     const currentMinute = dueDate.getMinutes();
@@ -64,6 +61,7 @@ const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateI
     // console.log(diff);
     setDueDate(newDate);
     setDateDiff(Math.floor(diff));
+    
     if (diff <= 0) {
       setErrorNo("DUE_PAST");
       return;

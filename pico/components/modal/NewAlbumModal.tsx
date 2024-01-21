@@ -3,7 +3,7 @@ import { IoIosClose } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsSendFill } from "react-icons/bs";
 import { auth } from "@/lib/firebase/firebase";
-import { Album, imageSize } from "@/templates/Album";
+import { Album, imageSize  } from "@/templates/Album";
 import { createAlbum } from "@/lib/functions/firebaseCRUD";
 import DateInput from "../inputs/DateInput";
 import ImageInput from "../inputs/ImageInput";
@@ -82,9 +82,9 @@ const NewAlbumModal = ({
       console.error('Error uploading images:', error);
     }
     //get sizes of images here.
-    const  imageSizesPromises = compressedFiles.map((image) => getImageWidthandHeight(image));
-    const imageSizes = await Promise.all(imageSizesPromises);
-    // const imageSizes:imageSize[] = [];
+    // const  imageSizesPromises = compressedFiles.map((image) => getImageWidthandHeight(image));
+    // const imageSizes:imageSize[] = await Promise.all(imageSizesPromises);
+    const imageSizes:imageSize[] = [];
     
     const createdAlbum = await createAlbum(auth.currentUser!.uid,dueDate,tagList,compressedFiles,imageSizes);
     setIsLoading(false);
