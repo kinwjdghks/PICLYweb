@@ -68,7 +68,6 @@ export const getAllAlbumsByID = async (uid:string) =>{
 export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],imgFiles:File[],imageSizes:imageSize[]): Promise<Album|undefined> =>{
   //create album and post
   let album:Album = {
-      albumID:'',
       ownerID: ownerID,
       creationTime: new Date(),
       expireTime: expireTime,
@@ -123,7 +122,6 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
     const tempImagesURL = imgFiles.map((image)=>URL.createObjectURL(image));
     // console.log(imageURLs);
     await updateDoc(getDocRef(CollectionName.albums,albumID),{
-      albumID:albumID,
       thumbnailURL: thumbnailURL,
       imageURLs: imageURLs
     })
@@ -167,7 +165,7 @@ const deleteAlbumDoc = async (album:Album) => {
   if(!album) return;
 
   const albumID = album.albumID;
-  const albumRef = getDocRef(CollectionName.albums,albumID);
+  const albumRef = getDocRef(CollectionName.albums,albumID!);
   await deleteDoc(albumRef);
 }
   
