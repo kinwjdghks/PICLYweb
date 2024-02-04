@@ -47,6 +47,7 @@ const Loading = () => {
 };
 
 const AlbumsContainer = ({userAlbumList,tagInput,selectAlbum} : {userAlbumList: Album[] | undefined, tagInput:string, selectAlbum:(album: Album) => void}) => {
+  console.log(userAlbumList);
   // Variables
 
   //useStates

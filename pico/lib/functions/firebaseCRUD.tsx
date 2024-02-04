@@ -52,9 +52,11 @@ export const getAllAlbumsByID = async (uid:string) =>{
     const querySnapshot = await getDocs(albumQuery);
 
     const fetchAlbum:Promise<Album>[] = querySnapshot.docs.map(async (doc) => {
-      const albumData :DocumentData= doc.data();
-      const album = new Album(albumData as DocumentSnapshot);
-      return album;
+      const albumID:string = doc.id;
+      const albumData:DocumentData= doc.data();
+      let album:Album = new Album(albumData as DocumentSnapshot);
+
+      return {albumID:albumID,...album};
     });
     const userAlbums:Album[] = await Promise.all(fetchAlbum);
     return userAlbums;
@@ -163,7 +165,6 @@ const deleteAlbumImages = async (album:Album) => {
 
 const deleteAlbumDoc = async (album:Album) => {
   if(!album) return;
-
   const albumID = album.albumID;
   const albumRef = getDocRef(CollectionName.albums,albumID!);
   await deleteDoc(albumRef);
