@@ -65,7 +65,7 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
     else return { props: { album: null, valid: false } }
   } catch (error) {
     console.error("Error fetching album:", error);
-    return { props: { album: null } };
+    return { props: { album: null, valid: false } };
   }
 }
 

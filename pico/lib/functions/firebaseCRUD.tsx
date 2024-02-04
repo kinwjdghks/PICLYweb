@@ -36,7 +36,8 @@ export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undef
     return;
   }
   if(getAlbum.exists()){
-    album = new Album({albumID:albumID,getAlbum});
+    console.log('Album found');
+    album = new Album({albumID:albumID,...getAlbum.data()});
   }
   else{
     console.log("Album not found");
