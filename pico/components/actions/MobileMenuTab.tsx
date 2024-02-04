@@ -1,5 +1,4 @@
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
-import Modal from "../modal/Modal";
 import { notosans } from "@/public/assets/fonts/notosans";
 import ReactDOM  from "react-dom"; 
 import { page } from "@/pages/Gallery/[userid]";

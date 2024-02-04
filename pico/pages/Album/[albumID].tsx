@@ -1,16 +1,13 @@
 // SSR
-
 import Actionbar from "@/components/actions/ActionBar";
 import { Album } from "@/templates/Album";
 import dynamic from "next/dynamic";
-import { getAlbumByID } from "@/lib/functions/firebaseCRUD";
+import { getAlbumByID, updateViewCount } from "@/lib/functions/firebaseCRUD";
 import FallbackPage from "@/components/page/FallbackPage";
 import ExpiredPage from "@/components/page/ExpiredPage";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 import { useEffect } from "react";
 const PicoCarousel = dynamic(()=>import('@/components/page/Carousel'));
-
-
 
 const ImageView = ({ album, valid }: { album: Album|null, valid:boolean }) => {
   
@@ -51,8 +48,11 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
         viewCount : album_.viewCount || 0,
         imageSizes: album_.imageSizes || [],
       }
-      // console.log(new Date(album_.expireTime).getTime());
-      // console.log(new Date().getTime());
+    
+      //increase viewCount
+      updateViewCount(album_.albumID,album_.viewCount+1);
+      console.log('viewCount updated to'+(+album_.viewCount+1));
+      
       if(new Date(album_.expireTime).getTime() > new Date().getTime()){
         return {
           props: { album:album, valid:true } ,
@@ -92,9 +92,7 @@ export async function generateMetadata({ params }: {params: {albumID: string}}){
   }
 }
 
-
 //CSR
-
 // import Actionbar from "@/components/actions/ActionBar";
 // import Carousel from "@/components/page/Carousel";
 // import { useRouter } from "next/router";

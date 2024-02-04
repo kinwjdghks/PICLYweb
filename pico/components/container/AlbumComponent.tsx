@@ -48,7 +48,8 @@ const AlbumComponent= ({ item, priority, selectAlbum,alertCopyMsg }: { item: Alb
   }
   
   return (
-    <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer" onClick = {()=>selectAlbum(item)}>
+    <div className="(container) w-full aspect-[3/4]  p-2 relative cursor-pointer" 
+      onClick = {()=>selectAlbum(item)}>
       <div className="w-full h-full relative rounded-md bg-pico_lighter">
         <ThumbNail src={item.thumbnailURL ?? noImage} len={item.imageCount} alertCopyMsg={alertCopyMsg} albumID={item.albumID} priority={priority && true}/>
         <Info/>

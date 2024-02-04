@@ -9,11 +9,13 @@ import flatIphone from "@/public/assets/images/flatIphone.png";
 import catAlbum from "@/public/assets/images/catAlbum.svg";
 import racoonAlbum from "@/public/assets/images/racoonAlbum.svg";
 import emptyAlbum from "@/public/assets/images/emptyAlbum.svg";
-import onBoarding2Image from "@/public/assets/images/onBoarding2Image.png";
+import onBoarding2ImagePC from "@/public/assets/images/onBoarding2ImagePC.png";
+import onBoarding2ImageMobile from "@/public/assets/images/onBoarding2ImageMobile.png";
 import copyToast from "@/public/assets/images/copyToast.svg";
 import outDatedAlbum from "@/public/assets/images/outDatedAlbum.png";
 import { notosans } from "@/public/assets/fonts/notosans";
 import MainPageHeader from "@/components/container/MainPageHeader";
+
 
 export default function Home() {
   const [clientSide,setClientSide] = useState<boolean>(false);
@@ -170,7 +172,7 @@ export default function Home() {
           <div className="lg:w-1/2 lg:h-full flex items-center">
             <div className="relative items-center left-[10%]">
               <Image className="w-[500px]"
-                src={onBoarding2Image}
+                src={onBoarding2ImagePC}
                 alt="onBoarding2"
                 width={0}
                 height={0}
@@ -191,6 +193,7 @@ export default function Home() {
           <div className="lg:w-1/2 lg:h-full flex justify-end items-center">
             <div className="relative right-[10%]">
               <Image
+                className="w-[439px]"
                 src={outDatedAlbum}
                 alt="outDatedAlbum"
                 width={0}
@@ -255,7 +258,7 @@ export default function Home() {
         <h1 className="text-2xl font-bold text-center">{content.onBoarding2Title}</h1>
         <div className="relative justify-center flex">
           <Image className="w-[300px]"
-            src={onBoarding2Image}
+            src={onBoarding2ImageMobile}
             alt="onBoarding2"
             priority={true}/>
             <Image className={`absolute top-[150px] left-1/2 -translate-x-1/2 w-[150px] {styles.__onBoarding__msg_toast}`}

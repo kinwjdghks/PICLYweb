@@ -5,20 +5,20 @@ import { FcGoogle } from "react-icons/fc";
 import arrow from '@/public/assets/images/arrow_back.svg';
 import PiCoLogo from '@/public/assets/images/PiCo_Logo_white.svg';
 import { useRouter } from "next/router";
-import { auth } from "@/lib/firebase/firebase";
 import {  useEffect, useRef, useState } from "react";
 import { signInWithCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
 import { db } from "@/lib/firebase/firebase";
+import { auth } from "@/lib/firebase/firebase";
 import { DocumentSnapshot, doc,getDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
-import { GoogleLogin } from '@react-oauth/google';
 import PageFrame from "./PageFrame";
 import EmailLoginForm from "../form/EmailLoginForm";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { signIn } from 'next-auth/react';
+// import { signIn } from 'next-auth/react';
+
 
 export const logout = async () =>{
+  const auth = getAuth();
   console.log('logged out');
   sessionStorage.removeItem('picoweb_loginState');
   signOut(auth).then(() => {
@@ -69,48 +69,50 @@ const LoginPage = () => {
     if(pwcRef.current) pwcRef.current.value = '';
   }
 
-  // const logInGoogle = async () => {
-  //   const auth = getAuth();
-    
-  //   const provider = new GoogleAuthProvider();
-  //   signInWithPopup(auth, provider)
-  //     .then( async (result) => {
-  //       // This gives you a Google Access Token. You can use it to access the Google API.
-  //       console.log(result);
-  //       const credential_ = GoogleAuthProvider.credentialFromResult(result);
-  //       // const token = credential!.accessToken;
-  //       const id_token = credential_?.idToken;
+  const logInGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
 
-  //       const credential = GoogleAuthProvider.credential(id_token);
-  //       // The signed-in user info.
-  //       const user_ = result.user;
-  //       let user:_user_|undefined;
-  //       const userRef = doc(db, 'Users', user_.uid);
-  //       const userDoc = await getDoc(userRef);
+    signInWithPopup(auth, provider)
+      .then(result => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        console.log(result);
+        const credential_ = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential!.accessToken;
+        const id_token = credential_?.idToken;
 
-  //       if (!userDoc.exists()) {
-  //         // This is the first time the user is registering
-  //         user = {
-  //           // uid: user_.uid,
-  //           email: '',
-  //           authProvider: 'google',
-  //           creationTime: new Date(),
-  //         };
-  //         // Create a Firebase doc only if the user is registering for the first time
-  //         await setDoc(userRef, user);
-  //       }
+        console.log(credential_);
+
+        // const credential = GoogleAuthProvider.credential(id_token);
+        // // The signed-in user info.
+        // const user_ = result.user;
+        // let user:_user_|undefined;
+        // const userRef = doc(db, 'Users', user_.uid);
+        // const userDoc = await getDoc(userRef);
+
+        // if (!userDoc.exists()) {
+        //   // This is the first time the user is registering
+        //   user = {
+        //     // uid: user_.uid,
+        //     email: '',
+        //     authProvider: 'google',
+        //     creationTime: new Date(),
+        //   };
+        //   // Create a Firebase doc only if the user is registering for the first time
+        //   await setDoc(userRef, user);
+        // }
     
-  //       await signInWithCredential(auth,credential);
-  //       router.push(`/Gallery/${user_.uid}`)
-  //     }).catch((error) => {
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       // The email of the user's account used.
-  //       console.log('errorCode: '+errorCode);
-  //       console.log(errorMessage);
-  //     });
-  //   return;
-  // };
+        // await signInWithCredential(auth,credential);
+        // router.push(`/Gallery/${user_.uid}`)
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        console.log('errorCode: '+errorCode);
+        console.log(errorMessage);
+      });
+    return;
+  };
 
   const logInEmail = async () => {
     const id = emailRef?.current?.value.trim();
@@ -120,7 +122,7 @@ const LoginPage = () => {
 
   try {
     const userCredential = await signInWithEmailAndPassword(auth, id!, pw!);
-    user = userCredential.user;
+    user = userCredential.user;  
     const docRef = doc(db,'Users',user.uid);
     console.log(user.uid)
     userInfo = await getDoc(docRef);
@@ -223,26 +225,16 @@ const LoginPage = () => {
           <button className={`${inputClassName} border-[1px] text-white hover:bg-white hover:text-black`} 
             onClick={isRegistering ? register_Email : logInEmail}>{isRegistering ? '가입하기':'로그인'}
           </button>
-          <p className="mt-4">또는</p>
+          {/* <p className="mt-4">또는</p>
           
           <div className="flex h-max w-full mt-4 items-center">
             <button className={`${inputClassName} border-[1px] mx-0 pr-12 text-white hover:bg-white hover:text-black flex items-center`}
-              onClick={()=>signIn('google')}>
+              onClick={logInGoogle}>
                 <FcGoogle className="w-8 h-8"/>
                 <p className="mr-auto ml-auto">구글로 계속하기</p>
             </button>
-            {/* <span className="w-full text-center">
-            <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID!}>
-              <GoogleLogin
-                onSuccess={credentialResponse => {
-                  console.log(credentialResponse)
-                }}
-                onError={() => {
-                  console.log('Login Failed')
-                }}/>
-              </GoogleOAuthProvider>
-            </span> */}
-          </div>
+
+          </div> */}
 
         </div>    
         <div className="flex flex-col mt-auto">

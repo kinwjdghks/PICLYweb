@@ -135,6 +135,13 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
     return album;
 }
 
+//Update functions
+export const updateViewCount = async (albumID:string, newViewCount:number) =>{
+  await updateDoc(getDocRef(CollectionName.albums,albumID),{
+    viewCount: newViewCount
+  });
+}
+
 // Delete functions
 const deleteAlbumImages = async (album:Album) => {
   if (!album) return;

@@ -1,5 +1,5 @@
 // import NewAlbumModal from "@/components/Gallery/newalbummodal";
-import Modal from "../modal/Modal";
+import Modal from "../modal/ModalWithBackDrop";
 import dynamic from "next/dynamic";
 import {Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState} from "react";
 import Actionbar from "@/components/actions/ActionBar";

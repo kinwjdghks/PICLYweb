@@ -8,24 +8,31 @@ import { Album } from "@/templates/Album";
 import PopupMessage from "../modal/PopupMessage";
 import { copyURL } from "@/lib/functions/copyURL";
 import AlertMessage from "../modal/AlertMessage";
+import AlbumInfoModal from "../modal/AlbumInfoModal";
+import Modal from "../modal/ModalWithBackDrop";
 
-const MenuBar = ({
-  isMenuOpen,
-  deleteAlbum,
-  menuClose,
-}: {
-  isMenuOpen: Boolean;
+type MenuBarProps={
+isMenuOpen: Boolean;
   deleteAlbum: () => void;
+  album:Album;
   menuClose: () => void;
-}) => {
+}
+
+const MenuBar = ({isMenuOpen,deleteAlbum,album,menuClose,}: MenuBarProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showAlbumInfo,setShowAlbumInfo] = useState<boolean>(false);
   const listClassName = "w-full text-right text-center hover:underline underline-offset-8 items-center lg:text-2xl text-[1.3rem]";
 
-  return isMenuOpen ? (
-    <ul className={`w-30 h-max absolute lg:top-28 top-16 lg:right-0 -right-8 p-10 pt-0 leading-[2.5rem] text-right  text-[#aaaaaa]} lg:bg-transparent bg-gradient-to-bl from-black to-transparent lg:from-transparent`}>
-      <li>
+  if(isMenuOpen) 
+    return <>
+    {showAlbumInfo && <Modal onClick={()=>setShowAlbumInfo(false)}><AlbumInfoModal album={album} closeModal={()=>{setShowAlbumInfo(false)}}/></Modal>}
+    <ul className={`w-30 h-max absolute lg:top-28 top-16 lg:right-0 -right-8 p-10 pt-0  leading-[2.5rem] text-right  text-[#aaaaaa]} lg:bg-transparent bg-gradient-to-bl from-black to-transparent lg:from-transparent`}>
+        <li className={`${listClassName}`}>
+          <button onClick={()=>setShowAlbumInfo(true)}>앨범 정보</button>
+        </li>
+      <li className={`${listClassName}`}>
         <button
-          className={`${listClassName} ${isLoading && "cursor-default"}`}
+          className={`${isLoading && "cursor-default"}`}
           onClick={
             isLoading
               ? () => {}
@@ -37,16 +44,14 @@ const MenuBar = ({
           {isLoading ? "삭제 중..." : "앨범 삭제"}
         </button>
       </li>
-      <li>
-        <button className={listClassName} onClick={menuClose}>
+      <li className={`${listClassName}`}>
+        <button onClick={menuClose}>
           취소
         </button>
       </li>
       <div className="bg-gradient-to-b via-80%"></div>
     </ul>
-  ) : (
-    <></>
-  );
+  </>
 };
 
 const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () => void, mode: "user" | "guest", album: Album, deleteAlbum: () => void }) => {
@@ -88,6 +93,8 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
           className="w-14 h-14 top-0 left-0 cursor-pointer fill-white"
           onClick={resetAlbum}/>
 
+        <div className="">{}</div>
+
         <URLCopyButton/>
         
         <HiOutlineMenu
@@ -100,6 +107,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
         <MenuBar
           isMenuOpen={isMenuOpen}
           deleteAlbum={deleteAlbum}
+          album={album}
           menuClose={() => {
             setisMenuOpen(false);
             }}/>
