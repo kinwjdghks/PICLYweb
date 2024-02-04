@@ -23,6 +23,7 @@ const getStorageRef = (objectName: string) =>{
 
 // Read functions
 export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undefined> =>{
+  console.log('albumID:'+albumID);
   if(!albumID) return undefined;
   const albumRef = getDocRef(CollectionName.albums, albumID);
   //get Album
@@ -35,7 +36,7 @@ export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undef
     return;
   }
   if(getAlbum.exists()){
-    album = new Album(getAlbum);
+    album = new Album({albumID:albumID,getAlbum});
   }
   else{
     console.log("Album not found");
