@@ -50,7 +50,7 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
       }
     
       //increase viewCount
-      updateViewCount(album_.albumID,album_.viewCount+1);
+      updateViewCount(album_.albumID!,album_.viewCount+1);
       console.log('viewCount updated to'+(+album_.viewCount+1));
       
       if(new Date(album_.expireTime).getTime() > new Date().getTime()){

@@ -17,7 +17,7 @@ export enum AlbumProps {
 }
 
 export interface Album {
-  albumID: string;
+  albumID?: string;
   ownerID: string;
   creationTime: Date;
   expireTime: Date;
@@ -35,7 +35,7 @@ export type AlbumData =
   | Album;
 
 export class Album {
-  public albumID: string;
+  public albumID?: string;
   public ownerID: string;
   public creationTime: Date;
   public expireTime: Date;

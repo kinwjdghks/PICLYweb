@@ -70,7 +70,7 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
         show={showcopymsg} 
         setShow={setShowcopymsg} 
         ellapseTime={1200} 
-        callback={()=>copyURL(album.albumID)}>
+        callback={()=>copyURL(album.albumID!)}>
        <AlertMessage>링크가 복사되었습니다.</AlertMessage>
       </PopupMessage>
       <BsLink45Deg className="lg:w-11 lg:h-11 w-9 h-9 m-2 cursor-pointer hover:scale-[115%] " />
