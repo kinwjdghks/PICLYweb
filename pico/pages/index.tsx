@@ -18,7 +18,6 @@ import MainPageHeader from "@/components/container/MainPageHeader";
 
 
 export default function Home() {
-  const [clientSide,setClientSide] = useState<boolean>(false);
 
   const router = useRouter();
   //constants
@@ -38,10 +37,12 @@ export default function Home() {
     onBoarding3Content:
       "앨범을 게시할 때 만료시간을 설정할 수 있습니다.\n만료시간 이후에는 본인만 앨범을 확인할 수 있습니다.\n\n이제는 더욱 편하게 앨범을 관리하세요.",
   };
-
-  const detailsRef = useRef<HTMLDivElement | null>(null);
+  //useStates
   const [scrollpos, setScrollPos] = useState<number>(0);
-
+  const [clientSide,setClientSide] = useState<boolean>(false);
+  //useRefs
+  const detailsRef = useRef<HTMLDivElement | null>(null);
+  const firstOnBoardingRef = useRef<HTMLDivElement>(null);
   useEffect(()=>{
     setClientSide(true);
   },[]);
@@ -91,7 +92,10 @@ export default function Home() {
                 </div>
 
                 <div className={`w-fit lg:mt-4 flex items-center text-center lg:text-3xl text-2xl hover:underline underline-offset-8 cursor-pointer`}
-                  onClick={() => window.scrollTo(0, firstPageEnd + 1)}>
+                  onClick={() => {
+                    window.scrollTo(0, firstPageEnd + 1);
+                    firstOnBoardingRef.current?.scrollIntoView({behavior:'smooth'});
+                  }}>
                   더 알아보기
                   <IoIosArrowDropdown className="mx-2" />
                 </div>
@@ -217,7 +221,8 @@ export default function Home() {
         </div>
       )}
 
-      <div className={`(mobile onboarding1) lg:hidden w-full h-[100svh] p-8 pt-24 flex flex-col justify-between ${notosans.className}`}>
+      <div className={`(mobile onboarding1) lg:hidden w-full h-[100svh] p-8 pt-24 flex flex-col justify-between ${notosans.className}`}
+        ref={firstOnBoardingRef}>
         <h1 className="text-2xl font-bold text-center">{content.onBoarding1Title}</h1>
         <div className="w-full flex justify-center">
         <div className="relative overflow-hidden">
