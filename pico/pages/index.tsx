@@ -266,9 +266,9 @@ export default function Home() {
             src={onBoarding2ImageMobile}
             alt="onBoarding2"
             priority={true}/>
-            <Image className={`absolute top-[150px] left-1/2 -translate-x-1/2 w-[150px] {styles.__onBoarding__msg_toast}`}
+            {/* <Image className={`absolute top-[150px] left-1/2 -translate-x-1/2 w-[150px] {styles.__onBoarding__msg_toast}`}
               src={copyToast}
-              alt="copyToast"/>
+              alt="copyToast"/> */}
           </div>
         <h2 className="whitespace-pre-wrap">{content.onBoarding2Content}</h2>
       </div>
