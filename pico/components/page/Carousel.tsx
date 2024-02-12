@@ -116,7 +116,7 @@ const Carousel = ({album}:{album:Album})=> {
   };
 
   const imageList = album.imageURLs.map((url,idx) => (
-    <div key={idx} className="(imagebackground) w-screen lg:h-screen h-[calc(100vh-4rem)] flex justify-center align-middle snap-center relative">
+    <div key={idx} className="(imagebackground) w-screen lg:h-screen h-[calc(100vh-5rem)] flex justify-center align-middle snap-center relative">
       {idx == activeIndex && <div className="(anchor) w-1 h-1 absolute" key={idx} ref={activeImgRef}></div>}
       <Image
         src={url}
