@@ -1,6 +1,6 @@
 const address = {
     local: "localhost:3000/Album/",
-    app: "https://picoweb.vercel.app/Album/",
+    app: "pico.net.co/Album/",
   };
   const domain = (string: "local" | "app") => address[string];
 
