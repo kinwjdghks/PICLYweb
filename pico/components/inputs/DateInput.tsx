@@ -1,7 +1,7 @@
 import { InputLabel } from "../container/InputLabel";
 import { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from "react";
 import { Error } from "../modal/ErrorModal";
-import { getDateDiffByMinute } from "@/lib/functions/dateFunctions";
+import { formatDateStringforTag, getDateDiffByMinute } from "@/lib/functions/dateFunctions";
 
 type DateInputProps = {
   setDueDate: Dispatch<SetStateAction<Date>>;
@@ -88,6 +88,11 @@ const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateI
     setDateDiff(Math.floor(diff));
   };
 
+  const getOneYearLater = () => {
+    const today = new Date();
+    const nextYear = new Date(new Date().setFullYear(today.getFullYear() + 1));
+    return formatDateStringforTag(nextYear);
+  }
   return (
     <>
       <InputLabel>만료 기한</InputLabel>
@@ -97,6 +102,7 @@ const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateI
             className={`text-white h-10 w-42 m-2 p-4 rounded-md bg-pico_darker`}
             type="date"
             onChange={handleDateChange}
+            max={getOneYearLater()}
             ref={dateInputRef}/>
           <input
             className={`text-white h-10 w-42 m-2 p-4 rounded-md bg-pico_darker`}
