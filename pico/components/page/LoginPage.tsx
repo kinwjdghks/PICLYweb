@@ -14,8 +14,7 @@ import { FirebaseError } from "firebase/app";
 import PageFrame from "./PageFrame";
 import EmailLoginForm from "../form/EmailLoginForm";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
-// import { signIn } from 'next-auth/react';
-
+import { createDefaultAlbum } from "@/lib/functions/firebaseCRUD";
 
 export const logout = async () =>{
   const auth = getAuth();
@@ -126,6 +125,8 @@ const LoginPage = () => {
     const docRef = doc(db,'Users',user.uid);
     console.log(user.uid)
     userInfo = await getDoc(docRef);
+
+    // createDefaultAlbum(user.uid);
   } catch (error) {
     if(error instanceof FirebaseError){
       console.log(error.code);
@@ -173,6 +174,7 @@ const LoginPage = () => {
     }
 
     clearInput();
+    createDefaultAlbum(user_.uid);
     setIsRegistering(false);
     setMsg('정상적으로 가입되었습니다');
     //create firebase doc

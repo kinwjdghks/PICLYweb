@@ -89,10 +89,10 @@ const DateInput = ({ setDueDate,setDateDiff,setErrorNo,dueDate,dateDiff }: DateI
   };
 
   const getOneYearLater = () => {
-    const today = new Date();
-    const nextYear = new Date(new Date().setFullYear(today.getFullYear() + 1));
+    const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
     return formatDateStringforTag(nextYear);
   }
+
   return (
     <>
       <InputLabel>만료 기한</InputLabel>

@@ -2,7 +2,7 @@
 import Actionbar from "@/components/actions/ActionBar";
 import { Album } from "@/templates/Album";
 import dynamic from "next/dynamic";
-import { getAlbumByID, updateViewCount } from "@/lib/functions/firebaseCRUD";
+import { getAlbumByAlbumID, updateViewCount } from "@/lib/functions/firebaseCRUD";
 import FallbackPage from "@/components/page/FallbackPage";
 import ExpiredPage from "@/components/page/ExpiredPage";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
@@ -33,7 +33,7 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
   const albumID = query.albumID as string;
 
   try {
-    const album_: Album | undefined = await getAlbumByID(albumID);
+    const album_: Album | undefined = await getAlbumByAlbumID(albumID);
     
     if (album_){
       const album:Album = {
@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: {params: {albumID: string}}){
  
   let album:Album | undefined;
   try {
-    album = await getAlbumByID(params.albumID);
+    album = await getAlbumByAlbumID(params.albumID);
   }catch(error){
     console.log(error);
   }
@@ -98,7 +98,7 @@ export async function generateMetadata({ params }: {params: {albumID: string}}){
 // import { useRouter } from "next/router";
 // import FallbackPage from "@/components/page/FallbackPage";
 // import { Album } from "@/templates/Album";
-// import { getAlbumByID } from "@/lib/functions/firebaseCRUD";
+// import { getAlbumByAlbumID } from "@/lib/functions/firebaseCRUD";
 // import { useEffect, useState } from "react";
 // import LoadingPage from "@/components/page/LoadingPage";
 // import { useBodyScrollLock } from "@/lib/functions/scrollLock";
@@ -128,7 +128,7 @@ export async function generateMetadata({ params }: {params: {albumID: string}}){
 //   const { lockScroll, openScroll } = useBodyScrollLock();
 
 //   const getAlbum = async (albumID:string) => { 
-//     let album: Album | undefined = await getAlbumByID(albumID);
+//     let album: Album | undefined = await getAlbumByAlbumID(albumID);
 //     // console.log(album);
 //     setCurAlbum(album);
 //     setIsLoading(false);
