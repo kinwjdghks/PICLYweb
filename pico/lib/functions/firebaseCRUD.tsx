@@ -22,7 +22,7 @@ const getStorageRef = (objectName: string) =>{
 }
 
 // Read functions
-export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undefined> =>{
+export const getAlbumByAlbumID = async (albumID:string|undefined):Promise<Album|undefined> =>{
   console.log('albumID:'+albumID);
   if(!albumID) return undefined;
   const albumRef = getDocRef(CollectionName.albums, albumID);
@@ -46,7 +46,7 @@ export const getAlbumByID = async (albumID:string|undefined):Promise<Album|undef
   return album;
 }
 
-export const getAllAlbumsByID = async (uid:string) =>{
+export const getAllAlbumsByUID = async (uid:string) =>{
   console.log("getAllAlbumsByID executed");
   const albumQuery = query(getCollectionRef(CollectionName.albums), where(AlbumProps.ownerID, '==', uid), orderBy(AlbumProps.creationTime,'desc'));
   
@@ -136,6 +136,19 @@ export const createAlbum = async (ownerID:string,expireTime:Date,tags:string[],i
     return album;
 }
 
+export const createDefaultAlbum = async (uid: string) => {
+  // URLs of the images stored in your public folder
+  const defaultImageUrl = '/assets/images/defaultAlbumImage.png';
+
+  // Convert each URL to a File object
+  const response = await fetch(defaultImageUrl);
+  const blob = await response.blob();
+  const imgFile:File = new File([blob], defaultImageUrl.split('/').pop()!, {type: 'image/jpeg'});
+  
+  await createAlbum(uid, new Date(new Date().setDate(new Date().getDate() + 7)), ['우리집_고양이'], [imgFile], [{width: 692 * 4, height: 692 * 4}]);
+  console.log('default album created');
+}
+
 //Update functions
 export const updateViewCount = async (albumID:string, newViewCount:number) =>{
   await updateDoc(getDocRef(CollectionName.albums,albumID),{
@@ -175,4 +188,23 @@ const deleteAlbumDoc = async (album:Album) => {
 export const deleteAlbum = async (album:Album) =>{
   await deleteAlbumImages(album);
   await deleteAlbumDoc(album);
+}
+
+export const clearAllAlbumsByID = async (uid:string) =>{
+  console.log("getAllAlbumsByID executed");
+  const albumQuery = query(getCollectionRef(CollectionName.albums), where(AlbumProps.ownerID, '==', uid), orderBy(AlbumProps.creationTime,'desc'));
+  
+  try {
+    const querySnapshot = await getDocs(albumQuery);
+
+    querySnapshot.docs.forEach(async (doc) => {
+      const albumID:string = doc.id;
+      const albumData:DocumentData= doc.data();
+      let album:Album = new Album({albumID:albumID,...albumData as DocumentSnapshot});
+      deleteAlbum(album);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+
 }

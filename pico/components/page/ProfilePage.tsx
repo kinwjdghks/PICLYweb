@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { MdArrowBackIos } from "react-icons/md";
 import { page } from "@/pages/Gallery/[userid]";
 import PageFrame from "./PageFrame";
+import { clearAllAlbumsByID } from "@/lib/functions/firebaseCRUD";
 
 const DeleteModal = ({deleteAccount,closeModal}:{deleteAccount:()=>void,closeModal:()=>void}):React.ReactNode =>{
 
@@ -80,6 +81,7 @@ const ProfilePage = ({albumCount,close}:{albumCount:number|undefined,close:(page
     const onDeleteAccount = async () =>{
         if(!user) return;
         try{
+            await clearAllAlbumsByID(user.uid);
             await deleteUser(user);
             router.push('/');
         }catch(error){

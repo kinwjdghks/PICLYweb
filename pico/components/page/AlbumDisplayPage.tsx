@@ -9,7 +9,7 @@ import { auth } from "@/lib/firebase/firebase";
 import { _user_ } from "@/templates/user";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 import AlbumsContainer from "../container/AlbumsContainer";
-import { deleteAlbum, getAllAlbumsByID } from "@/lib/functions/firebaseCRUD";
+import { deleteAlbum, getAllAlbumsByUID } from "@/lib/functions/firebaseCRUD";
 import GalleryHeader from "../container/GalleryHeader";
 import PageFrame from "./PageFrame";
 //dynamic import component
@@ -80,7 +80,7 @@ const AlbumDisplayPage = ({userAlbumList,setUserAlbumList,setMobileMenuOpen}:Alb
   const { lockScroll, openScroll } = useBodyScrollLock();
 
   const getAllAlbumsByID_ = async (uid:string) =>{
-    const albumList = await getAllAlbumsByID(uid);
+    const albumList = await getAllAlbumsByUID(uid);
     setUserAlbumList(albumList);
   }
 
