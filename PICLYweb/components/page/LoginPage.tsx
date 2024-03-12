@@ -1,7 +1,7 @@
 import Image from "next/image";
 import nanumgothic from "@/public/assets/fonts/nanumgothic";
 import { _user_ } from "@/templates/user";
-import { FcGoogle } from "react-icons/fc";
+import AppstoreImg from "@/public/assets/images/DownloadAppstore.svg";
 import arrow from '@/public/assets/images/arrow_back.svg';
 import PICLYLogo from '@/public/assets/images/PICLY_Logo_white.svg';
 import { useRouter } from "next/router";
@@ -213,7 +213,7 @@ const LoginPage = () => {
     <PageFrame className={`w-screen p-12 lg:px-[40%] lg:py-[5%] relative bg-picly_darker flex justify-center overflow-hidden ${nanumgothic.className}`}>
       <div className="(container) w-full relative flex flex-col items-center">
         <Image src={PICLYLogo} alt="logo" className="w-16 h-16 rotate-12"/>
-        
+
         <EmailLoginForm
           emailRef={emailRef}
           pwRef={pwRef}
@@ -239,8 +239,12 @@ const LoginPage = () => {
             </button>
 
           </div> */}
-
-        </div>    
+        <a className="mt-8" 
+          href="https://apps.apple.com/kr/app/picly-%ED%94%BC%ED%81%B4%EB%A6%AC/id6478313847"
+          target='_blank'> 
+          <Image src={AppstoreImg} alt="appstore" className="w-28 " />    
+        </a>
+        </div>
         <div className="flex flex-col mt-auto">
           <button onClick={()=>{}} className="text-center hover:underline underline-offset-8 items-center text-1 lead ing-9 opacity-30 cursor-default">비밀번호 찾기</button>
           <button onClick={()=>{setIsRegistering((prev)=>!prev)}} className="text-center hover:underline underline-offset-8 items-center leading-9">{isRegistering  ? '취소' : '가입하기'}</button>

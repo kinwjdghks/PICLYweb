@@ -3,10 +3,12 @@ import { db, storage } from "../firebase/firebase";
 import { DocumentData, DocumentSnapshot, addDoc, collection, deleteDoc, doc,getDoc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { imageCompressGetFile } from "./imageCompress";
+import { _report_ } from "@/templates/Reports";
 
 enum CollectionName {
   albums = "Albums",
   users = "Users",
+  reports = "Reports",
 }
 
 const getCollectionRef = (collectionName: CollectionName) =>{
@@ -149,8 +151,19 @@ export const createDefaultAlbum = async (uid: string) => {
   console.log('default album created');
 }
 
+export const createReport = async (albumID:string, reportCode: number, content:string) => {
+  const report:_report_ = {
+    creationTime: new Date(),
+    albumID: albumID,
+    reportCode: reportCode,
+    reportContent: content
+  }
+  const doc = await addDoc(getCollectionRef(CollectionName.reports), report);
+  // console.log(doc);
+}
+
 //Update functions
-export const updateViewCount = async (albumID:string, newViewCount:number) =>{
+export const updateViewCount = async (albumID:string, newViewCount:number) => {
   await updateDoc(getDocRef(CollectionName.albums,albumID),{
     viewCount: newViewCount
   });
