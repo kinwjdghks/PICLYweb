@@ -15,7 +15,10 @@ const Sidebar = ({switchPage}:{switchPage:(page:page)=>void}):React.ReactNode =>
     return <div className="lg:visible invisible lg:h-screen min-h-max h-[calc(var(--vh, 1vh) * 100)] lg:w-64 w-0 left-0 top-0 flex flex-col lg:border-r-[1px] border-white bg-picly_default">
         <div className={`w-full text-center p-4 flex flex-col items-center ${poppins.className}  `}>
         <p className="text-[3rem] font-[600]" draggable='false'><PICLYLogo/></p>
-        <Image src={appstore} width={0} height={0} alt='appstore' className="w-28" draggable='false'/>
+        <a href="https://apps.apple.com/kr/app/picly-%ED%94%BC%ED%81%B4%EB%A6%AC/id6478313847"
+           target='_blank'>
+          <Image src={appstore} width={0} height={0} alt='appstore' className="w-28" draggable='false'/>
+        </a>
       </div>
 
       <ul className={`w-2/3 text-xl ml-[20%] mt-auto mb-20 ${nanumgothic.className}`}>

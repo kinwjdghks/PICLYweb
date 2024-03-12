@@ -11,6 +11,8 @@ import AlertMessage from "../modal/AlertMessage";
 import AlbumInfoModal from "../modal/AlbumInfoModal";
 import Modal from "../modal/ModalWithBackDrop";
 import PICLYLogo from "../container/Logo";
+import { BiSolidMegaphone } from "react-icons/bi";
+import ReportModal from "../modal/ReportModal";
 
 type MenuBarProps={
 isMenuOpen: Boolean;
@@ -26,7 +28,7 @@ const MenuBar = ({isMenuOpen,deleteAlbum,album,menuClose,}: MenuBarProps) => {
 
   if(isMenuOpen) 
     return <>
-    {showAlbumInfo && <Modal onClick={()=>setShowAlbumInfo(false)}><AlbumInfoModal album={album} closeModal={()=>{setShowAlbumInfo(false)}}/></Modal>}
+    {showAlbumInfo && <Modal onClickBackDrop={()=>setShowAlbumInfo(false)}><AlbumInfoModal album={album} closeModal={()=>{setShowAlbumInfo(false)}}/></Modal>}
     <ul className={`w-30 h-max absolute lg:top-28 top-16 lg:right-0 -right-8 p-10 pt-0  leading-[2.5rem] text-right  text-[#aaaaaa]} lg:bg-transparent bg-gradient-to-bl from-black to-transparent lg:from-transparent`}>
         <li className={`${listClassName}`}>
           <button onClick={()=>setShowAlbumInfo(true)}>앨범 정보</button>
@@ -59,6 +61,8 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
   //useState
   const [isMenuOpen, setisMenuOpen] = useState<boolean>(false);
   const [showcopymsg, setShowcopymsg] = useState<boolean>(false);
+  const [reportModalOpen, setReportModalOpen] = useState<boolean>(false);
+  
 
   //constants
   const user: Boolean = mode == "user";
@@ -80,21 +84,26 @@ const Actionbar = ({resetAlbum, mode, album, deleteAlbum } : { resetAlbum: () =>
   
   return (
     <div className={`(actionbar) w-screen h-max fixed flex items-center top-0 lg:p-12 p-4 pt-2 ${poppins.className} z=[102]`}>
+      {reportModalOpen && 
+        <ReportModal albumID={album.albumID!} onClickBackDrop={() => setReportModalOpen(false)}/>}
       {!user && (
+        <div className="w-full flex items-center">
         <Link
           href={"/"}
           className="w-max h-max font-bold lg:text-4xl text-2xl"
           onClick={resetAlbum}>
           <PICLYLogo/>
-        </Link>)}
+        </Link>
+        <BiSolidMegaphone 
+          onClick={()=>setReportModalOpen(true)} 
+          className="fill-white ml-auto w-6 h-6 cursor-pointer"/>
+        </div>)}
 
       {user && (
         <>
         <IoIosClose
           className="w-14 h-14 top-0 left-0 cursor-pointer fill-white"
           onClick={resetAlbum}/>
-
-        <div className="">{}</div>
 
         <URLCopyButton/>
         

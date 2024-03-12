@@ -55,10 +55,12 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
       
       if(new Date(album_.expireTime).getTime() > new Date().getTime()){
         return {
+          //album found and viewable
           props: { album:album, valid:true } ,
         };
       }
       else return {
+        //album found and unviewable
         props: { album:null, valid:true } ,
       }
     }

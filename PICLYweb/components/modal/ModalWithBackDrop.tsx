@@ -1,14 +1,15 @@
+"use client";
 import { PropsWithChildren, useEffect, useState } from "react";
 import ReactDOM  from "react-dom"; 
 
 type ModalProps={
     children?: React.ReactNode;
-    onClick?:()=>void;
+    onClickBackDrop?:()=>void;
 }   
 
-const BackDrop = ({children,onClick}:ModalProps)=>{
+const BackDrop = ({children,onClickBackDrop}:ModalProps)=>{
     return <div className="(backdrop) w-screen h-screen left-0 top-0 fixed bg-black/80"
-      onClick={onClick}>{children}</div>
+      onClick={onClickBackDrop}>{children}</div>
 }
 
 const ModalWithBackDrop = (props: PropsWithChildren<ModalProps>) =>{
@@ -20,7 +21,7 @@ const ModalWithBackDrop = (props: PropsWithChildren<ModalProps>) =>{
     if (typeof window === 'undefined') return <></>;
     
     const root = document.getElementById('modalroot');
-    const portal = ReactDOM.createPortal(<BackDrop onClick={props.onClick}>{props.children}</BackDrop>, root!);
+    const portal = ReactDOM.createPortal(<BackDrop onClickBackDrop={props.onClickBackDrop}>{props.children}</BackDrop>, root!);
         
     return portal;
 } 
