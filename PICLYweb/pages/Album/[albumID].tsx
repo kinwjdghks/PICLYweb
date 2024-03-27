@@ -7,8 +7,7 @@ import FallbackPage from "@/components/page/FallbackPage";
 import ExpiredPage from "@/components/page/ExpiredPage";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 import { useEffect } from "react";
-// const PiclyCarousel = dynamic(()=>import('@/components/page/Carousel'));
-import Carousel from "@/components/page/Carousel";
+const PiclyCarousel = dynamic(()=>import('@/components/page/Carousel'));
 
 const ImageView = ({ album, valid }: { album: Album|null, valid:boolean }) => {
   
@@ -24,7 +23,7 @@ const ImageView = ({ album, valid }: { album: Album|null, valid:boolean }) => {
 
   return (
     <div className="(background) w-screen h-screen absolute bg-black">
-      <Carousel album={album} />
+      <PiclyCarousel album={album} />
       <Actionbar resetAlbum={() => {}} mode="guest" album={album} deleteAlbum={()=>{}} />
     </div>
   );
