@@ -3,6 +3,7 @@ import Image from "next/image";
 import nextImg from '@/public/assets/images/arrow_forward.svg'
 import prevImg from '@/public/assets/images/arrow_back.svg'
 import LoadingPage from "./LoadingPage";
+import defaultPic from "@/public/assets/images/catAlbum.svg";
 import { Album } from "@/templates/Album";
 
 const Action = ({prev,next}:{prev:()=>void, next:()=>void}) =>{
@@ -119,7 +120,8 @@ const Carousel = ({album}:{album:Album})=> {
     <div key={idx} className="(imagebackground) w-screen lg:h-screen h-[calc(100vh-6rem)] flex justify-center align-middle snap-center relative">
       {idx == activeIndex && <div className="(anchor) w-1 h-1 absolute" key={idx} ref={activeImgRef}></div>}
       <Image
-        src={url}
+        // src={url}
+        src={defaultPic}
         alt={`${url}`}
         width={0}
         height={0}
