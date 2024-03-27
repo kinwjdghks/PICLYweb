@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    formats:['image/avif', 'image/webp'],
     domains: ["firebasestorage.googleapis.com"],
     minimumCacheTTL: 31536000,
   },
