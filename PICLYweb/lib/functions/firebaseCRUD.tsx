@@ -32,7 +32,11 @@ export const getAlbumByAlbumID = async (albumID:string|undefined):Promise<Album|
   let album:Album;
   let getAlbum:DocumentSnapshot;
   try{
+    // let from, to;
+    // from = new Date().getTime()
     getAlbum = await getDoc(albumRef);
+    // to = new Date().getTime()
+    // console.log(to-from);
   }catch(error){
     console.log(error);
     return;

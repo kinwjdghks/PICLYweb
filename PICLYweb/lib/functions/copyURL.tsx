@@ -1,6 +1,6 @@
 const address = {
     local: "localhost:3000/Album/",
-    app: "picly.app/Album/",
+    app: "https://picly.app/Album/",
   };
   const domain = (string: "local" | "app") => address[string];
 
