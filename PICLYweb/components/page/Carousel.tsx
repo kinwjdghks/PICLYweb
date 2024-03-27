@@ -120,8 +120,8 @@ const Carousel = ({album}:{album:Album})=> {
     <div key={idx} className="(imagebackground) w-screen lg:h-screen h-[calc(100vh-6rem)] flex justify-center align-middle snap-center relative">
       {idx == activeIndex && <div className="(anchor) w-1 h-1 absolute" key={idx} ref={activeImgRef}></div>}
       <Image
-        src={url}
-        // src={defaultPic}
+        // src={url}
+        src={defaultPic}
         alt={`${url}`}
         width={0}
         height={0}

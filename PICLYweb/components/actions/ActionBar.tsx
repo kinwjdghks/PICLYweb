@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link";
 import { poppins } from "@/public/assets/fonts/poppins";
 import { useState,ReactNode } from "react";
