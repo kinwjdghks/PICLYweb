@@ -1,15 +1,15 @@
-// SSR
 import Actionbar from "@/components/actions/ActionBar";
 import { Album } from "@/templates/Album";
-import dynamic from "next/dynamic";
 import { getAlbumByAlbumID, updateViewCount } from "@/lib/functions/firebaseCRUD";
 import FallbackPage from "@/components/page/FallbackPage";
 import ExpiredPage from "@/components/page/ExpiredPage";
 import { useBodyScrollLock } from "@/lib/functions/scrollLock";
 import { useEffect } from "react";
-const PiclyCarousel = dynamic(()=>import('@/components/page/Carousel'));
+import Carousel from "@/components/page/Carousel";
+import { getPlaiceholder } from "plaiceholder";
+import { dynamicBlurDataUrl } from "@/lib/functions/dynamicBlurDataURL";
 
-const ImageView = ({ album, valid }: { album: Album|null, valid:boolean }) => {
+const ImageView = ({ album, valid, blurImg }: { album: Album|null, valid:boolean, blurImg:string }) => {
   
   const { lockScroll, openScroll } = useBodyScrollLock();
 
@@ -20,10 +20,11 @@ const ImageView = ({ album, valid }: { album: Album|null, valid:boolean }) => {
 
   if(!valid) return  <FallbackPage/>
   else if(!album) return <ExpiredPage/>
+  // console.log('blurImg:',blurImg)
 
   return (
     <div className="(background) w-screen h-screen absolute bg-black">
-      <PiclyCarousel album={album} />
+      <Carousel album={album} blurImg={blurImg}/>
       <Actionbar resetAlbum={() => {}} mode="guest" album={album} deleteAlbum={()=>{}} />
     </div>
   );
@@ -51,12 +52,15 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
     
       //increase viewCount
       updateViewCount(album_.albumID!,album_.viewCount+1);
-      // console.log('viewCount updated to'+(+album_.viewCount+1));
+      
+      //generate blurImageURL
+      const blurImg = await dynamicBlurDataUrl(album_.thumbnailURL!);
+      // console.log('blurImg:',blurImg)
       
       if(new Date(album_.expireTime).getTime() > new Date().getTime()){
         return {
           //album found and viewable
-          props: { album:album, valid:true } ,
+          props: { album:album, valid:true, blurImg: blurImg } ,
         };
       }
       else return {
@@ -64,10 +68,10 @@ export async function getServerSideProps({ query }: { query: { albumID: string }
         props: { album:null, valid:true } ,
       }
     }
-    else return { props: { album: null, valid: false } }
+    else return { props: { valid: false } }
   } catch (error) {
     console.error("Error fetching album:", error);
-    return { props: { album: null, valid: false } };
+    return { props: { valid: false } };
   }
 }
 
